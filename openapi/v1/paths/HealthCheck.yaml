@@ -1,0 +1,14 @@
+get:
+  operationId: HealthCheck
+  summary: Service Health Check
+  description: Checks service health and availability
+  x-eov-operation-handler: actions/HealthCheck
+  responses:
+    "200":
+      description: Successfully revoked session key
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HealthCheckResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml

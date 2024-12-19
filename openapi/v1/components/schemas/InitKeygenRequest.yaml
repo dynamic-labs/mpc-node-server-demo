@@ -1,0 +1,12 @@
+type: object
+required:
+  - chain
+  - environmentId
+  - userId
+properties:
+  chain:
+    $ref: ./Chain.yaml
+  environmentId:
+    $ref: ./UUID.yaml
+  userId:
+    $ref: ./UUID.yaml

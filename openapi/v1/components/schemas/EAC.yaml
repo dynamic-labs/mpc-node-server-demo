@@ -1,0 +1,24 @@
+type: object
+required:
+  - userId
+  - uncompressedPublicKey
+  - accountAddress
+  - environmentId
+  - serverKeygenInitResult
+  - chain
+properties:
+  userId:
+    $ref: ./UUID.yaml
+  compressedPublicKey:
+    type: string
+    pattern: ^[0-9a-fA-F]{33}$
+  uncompressedPublicKey:
+    type: string
+  accountAddress:
+    type: string
+  environmentId:
+    $ref: ./UUID.yaml
+  serverKeygenInitResult:
+    type: string
+  chain:
+    $ref: ./Chain.yaml

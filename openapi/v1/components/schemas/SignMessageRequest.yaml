@@ -1,0 +1,14 @@
+type: object
+required:
+  - roomId
+  - message
+  - eac
+properties:
+  jwt:
+    $ref: ./JWT.yaml
+  message:
+    type: string
+  roomId:
+    type: string
+  eac:
+    $ref: ./EAC.yaml

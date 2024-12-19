@@ -1,0 +1,33 @@
+name: test
+on: 
+  push:
+  merge_group:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm run install:ev-enclave
+      - name: Run tests
+        run: npm test
+      - name: Run Lint
+        run: npm run lint
+      - name: Check Types
+        run: npm run build
+      - name: Check commit
+        run: npx commitlint --last
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v3.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any

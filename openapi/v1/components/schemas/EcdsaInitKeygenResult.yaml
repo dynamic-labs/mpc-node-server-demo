@@ -1,0 +1,5 @@
+EcdsaInitKeygenResult:
+  type: object
+  required:
+    - keygenId
+    - keygenSecret

@@ -1,0 +1,6 @@
+type: object
+required:
+  - chain
+properties:
+  chain:
+    $ref: ./Chain.yaml

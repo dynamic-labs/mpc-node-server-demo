@@ -1,0 +1,22 @@
+version = 1
+name = "embedded-wallet-service"
+uuid = "enclave_2c665ef52669"
+app_uuid = "app_7e350fdddfbc"
+team_uuid = "team_4fb36bfa6da1"
+debug = true
+dockerfile = "./Dockerfile"
+api_key_auth = false
+trx_logging = true
+tls_termination = true
+forward_proxy_protocol = false
+trusted_headers = []
+healthcheck = "/api/v1/actions/HealthCheck"
+desired_replicas = 1
+
+[egress]
+enabled = true
+destinations = ["*.datadoghq.com", "app.dynamic-preprod.xyz", "*.herokuapp.com"]
+
+[signing]
+certPath = "./cert.pem"
+keyPath = "./key.pem"

@@ -1,0 +1,24 @@
+post:
+  operationId: CreateWalletAccount
+  summary: Create Wallet Account
+  description: This creates a wallet for a given user
+  x-eov-operation-handler: actions/CreateWalletAccount
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateWalletAccountRequest.yaml
+  responses:
+    "200":
+      description: Successfully created wallet account
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CreateWalletAccountResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
+    "500":
+      $ref: ../components/responses/InternalServerError.yaml

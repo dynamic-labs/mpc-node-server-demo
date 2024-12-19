@@ -1,0 +1,80 @@
+{
+  "name": "embedded-wallet-enclave",
+  "version": "0.0.1",
+  "description": "A backend service for creating wallets and session keys",
+  "scripts": {
+    "clean": "rimraf dist .tsBuildInfo",
+    "install:ev-enclave": "which ev-enclave 2>&1 > /dev/null && ev-enclave update || (curl https://enclave-build-assets.evervault.com/cli/v1/install -sL | sh)",
+    "generate": "npm-run-all lint 'generate:**' lint:fix",
+    "generate:types": "kubb generate",
+    "generate:openapi:v1": "redocly bundle ./openapi/v1/openapi.yaml -o ./src/generated/openapi/api@v1.yaml",
+    "build": "npm-run-all clean lint typecheck 'build:**'",
+    "build:api": "tsc",
+    "build:openapi": "rimraf dist/src/generated/openapi && cp -r src/generated/openapi dist/src/generated/openapi",
+    "test": "npm-run-all clean generate 'test:**'",
+    "test:jest": "NODE_ENV=test jest",
+    "lint": "biome check",
+    "typecheck": "tsc --noEmit",
+    "lint:fix": "biome check --write --unsafe",
+    "start": "tsx --watch src/index.ts"
+  },
+  "engines": {
+    "node": ">=20.14.0",
+    "npm": ">=10.7.0"
+  },
+  "overrides": {
+    "oas": "^25.0.0"
+  },
+  "optionalDependencies": {
+    "@biomejs/cli-darwin-arm64": "1.8.1",
+    "@biomejs/cli-darwin-x64": "1.8.1",
+    "@biomejs/cli-linux-arm64": "1.8.1",
+    "@biomejs/cli-linux-arm64-musl": "1.8.1",
+    "@biomejs/cli-linux-x64": "1.8.1",
+    "@biomejs/cli-linux-x64-musl": "1.8.1",
+    "@biomejs/cli-win32-arm64": "1.8.1",
+    "@biomejs/cli-win32-x64": "1.8.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.1",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@faker-js/faker": "^8.4.1",
+    "@kubb/cli": "~2.21.2",
+    "@kubb/core": "~2.21.2",
+    "@kubb/plugin-oas": "~2.21.2",
+    "@kubb/swagger": "~2.21.2",
+    "@kubb/swagger-ts": "~2.21.2",
+    "@redocly/cli": "^1.17.0",
+    "@types/bip32": "^2.0.4",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.2",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "jest-dev-server": "^10.0.0",
+    "jest-openapi": "~0.14.1",
+    "lefthook": "^1.6.16",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.7",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.4",
+    "tsx": "^4.15.3",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@dynamic-labs/sdk-api": "^0.0.574",
+    "@sodot/sodot-node-sdk": "^1.2.1",
+    "@solana/web3.js": "^1.95.4",
+    "axios": "^1.7.2",
+    "cacheable-lookup": "^6.1.0",
+    "dd-trace": "^5.17.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-openapi-validator": "^5.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "viem": "^2.21.38",
+    "winston": "^3.13.0"
+  }
+}

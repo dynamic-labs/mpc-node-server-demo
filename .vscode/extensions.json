@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "redocly.openapi-vs-code",
+    "biomejs.biome",
+    "github.vscode-github-actions",
+    "firsttris.vscode-jest-runner",
+    "redhat.vscode-yaml"
+  ]
+}

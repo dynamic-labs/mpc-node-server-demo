@@ -1,0 +1,8 @@
+type: object
+properties:
+  error_code:
+    type: string
+    enum:
+      - bad_request
+  error_message:
+    type: string

@@ -1,0 +1,11 @@
+type: object
+required:
+  - jwt
+  - transaction
+properties:
+  jwt:
+    $ref: ./JWT.yaml
+  transaction:
+    type: string
+  eac:
+    $ref: ./EAC.yaml

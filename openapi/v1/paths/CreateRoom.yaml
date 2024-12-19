@@ -1,0 +1,24 @@
+post:
+  operationId: CreateRoom
+  summary: Create Room
+  description: This creates a room for MPC key generation
+  x-eov-operation-handler: actions/CreateRoom
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/CreateRoomRequest.yaml
+  responses:
+    "200":
+      description: Successfully created room
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/CreateRoomResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
+    "500":
+      $ref: ../components/responses/InternalServerError.yaml

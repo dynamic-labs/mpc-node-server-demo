@@ -1,0 +1,20 @@
+type: object
+required:
+  - eac
+  - userId
+  - environmentId
+  - accountAddress
+  - uncompressedPublicKey
+properties:
+  eac:
+    $ref: ./EncryptedEvervaultString.yaml
+  userId:
+    $ref: ./UUID.yaml
+  environmentId:
+    $ref: ./UUID.yaml
+  accountAddress:
+    type: string
+  uncompressedPublicKey:
+    type: string
+  compressedPublicKey:
+    type: string

@@ -1,0 +1,20 @@
+post:
+  operationId: ExportWalletAccount
+  summary: Export wallet account
+  description: This exports a wallet account
+  x-eov-operation-handler: actions/ExportWalletAccount
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ExportWalletAccountRequest.yaml
+  responses:
+    "201":
+      description: Exported wallet account
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
+    "500":
+      $ref: ../components/responses/InternalServerError.yaml

@@ -1,0 +1,18 @@
+type: object
+required:
+  - userId
+  - mnemonic
+  - seed
+  - environmentId
+  - jwtIssuer
+properties:
+  userId:
+    $ref: ./UUID.yaml
+  mnemonic:
+    type: string
+  seed:
+    type: string
+  environmentId:
+    $ref: ./UUID.yaml
+  jwtIssuer:
+    $ref: ./Issuer.yaml

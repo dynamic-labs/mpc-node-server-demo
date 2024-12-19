@@ -1,0 +1,15 @@
+type: object
+required:
+  - userId
+  - environmentId
+  - serverKeygenInitResult
+  - chain
+properties:
+  userId:
+    $ref: ./UUID.yaml
+  environmentId:
+    $ref: ./UUID.yaml
+  serverKeygenInitResult:
+    type: string
+  chain:
+    $ref: ./Chain.yaml

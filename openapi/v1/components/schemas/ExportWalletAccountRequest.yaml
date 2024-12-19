@@ -1,0 +1,12 @@
+type: object
+required:
+  - eac
+  - exportId
+  - roomId
+properties:
+  eac:
+    $ref: ./EAC.yaml
+  exportId:
+    type: string
+  roomId:
+    type: string
