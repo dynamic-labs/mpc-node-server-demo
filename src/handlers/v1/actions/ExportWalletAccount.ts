@@ -5,12 +5,12 @@ import { exportWalletAccount } from '../../../services/wallets';
  */
 export const ExportWalletAccount = async (req: Request, res: Response) => {
   const { exportId, roomId, eac } = req.body;
-  const { chain, serverKeygenInitResult } = eac;
+  const { chain, serverShare } = eac;
 
   await exportWalletAccount({
     chain,
     roomId,
-    serverKeygenInitResult,
+    serverShare: JSON.parse(serverShare),
     exportId,
   });
 

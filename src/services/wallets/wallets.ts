@@ -8,6 +8,7 @@ import {
   Ed25519KeygenResult,
   MessageHash,
 } from '@sodot/sodot-node-sdk';
+import bs58 from 'bs58';
 import { publicKeyToAddress } from 'viem/accounts';
 import { ChainType } from '../../generated/types';
 
@@ -52,7 +53,7 @@ export const createMpcRoom = async ({
 export const initKeygen = async ({ chain }: { chain: ChainType }) => {
   const chainConfig = CHAIN_CONFIG[chain];
   const mpcSigner = getMPCSigner(chainConfig.signingAlgorithm);
-  const { roomId } = await createMpcRoom({ chain });
+  const { roomId } = await createMpcRoom({ chain, parties: 3 });
   const keygenInitResult = await mpcSigner.initKeygen();
 
   return {
@@ -102,61 +103,75 @@ export const createWalletAccount = async ({
   );
 
   let accountAddress;
-  let compressedPublicKey: Uint8Array<ArrayBufferLike> | undefined;
-  const uncompressedPublicKey: Uint8Array<ArrayBufferLike> | EcdsaPublicKey =
-    publicKeyRaw;
+  let compressedPublicKey: string | undefined;
+  let uncompressedPublicKey: string;
   if (publicKeyRaw instanceof EcdsaPublicKey) {
     const publicKeyCompressed = publicKeyRaw.serializeCompressed();
-    compressedPublicKey = publicKeyCompressed;
-    const publicKeyHex = buf2hex(publicKeyCompressed) as `0x${string}`;
+    const compressedPublicKeyHex = ('0x' +
+      buf2hex(publicKeyCompressed)) as `0x${string}`;
+    const publicKeyHex = ('0x' + publicKeyRaw.pubKeyAsHex()) as `0x${string}`;
+    compressedPublicKey = compressedPublicKeyHex;
+    uncompressedPublicKey = publicKeyHex;
 
     switch (chain) {
       case 'EVM':
         // Get EVM address from public key
-        accountAddress = publicKeyToAddress(publicKeyHex);
+        accountAddress = publicKeyToAddress(compressedPublicKeyHex);
         break;
       default:
         throw new Error(`Unsupported chain: ${chain}`);
     }
+  } else {
+    uncompressedPublicKey = '0x' + buf2hex(publicKeyRaw);
+    accountAddress = bs58.encode(publicKeyRaw as Uint8Array);
   }
 
   return {
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
+    serverShare: keygenResult,
   };
 };
 
 export const exportWalletAccount = async ({
   chain,
   roomId,
-  serverKeygenInitResult,
+  serverShare,
   exportId,
 }: {
   chain: ChainType;
   roomId: string;
-  serverKeygenInitResult: string;
+  serverShare: Ed25519KeygenResult | EcdsaKeygenResult;
   exportId: string;
 }) => {
   const chainConfig = CHAIN_CONFIG[chain];
   const mpcSigner = getMPCSigner(chainConfig.signingAlgorithm);
 
   // Export occurs only on the client that provided the exportId
-  await mpcSigner.exportFullPrivateKey(
-    roomId,
-    serverKeygenInitResult,
-    exportId,
-  );
+  if (mpcSigner instanceof Ecdsa) {
+    await mpcSigner.exportFullPrivateKey(
+      roomId,
+      serverShare as EcdsaKeygenResult,
+      exportId,
+    );
+  } else {
+    await mpcSigner.exportFullPrivateKey(
+      roomId,
+      serverShare as Ed25519KeygenResult,
+      exportId,
+    );
+  }
 };
 
 export const signMessage = async ({
   message,
-  serverKeygenInitResult,
+  serverShare,
   chain,
   roomId,
 }: {
   message: string;
-  serverKeygenInitResult: Ed25519KeygenResult | EcdsaKeygenResult;
+  serverShare: Ed25519KeygenResult | EcdsaKeygenResult;
   chain: ChainType;
   roomId: string;
 }) => {
@@ -167,14 +182,24 @@ export const signMessage = async ({
   if (mpcSigner instanceof Ecdsa) {
     // For ecdsa, signing requires a hashed message, while ed25519 requires the raw message
     messageToSign = MessageHash.sha256(message);
+
+    console.log('messageToSign', messageToSign);
+    console.log('serverShare', serverShare);
+    console.log('roomId', roomId);
+    console.log('chainConfig.derivationPath', chainConfig.derivationPath);
+    await mpcSigner.sign(
+      roomId,
+      serverShare as EcdsaKeygenResult,
+      messageToSign,
+      new Uint32Array(chainConfig.derivationPath),
+    );
   } else {
     messageToSign = new TextEncoder().encode(message);
+    await mpcSigner.sign(
+      roomId,
+      serverShare as Ed25519KeygenResult,
+      messageToSign,
+      new Uint32Array(chainConfig.derivationPath),
+    );
   }
-
-  await mpcSigner.sign(
-    roomId,
-    serverKeygenInitResult as any,
-    messageToSign as any,
-    new Uint32Array(chainConfig.derivationPath),
-  );
 };

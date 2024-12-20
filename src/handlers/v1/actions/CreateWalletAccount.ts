@@ -31,14 +31,18 @@ export const CreateWalletAccount: TypedRequestHandler<{
 
     const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
-    const { accountAddress, compressedPublicKey, uncompressedPublicKey } =
-      await createWalletAccount({
-        chain,
-        roomId,
-        serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-        clientKeygenId,
-        clientBackupKeygenId,
-      });
+    const {
+      accountAddress,
+      compressedPublicKey,
+      uncompressedPublicKey,
+      serverShare,
+    } = await createWalletAccount({
+      chain,
+      roomId,
+      serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
+      clientKeygenId,
+      clientBackupKeygenId,
+    });
     console.log('accountAddress', accountAddress);
     console.log('compressedPublicKey', compressedPublicKey);
     console.log('uncompressedPublicKey', uncompressedPublicKey);
@@ -50,6 +54,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       uncompressedPublicKey,
       accountAddress,
       serverKeygenInitResult,
+      serverShare: JSON.stringify(serverShare),
       environmentId,
       chain,
     };
@@ -60,7 +65,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       userId,
       environmentId,
       accountAddress: accountAddress as any,
-      uncompressedPublicKey: uncompressedPublicKey.toString(),
+      uncompressedPublicKey: uncompressedPublicKey,
       compressedPublicKey: compressedPublicKey?.toString(),
       eac: modifiedEac,
     });
@@ -68,8 +73,8 @@ export const CreateWalletAccount: TypedRequestHandler<{
       userId,
       environmentId,
       accountAddress: accountAddress as any,
-      uncompressedPublicKey: uncompressedPublicKey.toString(),
-      compressedPublicKey: compressedPublicKey?.toString(),
+      uncompressedPublicKey: uncompressedPublicKey,
+      compressedPublicKey: compressedPublicKey,
       eac: modifiedEac,
     });
   } catch (error) {

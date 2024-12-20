@@ -116,12 +116,8 @@ paths:
             schema:
               $ref: '#/components/schemas/SignMessageRequest'
       responses:
-        '200':
+        '201':
           description: Signed message
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SignMessageResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -229,9 +225,13 @@ components:
       type: object
       required:
         - chain
+        - parties
       properties:
         chain:
           $ref: '#/components/schemas/Chain'
+        parties:
+          type: number
+          description: The number of parties to create the room for
     CreateRoomResponse:
       type: object
       required:
@@ -306,7 +306,6 @@ components:
           $ref: '#/components/schemas/UUID'
         compressedPublicKey:
           type: string
-          pattern: ^[0-9a-fA-F]{33}$
         uncompressedPublicKey:
           type: string
         accountAddress:
@@ -348,13 +347,6 @@ components:
           type: string
         eac:
           $ref: '#/components/schemas/EAC'
-    SignMessageResponse:
-      type: object
-      required:
-        - signature
-      properties:
-        signature:
-          type: string
     HealthCheckResponse:
       type: object
       required:
