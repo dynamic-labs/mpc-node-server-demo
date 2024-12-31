@@ -203,3 +203,32 @@ export const signMessage = async ({
     );
   }
 };
+
+export const refreshShares = async ({
+  chain,
+  roomId,
+  serverShare,
+}: {
+  chain: ChainType;
+  roomId: string;
+  serverShare: Ed25519KeygenResult | EcdsaKeygenResult;
+}) => {
+  const chainConfig = CHAIN_CONFIG[chain];
+  const mpcSigner = getMPCSigner(chainConfig.signingAlgorithm);
+
+  let refreshResult;
+  if (mpcSigner instanceof Ecdsa) {
+    refreshResult = await mpcSigner.refresh(
+      roomId,
+      serverShare as EcdsaKeygenResult,
+    );
+  } else {
+    refreshResult = await mpcSigner.refresh(
+      roomId,
+      serverShare as Ed25519KeygenResult,
+    );
+  }
+  return {
+    serverShare: refreshResult,
+  };
+};
