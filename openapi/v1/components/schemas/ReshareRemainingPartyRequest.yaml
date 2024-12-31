@@ -1,0 +1,16 @@
+type: object
+required:
+  - eac
+  - roomId
+  - clientKeygenId
+  - clientBackupKeygenId
+properties:
+  eac:
+    $ref: ./PartialEAC.yaml
+  roomId:
+    type: string
+  clientKeygenId:
+    type: string
+  clientBackupKeygenId:
+    type: string
+

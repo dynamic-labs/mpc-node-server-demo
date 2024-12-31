@@ -232,3 +232,43 @@ export const refreshShares = async ({
     serverShare: refreshResult,
   };
 };
+
+export const reshareRemainingParty = async ({
+  chain,
+  roomId,
+  serverShare,
+  clientKeygenId,
+  clientBackupKeygenId,
+  newThreshold = THRESHOLD,
+}: {
+  chain: ChainType;
+  roomId: string;
+  clientKeygenId: string;
+  clientBackupKeygenId: string;
+  serverShare: Ed25519KeygenResult | EcdsaKeygenResult;
+  newThreshold?: number;
+}) => {
+  const chainConfig = CHAIN_CONFIG[chain];
+  const mpcSigner = getMPCSigner(chainConfig.signingAlgorithm);
+
+  const keygenIds = [clientKeygenId, clientBackupKeygenId];
+  let refreshResult;
+  if (mpcSigner instanceof Ecdsa) {
+    refreshResult = await mpcSigner.reshareRemainingParty(
+      roomId,
+      newThreshold,
+      serverShare as EcdsaKeygenResult,
+      keygenIds,
+    );
+  } else {
+    refreshResult = await mpcSigner.reshareRemainingParty(
+      roomId,
+      newThreshold,
+      serverShare as Ed25519KeygenResult,
+      keygenIds,
+    );
+  }
+  return {
+    serverShare: refreshResult,
+  };
+};

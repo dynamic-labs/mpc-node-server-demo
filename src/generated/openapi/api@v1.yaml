@@ -124,6 +124,56 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /api/v1/actions/ReshareRemainingParty:
+    post:
+      operationId: ReshareRemainingParty
+      summary: Reshare Remaining Party
+      description: This reshares the remaining party for a given user
+      x-eov-operation-handler: actions/ReshareRemainingParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReshareRemainingPartyRequest'
+      responses:
+        '200':
+          description: Successfully reshares the remaining party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReshareRemainingPartyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/actions/RefreshShares:
+    post:
+      operationId: RefreshShares
+      summary: Refresh Shares
+      description: This refreshes the shares for a given user
+      x-eov-operation-handler: actions/RefreshShares
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshSharesRequest'
+      responses:
+        '200':
+          description: Successfully refreshed shares
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshSharesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/actions/HealthCheck:
     get:
       operationId: HealthCheck
@@ -347,6 +397,46 @@ components:
           type: string
         eac:
           $ref: '#/components/schemas/EAC'
+    ReshareRemainingPartyRequest:
+      type: object
+      required:
+        - eac
+        - roomId
+        - clientKeygenId
+        - clientBackupKeygenId
+      properties:
+        eac:
+          $ref: '#/components/schemas/PartialEAC'
+        roomId:
+          type: string
+        clientKeygenId:
+          type: string
+        clientBackupKeygenId:
+          type: string
+    ReshareRemainingPartyResponse:
+      type: object
+      required:
+        - eac
+      properties:
+        eac:
+          $ref: '#/components/schemas/EncryptedEvervaultString'
+    RefreshSharesRequest:
+      type: object
+      required:
+        - eac
+        - roomId
+      properties:
+        eac:
+          $ref: '#/components/schemas/PartialEAC'
+        roomId:
+          type: string
+    RefreshSharesResponse:
+      type: object
+      required:
+        - eac
+      properties:
+        eac:
+          $ref: '#/components/schemas/EncryptedEvervaultString'
     HealthCheckResponse:
       type: object
       required:
