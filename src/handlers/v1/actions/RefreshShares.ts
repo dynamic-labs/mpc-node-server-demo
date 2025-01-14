@@ -9,6 +9,8 @@ import { EAC } from '../../../types/credentials';
 export const RefreshShares = async (req: Request, res: Response) => {
   const { roomId, eac } = req.body;
   const { serverShare, chain } = eac as EAC;
+  console.log('RefreshShares');
+  console.log('serverShare', serverShare);
   // Refresh the shares
   const { serverShare: refreshedServerShare } = await refreshShares({
     chain,

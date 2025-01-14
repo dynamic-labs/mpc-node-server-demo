@@ -4,7 +4,7 @@ required:
   - roomId
 properties:
   eac:
-    $ref: ./PartialEAC.yaml
+    $ref: ./EAC.yaml
   roomId:
     type: string
 

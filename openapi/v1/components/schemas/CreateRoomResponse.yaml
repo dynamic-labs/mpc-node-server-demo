@@ -4,3 +4,5 @@ required:
 properties:
   roomId:
     type: string
+  serverKeygenId:
+    type: string

@@ -1,7 +1,7 @@
-import { PartialEacType } from './PartialEacType';
+import { EacType } from './EacType';
 
 export type RefreshSharesRequestType = {
-  eac: PartialEacType;
+  eac: EacType;
   /**
    * @type string
    */

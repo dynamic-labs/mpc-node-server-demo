@@ -1,4 +1,5 @@
 import { ChainType } from './ChainType';
+import { EacType } from './EacType';
 
 export type CreateRoomRequestType = {
   chain: ChainType;
@@ -7,4 +8,5 @@ export type CreateRoomRequestType = {
    * @type number
    */
   parties: number;
+  eac?: EacType;
 };

@@ -21,6 +21,8 @@ paths:
     $ref: paths/ReshareRemainingParty.yaml
   /api/v1/actions/RefreshShares:
     $ref: paths/RefreshShares.yaml
+  /api/v1/actions/ImportPrivateKey:
+    $ref: paths/ImportPrivateKey.yaml
   /api/v1/actions/HealthCheck:
     $ref: paths/HealthCheck.yaml
 components:
