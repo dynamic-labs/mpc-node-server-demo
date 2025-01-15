@@ -17,19 +17,24 @@ export const registerOperationHandlers = (app: Express) => {
       '/api/v1/actions/CreateWalletAccount',
       '/api/v1/actions/ExportWalletAccount',
       '/api/v1/actions/SignMessage',
+      '/api/v1/actions/RefreshShares',
+      '/api/v1/actions/CreateRoom',
+      '/api/v1/actions/ImportPrivateKey',
     ],
     async (req, _res, next) => {
-      if (isDeployedEnv) {
-        // encrypted account credential (EAC) should be decrypted on ingress
-        const { eac: decryptedEACString } = req.body;
-        const eac: EacType = decryptedEACString
-          ? JSON.parse(decryptedEACString)
-          : undefined;
+      if (req.body.eac) {
+        if (isDeployedEnv) {
+          // encrypted account credential (EAC) should be decrypted on ingress
+          const { eac: decryptedEACString } = req.body;
+          const eac: EacType = decryptedEACString
+            ? JSON.parse(decryptedEACString)
+            : undefined;
 
-        req.body.eac = eac;
-      } else {
-        const eac = await evervaultDecrypt(req.body.eac as string);
-        req.body.eac = JSON.parse(eac);
+          req.body.eac = eac;
+        } else {
+          const eac = await evervaultDecrypt(req.body.eac as string);
+          req.body.eac = JSON.parse(eac);
+        }
       }
       next();
     },

@@ -1,28 +1,28 @@
 import {
-  CreateWalletAccount200Type,
-  CreateWalletAccount400Type,
-  CreateWalletAccount403Type,
-  CreateWalletAccount500Type,
-  CreateWalletAccountRequestType,
+  ImportPrivateKey200Type,
+  ImportPrivateKey400Type,
+  ImportPrivateKey403Type,
+  ImportPrivateKey500Type,
+  ImportPrivateKeyRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { createWalletAccount } from '../../../services/wallets';
+import { importPrivateKey } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
- * /api/v1/actions/CreateWalletAccount
+ * /api/v1/actions/ImportPrivateKey
  */
-export const CreateWalletAccount: TypedRequestHandler<{
+export const ImportPrivateKey: TypedRequestHandler<{
   request: {
-    body: CreateWalletAccountRequestType;
+    body: ImportPrivateKeyRequestType;
   };
   response: {
     body:
-      | CreateWalletAccount200Type
-      | CreateWalletAccount400Type
-      | CreateWalletAccount403Type
-      | CreateWalletAccount500Type;
+      | ImportPrivateKey200Type
+      | ImportPrivateKey400Type
+      | ImportPrivateKey403Type
+      | ImportPrivateKey500Type;
     statusCode: 200 | 400 | 403 | 500;
   };
 }> = async (req, res, next) => {
@@ -37,7 +37,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       compressedPublicKey,
       uncompressedPublicKey,
       serverShare,
-    } = await createWalletAccount({
+    } = await importPrivateKey({
       chain,
       roomId,
       serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,

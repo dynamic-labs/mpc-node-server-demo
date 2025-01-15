@@ -1,6 +1,6 @@
 import { PartialEacType } from './PartialEacType';
 
-export type CreateWalletAccountRequestType = {
+export type ImportPrivateKeyRequestType = {
   eac: PartialEacType;
   /**
    * @type string

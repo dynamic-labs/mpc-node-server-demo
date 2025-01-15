@@ -1,6 +1,12 @@
 type: object
 required:
   - chain
+  - parties
 properties:
   chain:
     $ref: ./Chain.yaml
+  parties:
+    type: number
+    description: The number of parties to create the room for
+  eac:
+    $ref: ./EAC.yaml

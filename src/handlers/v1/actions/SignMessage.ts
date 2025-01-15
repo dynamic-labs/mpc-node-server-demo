@@ -7,13 +7,13 @@ import { EAC } from '../../../types/credentials';
  */
 export const SignMessage = async (req: Request, res: Response) => {
   const { message, roomId, eac } = req.body;
-  const { serverKeygenInitResult, chain } = eac as EAC;
+  const { serverShare, chain } = eac as EAC;
   // Sign the message
   await signMessage({
     message,
-    serverKeygenInitResult: serverKeygenInitResult as any,
     chain,
     roomId,
+    serverShare: JSON.parse(serverShare),
   });
 
   return res.status(201).json();

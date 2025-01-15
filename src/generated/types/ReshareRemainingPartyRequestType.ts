@@ -1,6 +1,6 @@
 import { PartialEacType } from './PartialEacType';
 
-export type CreateWalletAccountRequestType = {
+export type ReshareRemainingPartyRequestType = {
   eac: PartialEacType;
   /**
    * @type string
@@ -9,9 +9,9 @@ export type CreateWalletAccountRequestType = {
   /**
    * @type string
    */
-  clientPrimaryKeygenId: string;
+  clientKeygenId: string;
   /**
    * @type string
    */
-  clientSecondaryKeygenId: string;
+  clientBackupKeygenId: string;
 };
