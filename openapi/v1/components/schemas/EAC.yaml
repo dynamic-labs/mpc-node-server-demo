@@ -10,10 +10,11 @@ properties:
   userId:
     $ref: ./UUID.yaml
   compressedPublicKey:
-    type: string
-    pattern: ^[0-9a-fA-F]{33}$
+    type: object
+    description: Binary representation of the compressed public key (Uint8Array)
   uncompressedPublicKey:
-    type: string
+    type: object
+    description: Binary representation of the uncompressed public key (Uint8Array or EcdsaPublicKey)
   accountAddress:
     type: string
   environmentId:

@@ -116,12 +116,8 @@ paths:
             schema:
               $ref: '#/components/schemas/SignMessageRequest'
       responses:
-        '200':
+        '201':
           description: Signed message
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SignMessageResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -170,6 +166,7 @@ components:
         - chain
         - environmentId
         - userId
+        - parties
       properties:
         chain:
           $ref: '#/components/schemas/Chain'
@@ -177,6 +174,9 @@ components:
           $ref: '#/components/schemas/UUID'
         userId:
           $ref: '#/components/schemas/UUID'
+        parties:
+          type: number
+          example: 2
     EncryptedEvervaultString:
       type: string
       pattern: ^ev.*
@@ -229,9 +229,13 @@ components:
       type: object
       required:
         - chain
+        - parties
       properties:
         chain:
           $ref: '#/components/schemas/Chain'
+        parties:
+          type: number
+          example: 2
     CreateRoomResponse:
       type: object
       required:
@@ -305,10 +309,11 @@ components:
         userId:
           $ref: '#/components/schemas/UUID'
         compressedPublicKey:
-          type: string
-          pattern: ^[0-9a-fA-F]{33}$
+          type: object
+          description: Binary representation of the compressed public key (Uint8Array)
         uncompressedPublicKey:
-          type: string
+          type: object
+          description: Binary representation of the uncompressed public key (Uint8Array or EcdsaPublicKey)
         accountAddress:
           type: string
         environmentId:
@@ -348,13 +353,6 @@ components:
           type: string
         eac:
           $ref: '#/components/schemas/EAC'
-    SignMessageResponse:
-      type: object
-      required:
-        - signature
-      properties:
-        signature:
-          type: string
     HealthCheckResponse:
       type: object
       required:

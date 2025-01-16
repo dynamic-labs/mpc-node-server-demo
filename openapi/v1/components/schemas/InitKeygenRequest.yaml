@@ -3,6 +3,7 @@ required:
   - chain
   - environmentId
   - userId
+  - parties
 properties:
   chain:
     $ref: ./Chain.yaml
@@ -10,3 +11,6 @@ properties:
     $ref: ./UUID.yaml
   userId:
     $ref: ./UUID.yaml
+  parties:
+    type: number
+    example: 2

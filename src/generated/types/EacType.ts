@@ -4,13 +4,15 @@ import { UuidType } from './UuidType';
 export type EacType = {
   userId: UuidType;
   /**
-   * @type string | undefined
+   * @description Binary representation of the compressed public key (Uint8Array)
+   * @type object | undefined
    */
-  compressedPublicKey?: string;
+  compressedPublicKey?: object;
   /**
-   * @type string
+   * @description Binary representation of the uncompressed public key (Uint8Array or EcdsaPublicKey)
+   * @type object
    */
-  uncompressedPublicKey: string;
+  uncompressedPublicKey: object;
   /**
    * @type string
    */

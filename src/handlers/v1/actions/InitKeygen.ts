@@ -1,3 +1,4 @@
+import { initKeygen } from '@dynamic-labs/dynamic-wallet-server';
 import {
   InitKeygen200Type,
   InitKeygen400Type,
@@ -6,7 +7,7 @@ import {
   InitKeygenRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { initKeygen } from '../../../services/wallets';
+// import { initKeygen } from '../../../services/wallets';
 import { InitialEAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
@@ -27,10 +28,11 @@ export const InitKeygen: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, environmentId, userId } = req.body;
+    const { chain, environmentId, userId, parties } = req.body;
 
     const { roomId, keygenInitResult } = await initKeygen({
       chain,
+      parties,
     });
     const serverKeygenId = keygenInitResult.keygenId;
 

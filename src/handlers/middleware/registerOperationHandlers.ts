@@ -4,6 +4,7 @@ import { Express } from 'express';
 import { middleware as OpenApiValidator } from 'express-openapi-validator';
 
 import 'dotenv/config';
+import { EcdsaPublicKey } from '@sodot/sodot-node-sdk';
 import { EacType } from '../../generated';
 import { evervaultDecrypt } from '../../services/evervault';
 import { verifyJWT } from '../../services/jwt';
@@ -12,6 +13,7 @@ const isDeployedEnv = process.env.NODE_ENV === 'production';
 
 export const registerOperationHandlers = (app: Express) => {
   // EWC and EAC parsing middleware
+  //TODO: make sure i add all the routes that need this encryption middleware
   app.use(
     [
       '/api/v1/actions/CreateWalletAccount',
@@ -29,7 +31,22 @@ export const registerOperationHandlers = (app: Express) => {
         req.body.eac = eac;
       } else {
         const eac = await evervaultDecrypt(req.body.eac as string);
-        req.body.eac = JSON.parse(eac);
+        console.log('HITTING EVERVAULT DECRYPT ------', { eac });
+        const parsedEac = JSON.parse(eac);
+
+        // // Convert hex strings to proper format
+        // if (parsedEac.compressedPublicKey && typeof parsedEac.compressedPublicKey === 'string') {
+        //   const buffer = Buffer.from(parsedEac.compressedPublicKey, 'hex');
+        //   parsedEac.compressedPublicKey = new Uint8Array(buffer);
+        // }
+
+        // if (parsedEac.uncompressedPublicKey && typeof parsedEac.uncompressedPublicKey === 'string') {
+        //   const buffer = Buffer.from(parsedEac.uncompressedPublicKey, 'hex');
+        //   parsedEac.uncompressedPublicKey = new EcdsaPublicKey(new Uint8Array(buffer.slice(1))); // Remove the '04' prefix
+        // }
+
+        console.log('HITTING EVERVAULT DECRYPT 2 ------', { parsedEac });
+        req.body.eac = parsedEac;
       }
       next();
     },

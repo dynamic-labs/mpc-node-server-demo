@@ -1,3 +1,5 @@
+// import { getMPCSigner } from '@dynamic-labs/dynamic-wallet-server';
+import { createWalletAccount } from '@dynamic-labs/dynamic-wallet-server';
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
@@ -6,10 +8,9 @@ import {
   CreateWalletAccountRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { createWalletAccount } from '../../../services/wallets';
+// import { createWalletAccount } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
-
 /**
  * /api/v1/actions/CreateWalletAccount
  */
@@ -42,6 +43,17 @@ export const CreateWalletAccount: TypedRequestHandler<{
     console.log('accountAddress', accountAddress);
     console.log('compressedPublicKey', compressedPublicKey);
     console.log('uncompressedPublicKey', uncompressedPublicKey);
+
+    const compressedPublicKeyHex = Buffer.from(
+      compressedPublicKey ?? [],
+    ).toString('hex');
+    const uncompressedPublicKeyHex =
+      uncompressedPublicKey instanceof Uint8Array
+        ? Buffer.from(uncompressedPublicKey).toString('hex')
+        : uncompressedPublicKey.pubKeyAsHex();
+
+    console.log('compressedPublicKeyHex', compressedPublicKeyHex);
+    console.log('uncompressedPublicKeyHex', uncompressedPublicKeyHex);
 
     // Encrypted Account Credential
     const rawEac: EAC = {

@@ -1,3 +1,4 @@
+// import { createMpcRoom } from '../../../../../dynamic-wallet-sdk/packages/server/src/mpc/mpc';
 import {
   CreateRoom200Type,
   CreateRoom400Type,
@@ -25,8 +26,8 @@ export const CreateRoom: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain } = req.body;
-    const { roomId } = await createMpcRoom({ chain });
+    const { chain, parties } = req.body;
+    const { roomId } = await createMpcRoom({ chain, parties });
 
     // Return the room id to the client
     return res.status(200).json({
