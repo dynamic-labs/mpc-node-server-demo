@@ -19,34 +19,24 @@ export const registerOperationHandlers = (app: Express) => {
       '/api/v1/actions/CreateWalletAccount',
       '/api/v1/actions/ExportWalletAccount',
       '/api/v1/actions/SignMessage',
+      '/api/v1/actions/RefreshShares',
+      '/api/v1/actions/CreateRoom',
+      '/api/v1/actions/ImportPrivateKey',
     ],
     async (req, _res, next) => {
-      if (isDeployedEnv) {
-        // encrypted account credential (EAC) should be decrypted on ingress
-        const { eac: decryptedEACString } = req.body;
-        const eac: EacType = decryptedEACString
-          ? JSON.parse(decryptedEACString)
-          : undefined;
+      if (req.body.eac) {
+        if (isDeployedEnv) {
+          // encrypted account credential (EAC) should be decrypted on ingress
+          const { eac: decryptedEACString } = req.body;
+          const eac: EacType = decryptedEACString
+            ? JSON.parse(decryptedEACString)
+            : undefined;
 
-        req.body.eac = eac;
-      } else {
-        const eac = await evervaultDecrypt(req.body.eac as string);
-        console.log('HITTING EVERVAULT DECRYPT ------', { eac });
-        const parsedEac = JSON.parse(eac);
-
-        // // Convert hex strings to proper format
-        // if (parsedEac.compressedPublicKey && typeof parsedEac.compressedPublicKey === 'string') {
-        //   const buffer = Buffer.from(parsedEac.compressedPublicKey, 'hex');
-        //   parsedEac.compressedPublicKey = new Uint8Array(buffer);
-        // }
-
-        // if (parsedEac.uncompressedPublicKey && typeof parsedEac.uncompressedPublicKey === 'string') {
-        //   const buffer = Buffer.from(parsedEac.uncompressedPublicKey, 'hex');
-        //   parsedEac.uncompressedPublicKey = new EcdsaPublicKey(new Uint8Array(buffer.slice(1))); // Remove the '04' prefix
-        // }
-
-        console.log('HITTING EVERVAULT DECRYPT 2 ------', { parsedEac });
-        req.body.eac = parsedEac;
+          req.body.eac = eac;
+        } else {
+          const eac = await evervaultDecrypt(req.body.eac as string);
+          req.body.eac = JSON.parse(eac);
+        }
       }
       next();
     },

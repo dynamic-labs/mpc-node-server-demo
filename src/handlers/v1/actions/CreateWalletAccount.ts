@@ -28,7 +28,8 @@ export const CreateWalletAccount: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { eac, roomId, clientKeygenId, clientBackupKeygenId } = req.body;
+    const { eac, roomId, clientPrimaryKeygenId, clientSecondaryKeygenId } =
+      req.body;
 
     const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
@@ -41,17 +42,9 @@ export const CreateWalletAccount: TypedRequestHandler<{
       chain,
       roomId,
       serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-      clientKeygenId,
-      clientBackupKeygenId,
+      clientPrimaryKeygenId,
+      clientSecondaryKeygenId,
     });
-
-    // const compressedPublicKeyHex = Buffer.from(
-    //   compressedPublicKey ?? [],
-    // ).toString('hex');
-    // const uncompressedPublicKeyHex =
-    //   uncompressedPublicKey instanceof Uint8Array
-    //     ? Buffer.from(uncompressedPublicKey).toString('hex')
-    //     : uncompressedPublicKey.pubKeyAsHex();
 
     // Encrypted Account Credential
     const rawEac: EAC = {
@@ -60,9 +53,9 @@ export const CreateWalletAccount: TypedRequestHandler<{
       uncompressedPublicKey,
       accountAddress,
       serverKeygenInitResult,
+      serverKeyShare: JSON.stringify(serverKeyShare),
       environmentId,
       chain,
-      serverKeyShare: JSON.stringify(serverKeyShare),
     };
 
     const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
@@ -71,7 +64,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       userId,
       environmentId,
       accountAddress: accountAddress as any,
-      uncompressedPublicKey: uncompressedPublicKey.toString(),
+      uncompressedPublicKey: uncompressedPublicKey,
       compressedPublicKey: compressedPublicKey?.toString(),
       eac: modifiedEac,
     });
@@ -79,8 +72,8 @@ export const CreateWalletAccount: TypedRequestHandler<{
       userId,
       environmentId,
       accountAddress: accountAddress as any,
-      uncompressedPublicKey: uncompressedPublicKey.toString(),
-      compressedPublicKey: compressedPublicKey?.toString(),
+      uncompressedPublicKey: uncompressedPublicKey,
+      compressedPublicKey: compressedPublicKey,
       eac: modifiedEac,
     });
   } catch (error) {

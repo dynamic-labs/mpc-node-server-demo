@@ -5,8 +5,10 @@ import {
   CreateRoom403Type,
   CreateRoom500Type,
   CreateRoomRequestType,
+  EacType,
 } from '../../../generated';
-import { createMpcRoom } from '../../../services/wallets';
+import { createMpcRoom, getKeygenId } from '../../../services/wallets';
+import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
@@ -26,12 +28,26 @@ export const CreateRoom: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, parties } = req.body;
+    const { chain, parties, eac } = req.body;
     const { roomId } = await createMpcRoom({ chain, parties });
+
+    console.log('eac', eac);
+    let serverKeygenId: string | undefined;
+    if (eac) {
+      if (!eac.serverKeyShare) {
+        throw new Error('Server key share is required');
+      }
+      const serverKeyShare = JSON.parse(eac.serverKeyShare);
+      serverKeygenId = await getKeygenId({
+        chainName: chain,
+        clientKeyshare: serverKeyShare,
+      });
+    }
 
     // Return the room id to the client
     return res.status(200).json({
       roomId,
+      serverKeygenId,
     });
   } catch (error) {
     next(error);

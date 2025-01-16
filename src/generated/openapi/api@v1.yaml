@@ -124,6 +124,81 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /api/v1/actions/ReshareRemainingParty:
+    post:
+      operationId: ReshareRemainingParty
+      summary: Reshare Remaining Party
+      description: This reshares the remaining party for a given user
+      x-eov-operation-handler: actions/ReshareRemainingParty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReshareRemainingPartyRequest'
+      responses:
+        '200':
+          description: Successfully reshares the remaining party
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReshareRemainingPartyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/actions/RefreshShares:
+    post:
+      operationId: RefreshShares
+      summary: Refresh Shares
+      description: This refreshes the shares for a given user
+      x-eov-operation-handler: actions/RefreshShares
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshSharesRequest'
+      responses:
+        '200':
+          description: Successfully refreshed shares
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshSharesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/actions/ImportPrivateKey:
+    post:
+      operationId: ImportPrivateKey
+      summary: Import Private Key
+      description: This imports a private key into the server
+      x-eov-operation-handler: actions/ImportPrivateKey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportPrivateKeyRequest'
+      responses:
+        '200':
+          description: Successfully imported private key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportPrivateKeyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/actions/HealthCheck:
     get:
       operationId: HealthCheck
@@ -225,6 +300,32 @@ components:
         error_message:
           type: string
           example: Internal Server Error
+    EAC:
+      type: object
+      required:
+        - userId
+        - uncompressedPublicKey
+        - accountAddress
+        - environmentId
+        - serverKeygenInitResult
+        - chain
+      properties:
+        userId:
+          $ref: '#/components/schemas/UUID'
+        compressedPublicKey:
+          type: string
+        uncompressedPublicKey:
+          type: string
+        accountAddress:
+          type: string
+        environmentId:
+          $ref: '#/components/schemas/UUID'
+        serverKeygenInitResult:
+          type: string
+        serverKeyShare:
+          type: string
+        chain:
+          $ref: '#/components/schemas/Chain'
     CreateRoomRequest:
       type: object
       required:
@@ -236,12 +337,17 @@ components:
         parties:
           type: number
           example: 2
+          description: The number of parties to create the room for
+        eac:
+          $ref: '#/components/schemas/EAC'
     CreateRoomResponse:
       type: object
       required:
         - roomId
       properties:
         roomId:
+          type: string
+        serverKeygenId:
           type: string
     PartialEAC:
       type: object
@@ -264,16 +370,16 @@ components:
       required:
         - eac
         - roomId
-        - clientKeygenId
-        - clientBackupKeygenId
+        - clientPrimaryKeygenId
+        - clientSecondaryKeygenId
       properties:
         eac:
           $ref: '#/components/schemas/PartialEAC'
         roomId:
           type: string
-        clientKeygenId:
+        clientPrimaryKeygenId:
           type: string
-        clientBackupKeygenId:
+        clientSecondaryKeygenId:
           type: string
     CreateWalletAccountResponse:
       type: object
@@ -296,32 +402,6 @@ components:
           type: string
         compressedPublicKey:
           type: string
-    EAC:
-      type: object
-      required:
-        - userId
-        - uncompressedPublicKey
-        - accountAddress
-        - environmentId
-        - serverKeygenInitResult
-        - chain
-      properties:
-        userId:
-          $ref: '#/components/schemas/UUID'
-        compressedPublicKey:
-          type: object
-          description: Binary representation of the compressed public key (Uint8Array)
-        uncompressedPublicKey:
-          type: object
-          description: Binary representation of the uncompressed public key (Uint8Array or EcdsaPublicKey)
-        accountAddress:
-          type: string
-        environmentId:
-          $ref: '#/components/schemas/UUID'
-        serverKeygenInitResult:
-          type: string
-        chain:
-          $ref: '#/components/schemas/Chain'
     ExportWalletAccountRequest:
       type: object
       required:
@@ -353,6 +433,83 @@ components:
           type: string
         eac:
           $ref: '#/components/schemas/EAC'
+    ReshareRemainingPartyRequest:
+      type: object
+      required:
+        - eac
+        - roomId
+        - clientKeygenId
+        - clientBackupKeygenId
+      properties:
+        eac:
+          $ref: '#/components/schemas/PartialEAC'
+        roomId:
+          type: string
+        clientKeygenId:
+          type: string
+        clientBackupKeygenId:
+          type: string
+    ReshareRemainingPartyResponse:
+      type: object
+      required:
+        - eac
+      properties:
+        eac:
+          $ref: '#/components/schemas/EncryptedEvervaultString'
+    RefreshSharesRequest:
+      type: object
+      required:
+        - eac
+        - roomId
+      properties:
+        eac:
+          $ref: '#/components/schemas/EAC'
+        roomId:
+          type: string
+    RefreshSharesResponse:
+      type: object
+      required:
+        - eac
+      properties:
+        eac:
+          $ref: '#/components/schemas/EncryptedEvervaultString'
+    ImportPrivateKeyRequest:
+      type: object
+      required:
+        - eac
+        - roomId
+        - clientPrimaryKeygenId
+        - clientSecondaryKeygenId
+      properties:
+        eac:
+          $ref: '#/components/schemas/PartialEAC'
+        roomId:
+          type: string
+        clientPrimaryKeygenId:
+          type: string
+        clientSecondaryKeygenId:
+          type: string
+    ImportPrivateKeyResponse:
+      type: object
+      required:
+        - eac
+        - userId
+        - environmentId
+        - accountAddress
+        - uncompressedPublicKey
+      properties:
+        eac:
+          $ref: '#/components/schemas/EncryptedEvervaultString'
+        userId:
+          $ref: '#/components/schemas/UUID'
+        environmentId:
+          $ref: '#/components/schemas/UUID'
+        accountAddress:
+          type: string
+        uncompressedPublicKey:
+          type: string
+        compressedPublicKey:
+          type: string
     HealthCheckResponse:
       type: object
       required:

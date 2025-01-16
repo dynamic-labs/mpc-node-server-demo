@@ -1,10 +1,4 @@
-// import { signMessage } from '../../../services/wallets';
 import { signMessage } from '@dynamic-labs/dynamic-wallet-server';
-import {
-  EcdsaKeygenResult,
-  EcdsaPublicKey,
-  Ed25519KeygenResult,
-} from '@sodot/sodot-node-sdk';
 import { Request, Response } from 'express';
 import { EAC } from '../../../types/credentials';
 
@@ -13,16 +7,13 @@ import { EAC } from '../../../types/credentials';
  */
 export const SignMessage = async (req: Request, res: Response) => {
   const { message, roomId, eac } = req.body;
-  const { chain, serverKeyShare } = eac as EAC;
-
-  const parsedServerKeyShare = JSON.parse(serverKeyShare);
-
+  const { serverKeyShare, chain } = eac as EAC;
   // Sign the message
   await signMessage({
     message,
-    serverKeyShare: parsedServerKeyShare,
     chain,
     roomId,
+    serverKeyShare: JSON.parse(serverKeyShare),
   });
 
   return res.status(201).json();

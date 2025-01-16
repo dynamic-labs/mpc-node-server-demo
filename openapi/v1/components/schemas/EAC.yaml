@@ -10,16 +10,16 @@ properties:
   userId:
     $ref: ./UUID.yaml
   compressedPublicKey:
-    type: object
-    description: Binary representation of the compressed public key (Uint8Array)
+   type: string
   uncompressedPublicKey:
-    type: object
-    description: Binary representation of the uncompressed public key (Uint8Array or EcdsaPublicKey)
+    type: string
   accountAddress:
     type: string
   environmentId:
     $ref: ./UUID.yaml
   serverKeygenInitResult:
+    type: string
+  serverKeyShare:
     type: string
   chain:
     $ref: ./Chain.yaml

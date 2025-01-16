@@ -4,15 +4,13 @@ import { UuidType } from './UuidType';
 export type EacType = {
   userId: UuidType;
   /**
-   * @description Binary representation of the compressed public key (Uint8Array)
-   * @type object | undefined
+   * @type string | undefined
    */
-  compressedPublicKey?: object;
+  compressedPublicKey?: string;
   /**
-   * @description Binary representation of the uncompressed public key (Uint8Array or EcdsaPublicKey)
-   * @type object
+   * @type string
    */
-  uncompressedPublicKey: object;
+  uncompressedPublicKey: string;
   /**
    * @type string
    */
@@ -22,5 +20,9 @@ export type EacType = {
    * @type string
    */
   serverKeygenInitResult: string;
+  /**
+   * @type string | undefined
+   */
+  serverKeyShare?: string;
   chain: ChainType;
 };

@@ -8,3 +8,6 @@ properties:
   parties:
     type: number
     example: 2
+    description: The number of parties to create the room for
+  eac:
+    $ref: ./EAC.yaml
