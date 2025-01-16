@@ -32,28 +32,26 @@ export const CreateWalletAccount: TypedRequestHandler<{
 
     const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
-    const { accountAddress, compressedPublicKey, uncompressedPublicKey } =
-      await createWalletAccount({
-        chain,
-        roomId,
-        serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-        clientKeygenId,
-        clientBackupKeygenId,
-      });
-    console.log('accountAddress', accountAddress);
-    console.log('compressedPublicKey', compressedPublicKey);
-    console.log('uncompressedPublicKey', uncompressedPublicKey);
+    const {
+      accountAddress,
+      compressedPublicKey,
+      uncompressedPublicKey,
+      serverKeyShare,
+    } = await createWalletAccount({
+      chain,
+      roomId,
+      serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
+      clientKeygenId,
+      clientBackupKeygenId,
+    });
 
-    const compressedPublicKeyHex = Buffer.from(
-      compressedPublicKey ?? [],
-    ).toString('hex');
-    const uncompressedPublicKeyHex =
-      uncompressedPublicKey instanceof Uint8Array
-        ? Buffer.from(uncompressedPublicKey).toString('hex')
-        : uncompressedPublicKey.pubKeyAsHex();
-
-    console.log('compressedPublicKeyHex', compressedPublicKeyHex);
-    console.log('uncompressedPublicKeyHex', uncompressedPublicKeyHex);
+    // const compressedPublicKeyHex = Buffer.from(
+    //   compressedPublicKey ?? [],
+    // ).toString('hex');
+    // const uncompressedPublicKeyHex =
+    //   uncompressedPublicKey instanceof Uint8Array
+    //     ? Buffer.from(uncompressedPublicKey).toString('hex')
+    //     : uncompressedPublicKey.pubKeyAsHex();
 
     // Encrypted Account Credential
     const rawEac: EAC = {
@@ -64,6 +62,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       serverKeygenInitResult,
       environmentId,
       chain,
+      serverKeyShare: JSON.stringify(serverKeyShare),
     };
 
     const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));

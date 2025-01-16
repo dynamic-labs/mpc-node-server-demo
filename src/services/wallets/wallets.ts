@@ -102,9 +102,8 @@ export const createWalletAccount = async ({
   );
 
   let accountAddress;
-  let compressedPublicKey: Uint8Array<ArrayBufferLike> | undefined;
-  const uncompressedPublicKey: Uint8Array<ArrayBufferLike> | EcdsaPublicKey =
-    publicKeyRaw;
+  let compressedPublicKey: Uint8Array | undefined;
+  const uncompressedPublicKey: Uint8Array | EcdsaPublicKey = publicKeyRaw;
   if (publicKeyRaw instanceof EcdsaPublicKey) {
     const publicKeyCompressed = publicKeyRaw.serializeCompressed();
     compressedPublicKey = publicKeyCompressed;
@@ -130,23 +129,19 @@ export const createWalletAccount = async ({
 export const exportWalletAccount = async ({
   chain,
   roomId,
-  serverKeygenInitResult,
+  serverKeyShare,
   exportId,
 }: {
   chain: ChainType;
   roomId: string;
-  serverKeygenInitResult: string;
+  serverKeyShare: any;
   exportId: string;
 }) => {
   const chainConfig = CHAIN_CONFIG[chain];
   const mpcSigner = getMPCSigner(chainConfig.signingAlgorithm);
 
   // Export occurs only on the client that provided the exportId
-  await mpcSigner.exportFullPrivateKey(
-    roomId,
-    serverKeygenInitResult,
-    exportId,
-  );
+  await mpcSigner.exportFullPrivateKey(roomId, serverKeyShare, exportId);
 };
 
 export const signMessage = async ({
@@ -163,7 +158,7 @@ export const signMessage = async ({
   const chainConfig = CHAIN_CONFIG[chain];
   const mpcSigner = getMPCSigner(chainConfig.signingAlgorithm);
 
-  let messageToSign: MessageHash | Uint8Array<ArrayBufferLike>;
+  let messageToSign: MessageHash | Uint8Array;
   if (mpcSigner instanceof Ecdsa) {
     // For ecdsa, signing requires a hashed message, while ed25519 requires the raw message
     messageToSign = MessageHash.sha256(message);

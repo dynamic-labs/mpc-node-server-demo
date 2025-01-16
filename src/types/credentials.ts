@@ -10,7 +10,8 @@ export type InitialEAC = {
 
 // Encrypted Account Credential
 export type EAC = InitialEAC & {
-  compressedPublicKey?: Uint8Array<ArrayBufferLike>;
-  uncompressedPublicKey: Uint8Array<ArrayBufferLike> | EcdsaPublicKey;
+  compressedPublicKey?: Uint8Array;
+  uncompressedPublicKey: Uint8Array | EcdsaPublicKey;
   accountAddress?: `0x${string}`;
+  serverKeyShare: string;
 };
