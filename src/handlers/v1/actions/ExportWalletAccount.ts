@@ -7,12 +7,12 @@ export const ExportWalletAccount = async (req: Request, res: Response) => {
   const { exportId, roomId, eac } = req.body;
   const { chain, serverKeyShare } = eac;
 
-  await exportWalletAccount({
+  const exportedKey = await exportWalletAccount({
     chain,
     roomId,
     serverKeyShare: JSON.parse(serverKeyShare),
     exportId,
   });
 
-  return res.status(201).send();
+  return res.status(201).json({ exportedKey });
 };

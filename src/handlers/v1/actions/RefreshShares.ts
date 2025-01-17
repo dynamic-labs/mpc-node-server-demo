@@ -1,6 +1,6 @@
+import { refreshShares } from '@dynamic-labs/dynamic-wallet-server';
 import { Request, Response } from 'express';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { refreshShares } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 
 /**
@@ -12,15 +12,15 @@ export const RefreshShares = async (req: Request, res: Response) => {
   console.log('RefreshShares');
   console.log('serverShare', serverKeyShare);
   // Refresh the shares
-  const { serverShare: refreshedServerShare } = await refreshShares({
+  const { serverKeyShare: refreshedServerKeyShare } = await refreshShares({
     chain,
     roomId,
-    serverShare: JSON.parse(serverKeyShare),
+    serverKeyShare: JSON.parse(serverKeyShare),
   });
 
   const rawEac: EAC = {
     ...eac,
-    serverShare: JSON.stringify(refreshedServerShare),
+    serverKeyShare: JSON.stringify(refreshedServerKeyShare),
   };
 
   const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));

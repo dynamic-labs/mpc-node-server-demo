@@ -8,7 +8,6 @@ import {
   CreateWalletAccountRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-// import { createWalletAccount } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 /**
@@ -67,6 +66,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       uncompressedPublicKey: uncompressedPublicKey,
       compressedPublicKey: compressedPublicKey?.toString(),
       eac: modifiedEac,
+      serverKeyShare: JSON.stringify(serverKeyShare),
     });
     return res.status(200).json({
       userId,
@@ -74,6 +74,10 @@ export const CreateWalletAccount: TypedRequestHandler<{
       accountAddress: accountAddress as any,
       uncompressedPublicKey: uncompressedPublicKey,
       compressedPublicKey: compressedPublicKey,
+      // serverKeyShares: [{
+      //   eac: modifiedEac,
+      //   serverKeygenId: serverKeygenInitResult.keygenId,
+      // }],
       eac: modifiedEac,
     });
   } catch (error) {

@@ -1,4 +1,7 @@
-// import { createMpcRoom } from '../../../../../dynamic-wallet-sdk/packages/server/src/mpc/mpc';
+import {
+  createMpcRoom,
+  getKeygenId,
+} from '../../../../../dynamic-wallet-sdk/packages/server/src/mpc/mpc';
 import {
   CreateRoom200Type,
   CreateRoom400Type,
@@ -7,8 +10,6 @@ import {
   CreateRoomRequestType,
   EacType,
 } from '../../../generated';
-import { createMpcRoom, getKeygenId } from '../../../services/wallets';
-import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**

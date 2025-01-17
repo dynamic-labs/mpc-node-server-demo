@@ -7,7 +7,6 @@ import {
   InitKeygenRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-// import { initKeygen } from '../../../services/wallets';
 import { InitialEAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 

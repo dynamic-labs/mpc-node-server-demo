@@ -1,6 +1,6 @@
+import { reshareRemainingParty } from '@dynamic-labs/dynamic-wallet-server';
 import { Request, Response } from 'express';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { reshareRemainingParty } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 
 /**
@@ -11,18 +11,19 @@ export const ReshareRemainingParty = async (req: Request, res: Response) => {
     req.body;
   const { serverKeyShare, chain } = eac as EAC;
   // Reshare the remaining party
-  const { serverShare: refreshedServerShare } = await reshareRemainingParty({
-    chain,
-    roomId,
-    serverShare: JSON.parse(serverKeyShare),
-    clientKeygenId,
-    clientBackupKeygenId,
-    newThreshold,
-  });
+  const { serverKeyShare: refreshedServerKeyShare } =
+    await reshareRemainingParty({
+      chain,
+      roomId,
+      serverKeyShare: JSON.parse(serverKeyShare),
+      clientKeygenId,
+      clientBackupKeygenId,
+      newThreshold,
+    });
 
   const rawEac: EAC = {
     ...eac,
-    serverShare: JSON.stringify(refreshedServerShare),
+    serverKeyShare: JSON.stringify(refreshedServerKeyShare),
   };
 
   const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));

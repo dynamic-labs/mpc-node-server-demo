@@ -1,3 +1,4 @@
+import { importPrivateKey } from '@dynamic-labs/dynamic-wallet-server';
 import {
   ImportPrivateKey200Type,
   ImportPrivateKey400Type,
@@ -6,7 +7,6 @@ import {
   ImportPrivateKeyRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { importPrivateKey } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
