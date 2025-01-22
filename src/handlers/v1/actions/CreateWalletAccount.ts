@@ -1,3 +1,8 @@
+// import { getMPCSigner } from '@dynamic-labs/dynamic-wallet-server';
+import {
+  ThresholdSignatureScheme,
+  createWalletAccount,
+} from '@dynamic-labs/dynamic-wallet-server';
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
@@ -6,10 +11,8 @@ import {
   CreateWalletAccountRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { createWalletAccount } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
-
 /**
  * /api/v1/actions/CreateWalletAccount
  */
@@ -27,8 +30,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { eac, roomId, clientPrimaryKeygenId, clientSecondaryKeygenId } =
-      req.body;
+    const { eac, roomId, clientKeygenIds, thresholdSignatureScheme } = req.body;
 
     const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
@@ -36,17 +38,15 @@ export const CreateWalletAccount: TypedRequestHandler<{
       accountAddress,
       compressedPublicKey,
       uncompressedPublicKey,
-      serverShare,
+      serverKeyShare,
     } = await createWalletAccount({
       chain,
       roomId,
       serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-      clientPrimaryKeygenId,
-      clientSecondaryKeygenId,
+      clientKeygenIds,
+      thresholdSignatureScheme:
+        thresholdSignatureScheme as ThresholdSignatureScheme,
     });
-    console.log('accountAddress', accountAddress);
-    console.log('compressedPublicKey', compressedPublicKey);
-    console.log('uncompressedPublicKey', uncompressedPublicKey);
 
     // Encrypted Account Credential
     const rawEac: EAC = {
@@ -55,7 +55,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       uncompressedPublicKey,
       accountAddress,
       serverKeygenInitResult,
-      serverShare: JSON.stringify(serverShare),
+      serverKeyShare: JSON.stringify(serverKeyShare),
       environmentId,
       chain,
     };
@@ -69,6 +69,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       uncompressedPublicKey: uncompressedPublicKey,
       compressedPublicKey: compressedPublicKey?.toString(),
       eac: modifiedEac,
+      serverKeyShare: JSON.stringify(serverKeyShare),
     });
     return res.status(200).json({
       userId,
@@ -76,6 +77,10 @@ export const CreateWalletAccount: TypedRequestHandler<{
       accountAddress: accountAddress as any,
       uncompressedPublicKey: uncompressedPublicKey,
       compressedPublicKey: compressedPublicKey,
+      // serverKeyShares: [{
+      //   eac: modifiedEac,
+      //   serverKeygenId: serverKeygenInitResult.keygenId,
+      // }],
       eac: modifiedEac,
     });
   } catch (error) {

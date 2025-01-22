@@ -1,18 +1,18 @@
+import { exportWalletAccount } from '@dynamic-labs/dynamic-wallet-server';
 import { Request, Response } from 'express';
-import { exportWalletAccount } from '../../../services/wallets';
 /**
  * /api/v1/actions/ExportWalletAccount
  */
 export const ExportWalletAccount = async (req: Request, res: Response) => {
   const { exportId, roomId, eac } = req.body;
-  const { chain, serverShare } = eac;
+  const { chain, serverKeyShare } = eac;
 
-  await exportWalletAccount({
+  const exportedKey = await exportWalletAccount({
     chain,
     roomId,
-    serverShare: JSON.parse(serverShare),
+    serverKeyShare: JSON.parse(serverKeyShare),
     exportId,
   });
 
-  return res.status(201).send();
+  return res.status(201).json({ exportedKey });
 };

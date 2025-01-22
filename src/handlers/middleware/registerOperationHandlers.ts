@@ -4,6 +4,7 @@ import { Express } from 'express';
 import { middleware as OpenApiValidator } from 'express-openapi-validator';
 
 import 'dotenv/config';
+import { EcdsaPublicKey } from '@sodot/sodot-node-sdk';
 import { EacType } from '../../generated';
 import { evervaultDecrypt } from '../../services/evervault';
 import { verifyJWT } from '../../services/jwt';
@@ -12,6 +13,7 @@ const isDeployedEnv = process.env.NODE_ENV === 'production';
 
 export const registerOperationHandlers = (app: Express) => {
   // EWC and EAC parsing middleware
+  //TODO: make sure i add all the routes that need this encryption middleware
   app.use(
     [
       '/api/v1/actions/CreateWalletAccount',

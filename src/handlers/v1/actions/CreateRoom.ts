@@ -1,3 +1,8 @@
+import { ThresholdSignatureScheme } from '../../../../../dynamic-wallet-sdk/packages/core/dist/mpc/constants';
+import {
+  createMpcRoom,
+  getKeygenId,
+} from '../../../../../dynamic-wallet-sdk/packages/server/src/mpc/mpc';
 import {
   CreateRoom200Type,
   CreateRoom400Type,
@@ -5,8 +10,6 @@ import {
   CreateRoom500Type,
   CreateRoomRequestType,
 } from '../../../generated';
-import { createMpcRoom, getKeygenId } from '../../../services/wallets';
-import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
@@ -26,16 +29,23 @@ export const CreateRoom: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, parties, eac } = req.body;
-    const { roomId } = await createMpcRoom({ chain, parties });
+    const { chain, thresholdSignatureScheme, eac } = req.body;
+    const { roomId } = await createMpcRoom({
+      chain,
+      thresholdSignatureScheme:
+        thresholdSignatureScheme as ThresholdSignatureScheme,
+    });
 
     console.log('eac', eac);
     let serverKeygenId: string | undefined;
     if (eac) {
-      const serverShare = JSON.parse((eac as EAC).serverShare);
+      if (!eac.serverKeyShare) {
+        throw new Error('Server key share is required');
+      }
+      const serverKeyShare = JSON.parse(eac.serverKeyShare);
       serverKeygenId = await getKeygenId({
         chainName: chain,
-        clientKeyshare: serverShare,
+        clientKeyshare: serverKeyShare,
       });
     }
 

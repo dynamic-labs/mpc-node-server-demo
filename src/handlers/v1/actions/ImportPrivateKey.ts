@@ -1,3 +1,4 @@
+import { importPrivateKey } from '@dynamic-labs/dynamic-wallet-server';
 import {
   ImportPrivateKey200Type,
   ImportPrivateKey400Type,
@@ -6,7 +7,6 @@ import {
   ImportPrivateKeyRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
-import { importPrivateKey } from '../../../services/wallets';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
@@ -27,8 +27,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { eac, roomId, clientPrimaryKeygenId, clientSecondaryKeygenId } =
-      req.body;
+    const { eac, roomId, clientKeygenIds } = req.body;
 
     const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
@@ -41,8 +40,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
       chain,
       roomId,
       serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-      clientPrimaryKeygenId,
-      clientSecondaryKeygenId,
+      clientKeygenIds,
     });
     console.log('accountAddress', accountAddress);
     console.log('compressedPublicKey', compressedPublicKey);
@@ -55,7 +53,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
       uncompressedPublicKey,
       accountAddress,
       serverKeygenInitResult,
-      serverShare: JSON.stringify(serverShare),
+      serverKeyShare: JSON.stringify(serverShare),
       environmentId,
       chain,
     };

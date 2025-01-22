@@ -20,5 +20,9 @@ export type EacType = {
    * @type string
    */
   serverKeygenInitResult: string;
+  /**
+   * @type string | undefined
+   */
+  serverKeyShare?: string;
   chain: ChainType;
 };

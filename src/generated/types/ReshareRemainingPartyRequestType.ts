@@ -7,11 +7,7 @@ export type ReshareRemainingPartyRequestType = {
    */
   roomId: string;
   /**
-   * @type string
+   * @type array
    */
-  clientKeygenId: string;
-  /**
-   * @type string
-   */
-  clientBackupKeygenId: string;
+  clientKeygenIds: string[];
 };

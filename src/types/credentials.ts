@@ -1,3 +1,4 @@
+import { EcdsaPublicKey } from '@sodot/sodot-node-sdk';
 import { ChainType } from '../generated';
 
 export type InitialEAC = {
@@ -12,5 +13,5 @@ export type EAC = InitialEAC & {
   compressedPublicKey?: string;
   uncompressedPublicKey: string;
   accountAddress?: `0x${string}` | string;
-  serverShare: string;
+  serverKeyShare: string;
 };

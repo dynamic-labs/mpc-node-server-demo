@@ -7,11 +7,7 @@ export type ImportPrivateKeyRequestType = {
    */
   roomId: string;
   /**
-   * @type string
+   * @type array
    */
-  clientPrimaryKeygenId: string;
-  /**
-   * @type string
-   */
-  clientSecondaryKeygenId: string;
+  clientKeygenIds: string[];
 };

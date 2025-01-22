@@ -235,12 +235,19 @@ components:
       minLength: 36
       maxLength: 36
       example: 95b11417-f18f-457f-8804-68e361f9164f
+    ThresholdSignatureScheme:
+      type: string
+      enum:
+        - TWO_OF_TWO
+        - TWO_OF_THREE
+        - THREE_OF_FIVE
     InitKeygenRequest:
       type: object
       required:
         - chain
         - environmentId
         - userId
+        - thresholdSignatureScheme
       properties:
         chain:
           $ref: '#/components/schemas/Chain'
@@ -248,6 +255,9 @@ components:
           $ref: '#/components/schemas/UUID'
         userId:
           $ref: '#/components/schemas/UUID'
+        thresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
+          example: TWO_OF_TWO
     EncryptedEvervaultString:
       type: string
       pattern: ^ev.*
@@ -318,19 +328,20 @@ components:
           $ref: '#/components/schemas/UUID'
         serverKeygenInitResult:
           type: string
+        serverKeyShare:
+          type: string
         chain:
           $ref: '#/components/schemas/Chain'
     CreateRoomRequest:
       type: object
       required:
         - chain
-        - parties
+        - thresholdSignatureScheme
       properties:
         chain:
           $ref: '#/components/schemas/Chain'
-        parties:
-          type: number
-          description: The number of parties to create the room for
+        thresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
         eac:
           $ref: '#/components/schemas/EAC'
     CreateRoomResponse:
@@ -363,17 +374,18 @@ components:
       required:
         - eac
         - roomId
-        - clientPrimaryKeygenId
-        - clientSecondaryKeygenId
+        - clientKeygenIds
       properties:
         eac:
           $ref: '#/components/schemas/PartialEAC'
         roomId:
           type: string
-        clientPrimaryKeygenId:
-          type: string
-        clientSecondaryKeygenId:
-          type: string
+        clientKeygenIds:
+          type: array
+          items:
+            type: string
+        thresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
     CreateWalletAccountResponse:
       type: object
       required:
@@ -431,17 +443,16 @@ components:
       required:
         - eac
         - roomId
-        - clientKeygenId
-        - clientBackupKeygenId
+        - clientKeygenIds
       properties:
         eac:
           $ref: '#/components/schemas/PartialEAC'
         roomId:
           type: string
-        clientKeygenId:
-          type: string
-        clientBackupKeygenId:
-          type: string
+        clientKeygenIds:
+          type: array
+          items:
+            type: string
     ReshareRemainingPartyResponse:
       type: object
       required:
@@ -471,17 +482,16 @@ components:
       required:
         - eac
         - roomId
-        - clientPrimaryKeygenId
-        - clientSecondaryKeygenId
+        - clientKeygenIds
       properties:
         eac:
           $ref: '#/components/schemas/PartialEAC'
         roomId:
           type: string
-        clientPrimaryKeygenId:
-          type: string
-        clientSecondaryKeygenId:
-          type: string
+        clientKeygenIds:
+          type: array
+          items:
+            type: string
     ImportPrivateKeyResponse:
       type: object
       required:

@@ -10,7 +10,7 @@ properties:
   userId:
     $ref: ./UUID.yaml
   compressedPublicKey:
-    type: string
+   type: string
   uncompressedPublicKey:
     type: string
   accountAddress:
@@ -18,6 +18,8 @@ properties:
   environmentId:
     $ref: ./UUID.yaml
   serverKeygenInitResult:
+    type: string
+  serverKeyShare:
     type: string
   chain:
     $ref: ./Chain.yaml
