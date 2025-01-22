@@ -1,0 +1,5 @@
+type: string
+enum:
+  - TWO_OF_TWO
+  - TWO_OF_THREE
+  - THREE_OF_FIVE
