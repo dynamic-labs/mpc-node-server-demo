@@ -1,4 +1,7 @@
-import { initKeygen } from '@dynamic-labs/dynamic-wallet-server';
+import {
+  ThresholdSignatureScheme,
+  initKeygen,
+} from '@dynamic-labs/dynamic-wallet-server';
 import {
   InitKeygen200Type,
   InitKeygen400Type,
@@ -27,11 +30,12 @@ export const InitKeygen: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, environmentId, userId, parties } = req.body;
+    const { chain, environmentId, userId, thresholdSignatureScheme } = req.body;
 
     const { roomId, keygenInitResult } = await initKeygen({
       chain,
-      parties,
+      thresholdSignatureScheme:
+        thresholdSignatureScheme as ThresholdSignatureScheme,
     });
     const serverKeygenId = keygenInitResult.keygenId;
 

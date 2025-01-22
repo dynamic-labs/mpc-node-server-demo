@@ -1,13 +1,11 @@
 type: object
 required:
   - chain
-  - parties
+  - thresholdSignatureScheme
 properties:
   chain:
     $ref: ./Chain.yaml
-  parties:
-    type: number
-    example: 2
-    description: The number of parties to create the room for
+  thresholdSignatureScheme:
+    $ref: ./ThresholdSignatureScheme.yaml
   eac:
     $ref: ./EAC.yaml

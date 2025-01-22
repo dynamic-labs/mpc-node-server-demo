@@ -2,14 +2,15 @@ type: object
 required:
   - eac
   - roomId
-  - clientPrimaryKeygenId
-  - clientSecondaryKeygenId
+  - clientKeygenIds
 properties:
   eac:
     $ref: ./PartialEAC.yaml
   roomId:
     type: string
-  clientPrimaryKeygenId:
-    type: string
-  clientSecondaryKeygenId:
-    type: string
+  clientKeygenIds:
+    type: array
+    items:
+      type: string
+  thresholdSignatureScheme:
+    $ref: ./ThresholdSignatureScheme.yaml

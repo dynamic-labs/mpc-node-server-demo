@@ -1,3 +1,4 @@
+import { ThresholdSignatureScheme } from '../../../../../dynamic-wallet-sdk/packages/core/dist/mpc/constants';
 import {
   createMpcRoom,
   getKeygenId,
@@ -8,7 +9,6 @@ import {
   CreateRoom403Type,
   CreateRoom500Type,
   CreateRoomRequestType,
-  EacType,
 } from '../../../generated';
 import { TypedRequestHandler } from '../../../types/express';
 
@@ -29,8 +29,12 @@ export const CreateRoom: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, parties, eac } = req.body;
-    const { roomId } = await createMpcRoom({ chain, parties });
+    const { chain, thresholdSignatureScheme, eac } = req.body;
+    const { roomId } = await createMpcRoom({
+      chain,
+      thresholdSignatureScheme:
+        thresholdSignatureScheme as ThresholdSignatureScheme,
+    });
 
     console.log('eac', eac);
     let serverKeygenId: string | undefined;

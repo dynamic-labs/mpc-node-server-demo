@@ -27,8 +27,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { eac, roomId, clientPrimaryKeygenId, clientSecondaryKeygenId } =
-      req.body;
+    const { eac, roomId, clientKeygenIds } = req.body;
 
     const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
@@ -41,8 +40,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
       chain,
       roomId,
       serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-      clientPrimaryKeygenId,
-      clientSecondaryKeygenId,
+      clientKeygenIds,
     });
     console.log('accountAddress', accountAddress);
     console.log('compressedPublicKey', compressedPublicKey);

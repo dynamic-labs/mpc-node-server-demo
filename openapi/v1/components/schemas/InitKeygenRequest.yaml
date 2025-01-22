@@ -3,7 +3,7 @@ required:
   - chain
   - environmentId
   - userId
-  - parties
+  - thresholdSignatureScheme
 properties:
   chain:
     $ref: ./Chain.yaml
@@ -11,6 +11,6 @@ properties:
     $ref: ./UUID.yaml
   userId:
     $ref: ./UUID.yaml
-  parties:
-    type: number
-    example: 2
+  thresholdSignatureScheme:
+    $ref: ./ThresholdSignatureScheme.yaml
+    example: 'TWO_OF_TWO'

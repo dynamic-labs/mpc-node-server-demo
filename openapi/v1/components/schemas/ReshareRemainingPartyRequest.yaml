@@ -2,15 +2,14 @@ type: object
 required:
   - eac
   - roomId
-  - clientKeygenId
-  - clientBackupKeygenId
+  - clientKeygenIds
 properties:
   eac:
     $ref: ./PartialEAC.yaml
   roomId:
     type: string
-  clientKeygenId:
-    type: string
-  clientBackupKeygenId:
-    type: string
+  clientKeygenIds:
+    type: array
+    items:
+      type: string
 

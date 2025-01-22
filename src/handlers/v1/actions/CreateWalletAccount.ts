@@ -1,5 +1,8 @@
 // import { getMPCSigner } from '@dynamic-labs/dynamic-wallet-server';
-import { createWalletAccount } from '@dynamic-labs/dynamic-wallet-server';
+import {
+  ThresholdSignatureScheme,
+  createWalletAccount,
+} from '@dynamic-labs/dynamic-wallet-server';
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
@@ -27,8 +30,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { eac, roomId, clientPrimaryKeygenId, clientSecondaryKeygenId } =
-      req.body;
+    const { eac, roomId, clientKeygenIds, thresholdSignatureScheme } = req.body;
 
     const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
@@ -41,8 +43,9 @@ export const CreateWalletAccount: TypedRequestHandler<{
       chain,
       roomId,
       serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-      clientPrimaryKeygenId,
-      clientSecondaryKeygenId,
+      clientKeygenIds,
+      thresholdSignatureScheme:
+        thresholdSignatureScheme as ThresholdSignatureScheme,
     });
 
     // Encrypted Account Credential

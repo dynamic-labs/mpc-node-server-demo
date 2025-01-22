@@ -47,4 +47,5 @@ export * from './SignMessageType';
 export * from './SignTransactionRequestType';
 export * from './SignTransactionResponseType';
 export * from './SignTransactionType';
+export * from './ThresholdSignatureSchemeType';
 export * from './UuidType';
