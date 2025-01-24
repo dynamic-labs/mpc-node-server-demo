@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf dist .tsBuildInfo",
     "install:ev-enclave": "which ev-enclave 2>&1 > /dev/null && ev-enclave update || (curl https://enclave-build-assets.evervault.com/cli/v1/install -sL | sh)",
-    "generate": "npm-run-all lint 'generate:**' lint:fix",
+    "generate": "npm run lint:fix && npm-run-all lint 'generate:**' lint:fix",
     "generate:types": "kubb generate",
     "generate:openapi:v1": "redocly bundle ./openapi/v1/openapi.yaml -o ./src/generated/openapi/api@v1.yaml",
     "build": "npm-run-all clean lint typecheck 'build:**'",
@@ -63,6 +63,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@dynamic-labs-wallet/evm": "^0.0.2",
     "@dynamic-labs/dynamic-wallet-server": "file:../dynamic-wallet-sdk/packages/server",
     "@dynamic-labs/sdk-api": "^0.0.574",
     "@sodot/sodot-node-sdk": "^1.2.1",

@@ -1,18 +1,34 @@
 import { exportWalletAccount } from '@dynamic-labs/dynamic-wallet-server';
 import { Request, Response } from 'express';
+import { EAC } from 'types/credentials';
+
 /**
  * /api/v1/actions/ExportWalletAccount
  */
-export const ExportWalletAccount = async (req: Request, res: Response) => {
-  const { exportId, roomId, eac } = req.body;
-  const { chain, serverKeyShare } = eac;
 
+const exportSingleServerPartyWalletAccount = async (
+  exportId: string,
+  roomId: string,
+  serverEac: EAC,
+) => {
+  const { chain, serverKeyShare } = serverEac;
   const exportedKey = await exportWalletAccount({
     chain,
     roomId,
     serverKeyShare: JSON.parse(serverKeyShare),
     exportId,
   });
+  return exportedKey;
+};
 
-  return res.status(201).json({ exportedKey });
+export const ExportWalletAccount = async (req: Request, res: Response) => {
+  const { exportId, roomId, serverEacs } = req.body;
+
+  await Promise.all(
+    serverEacs.map((serverEac: EAC) =>
+      exportSingleServerPartyWalletAccount(exportId, roomId, serverEac),
+    ),
+  );
+
+  return res.status(201).json();
 };

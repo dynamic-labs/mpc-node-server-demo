@@ -1,8 +1,7 @@
-import { EncryptedEvervaultStringType } from './EncryptedEvervaultStringType';
+import { ServerKeyShareType } from './ServerKeyShareType';
 import { UuidType } from './UuidType';
 
 export type CreateWalletAccountResponseType = {
-  eac: EncryptedEvervaultStringType;
   userId: UuidType;
   environmentId: UuidType;
   /**
@@ -17,4 +16,8 @@ export type CreateWalletAccountResponseType = {
    * @type string | undefined
    */
   compressedPublicKey?: string;
+  /**
+   * @type array
+   */
+  serverKeyShares: ServerKeyShareType[];
 };

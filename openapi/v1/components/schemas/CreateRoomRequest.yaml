@@ -7,5 +7,5 @@ properties:
     $ref: ./Chain.yaml
   thresholdSignatureScheme:
     $ref: ./ThresholdSignatureScheme.yaml
-  eac:
+  autherizedServerEac:
     $ref: ./EAC.yaml

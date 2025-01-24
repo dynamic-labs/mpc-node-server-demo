@@ -3,14 +3,23 @@ required:
   - eac
   - roomId
   - clientKeygenIds
+  - serverKeygenIds
+  - thresholdSignatureScheme
+  - serverEacs
 properties:
-  eac:
-    $ref: ./PartialEAC.yaml
+  serverEacs:
+    type: array
+    items:
+      $ref: ./PartialEAC.yaml
   roomId:
     type: string
   clientKeygenIds:
     type: array
     items:
       type: string
+  serverKeygenIds:
+    type: array
+    items:
+      type: string
   thresholdSignatureScheme:
-    $ref: ./ThresholdSignatureScheme.yaml
+    type: string

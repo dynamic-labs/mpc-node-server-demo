@@ -266,13 +266,19 @@ components:
       type: object
       required:
         - roomId
+        - serverKeygenIds
+        - serverEacs
       properties:
-        eac:
-          $ref: '#/components/schemas/EncryptedEvervaultString'
         roomId:
           type: string
-        serverKeygenId:
-          type: string
+        serverKeygenIds:
+          type: array
+          items:
+            type: string
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EncryptedEvervaultString'
     BadRequest:
       type: object
       properties:
@@ -342,7 +348,7 @@ components:
           $ref: '#/components/schemas/Chain'
         thresholdSignatureScheme:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
-        eac:
+        autherizedServerEac:
           $ref: '#/components/schemas/EAC'
     CreateRoomResponse:
       type: object
@@ -375,17 +381,33 @@ components:
         - eac
         - roomId
         - clientKeygenIds
+        - serverKeygenIds
+        - thresholdSignatureScheme
+        - serverEacs
       properties:
-        eac:
-          $ref: '#/components/schemas/PartialEAC'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartialEAC'
         roomId:
           type: string
         clientKeygenIds:
           type: array
           items:
             type: string
+        serverKeygenIds:
+          type: array
+          items:
+            type: string
         thresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
+          type: string
+    ServerKeyShare:
+      type: object
+      properties:
+        serverKeygenId:
+          type: string
+        serverKeyShare:
+          $ref: '#/components/schemas/EncryptedEvervaultString'
     CreateWalletAccountResponse:
       type: object
       required:
@@ -394,9 +416,8 @@ components:
         - environmentId
         - accountAddress
         - uncompressedPublicKey
+        - serverKeyShares
       properties:
-        eac:
-          $ref: '#/components/schemas/EncryptedEvervaultString'
         userId:
           $ref: '#/components/schemas/UUID'
         environmentId:
@@ -407,15 +428,21 @@ components:
           type: string
         compressedPublicKey:
           type: string
+        serverKeyShares:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerKeyShare'
     ExportWalletAccountRequest:
       type: object
       required:
-        - eac
+        - serverEacs
         - exportId
         - roomId
       properties:
-        eac:
-          $ref: '#/components/schemas/EAC'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EAC'
         exportId:
           type: string
         roomId:
@@ -428,7 +455,7 @@ components:
       required:
         - roomId
         - message
-        - eac
+        - serverEacs
       properties:
         jwt:
           $ref: '#/components/schemas/JWT'
@@ -436,8 +463,10 @@ components:
           type: string
         roomId:
           type: string
-        eac:
-          $ref: '#/components/schemas/EAC'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EAC'
     ReshareRemainingPartyRequest:
       type: object
       required:
