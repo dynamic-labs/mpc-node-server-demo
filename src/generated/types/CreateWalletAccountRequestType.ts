@@ -1,4 +1,5 @@
 import { PartialEacType } from './PartialEacType';
+import { ThresholdSignatureSchemeType } from './ThresholdSignatureSchemeType';
 
 export type CreateWalletAccountRequestType = {
   /**
@@ -17,8 +18,5 @@ export type CreateWalletAccountRequestType = {
    * @type array
    */
   serverKeygenIds: string[];
-  /**
-   * @type string
-   */
-  thresholdSignatureScheme: string;
+  thresholdSignatureScheme: ThresholdSignatureSchemeType;
 };

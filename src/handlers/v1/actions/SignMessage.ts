@@ -1,12 +1,11 @@
 import { signMessage } from '@dynamic-labs-wallet/server';
 import { Request, Response } from 'express';
-import { EAC } from '../../../types/credentials';
 import { signSingleServerPartyMessage } from 'services/mpc/signSingleServerPartyMessage';
+import { EAC } from '../../../types/credentials';
 
 /**
  * /api/v1/actions/SignMessage
  */
-
 
 export const SignMessage = async (req: Request, res: Response) => {
   const { message, roomId, serverEacs } = req.body;

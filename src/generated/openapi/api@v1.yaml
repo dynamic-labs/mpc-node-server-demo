@@ -348,7 +348,7 @@ components:
           $ref: '#/components/schemas/Chain'
         thresholdSignatureScheme:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
-        autherizedServerEac:
+        authorizedServerEac:
           $ref: '#/components/schemas/EAC'
     CreateRoomResponse:
       type: object
@@ -400,7 +400,7 @@ components:
           items:
             type: string
         thresholdSignatureScheme:
-          type: string
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
     ServerKeyShare:
       type: object
       properties:

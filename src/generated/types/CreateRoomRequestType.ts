@@ -5,5 +5,5 @@ import { ThresholdSignatureSchemeType } from './ThresholdSignatureSchemeType';
 export type CreateRoomRequestType = {
   chain: ChainType;
   thresholdSignatureScheme: ThresholdSignatureSchemeType;
-  autherizedServerEac?: EacType;
+  authorizedServerEac?: EacType;
 };

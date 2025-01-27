@@ -1,4 +1,8 @@
 import {
+  WalletAccount,
+  createSingleWalletAccount,
+} from 'services/mpc/createSingleWalletAccount';
+import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
   CreateWalletAccount403Type,
@@ -8,7 +12,6 @@ import {
 } from '../../../generated';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
-import { createSingleWalletAccount, WalletAccount } from 'services/mpc/createSingleWalletAccount';
 
 /**
  * /api/v1/actions/CreateWalletAccount

@@ -29,20 +29,20 @@ export const CreateRoom: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, thresholdSignatureScheme, autherizedServerEac } = req.body;
+    const { chain, thresholdSignatureScheme, authorizedServerEac } = req.body;
     const { roomId } = await createMpcRoom({
       chain,
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
     });
 
-    console.log('eac', autherizedServerEac);
+    console.log('eac', authorizedServerEac);
     let serverKeygenId: string | undefined;
-    if (autherizedServerEac) {
-      if (!autherizedServerEac.serverKeyShare) {
+    if (authorizedServerEac) {
+      if (!authorizedServerEac.serverKeyShare) {
         throw new Error('Server key share is required');
       }
-      const serverKeyShare = JSON.parse(autherizedServerEac.serverKeyShare);
+      const serverKeyShare = JSON.parse(authorizedServerEac.serverKeyShare);
       serverKeygenId = await getKeygenId({
         chainName: chain,
         clientKeyshare: serverKeyShare,
