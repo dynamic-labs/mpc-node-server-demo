@@ -2,7 +2,7 @@
 import {
   ThresholdSignatureScheme,
   createWalletAccount,
-} from '@dynamic-labs/dynamic-wallet-server';
+} from '@dynamic-labs-wallet/server';
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,

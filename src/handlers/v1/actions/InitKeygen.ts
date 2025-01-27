@@ -1,7 +1,7 @@
 import {
   ThresholdSignatureScheme,
   initKeygen,
-} from '@dynamic-labs/dynamic-wallet-server';
+} from '@dynamic-labs-wallet/server';
 import { BIP340InitKeygenResult } from '../../../../../dynamic-wallet-sdk/packages/lib-mpc-internal/dist/dist';
 import {
   InitKeygen200Type,

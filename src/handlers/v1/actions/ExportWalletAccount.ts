@@ -1,4 +1,4 @@
-import { exportWalletAccount } from '@dynamic-labs/dynamic-wallet-server';
+import { exportWalletAccount } from '@dynamic-labs-wallet/server';
 import { Request, Response } from 'express';
 import { EAC } from 'types/credentials';
 
