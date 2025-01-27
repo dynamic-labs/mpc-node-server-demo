@@ -1,4 +1,4 @@
-import { importPrivateKey } from '@dynamic-labs/dynamic-wallet-server';
+import { importPrivateKey } from '@dynamic-labs-wallet/server';
 import {
   ImportPrivateKey200Type,
   ImportPrivateKey400Type,

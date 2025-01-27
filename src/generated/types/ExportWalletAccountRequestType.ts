@@ -1,7 +1,10 @@
 import { EacType } from './EacType';
 
 export type ExportWalletAccountRequestType = {
-  eac: EacType;
+  /**
+   * @type array
+   */
+  serverEacs: EacType[];
   /**
    * @type string
    */

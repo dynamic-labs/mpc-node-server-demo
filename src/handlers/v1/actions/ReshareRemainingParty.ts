@@ -1,4 +1,4 @@
-import { reshareRemainingParty } from '@dynamic-labs/dynamic-wallet-server';
+import { reshareRemainingParty } from '@dynamic-labs-wallet/server';
 import { Request, Response } from 'express';
 import { evervaultEncrypt } from '../../../services/evervault';
 import { EAC } from '../../../types/credentials';

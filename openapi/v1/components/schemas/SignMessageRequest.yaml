@@ -2,7 +2,7 @@ type: object
 required:
   - roomId
   - message
-  - eac
+  - serverEacs
 properties:
   jwt:
     $ref: ./JWT.yaml
@@ -10,5 +10,7 @@ properties:
     type: string
   roomId:
     type: string
-  eac:
-    $ref: ./EAC.yaml
+  serverEacs:
+    type: array
+    items:
+      $ref: ./EAC.yaml

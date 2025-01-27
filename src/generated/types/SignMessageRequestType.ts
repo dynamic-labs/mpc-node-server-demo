@@ -11,5 +11,8 @@ export type SignMessageRequestType = {
    * @type string
    */
   roomId: string;
-  eac: EacType;
+  /**
+   * @type array
+   */
+  serverEacs: EacType[];
 };

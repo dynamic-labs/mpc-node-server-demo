@@ -1,7 +1,8 @@
 import {
   ThresholdSignatureScheme,
   initKeygen,
-} from '@dynamic-labs/dynamic-wallet-server';
+} from '@dynamic-labs-wallet/server';
+import { BIP340InitKeygenResult } from '../../../../../dynamic-wallet-sdk/packages/lib-mpc-internal/dist/dist';
 import {
   InitKeygen200Type,
   InitKeygen400Type,
@@ -32,28 +33,39 @@ export const InitKeygen: TypedRequestHandler<{
   try {
     const { chain, environmentId, userId, thresholdSignatureScheme } = req.body;
 
-    const { roomId, keygenInitResult } = await initKeygen({
+    if (!thresholdSignatureScheme) {
+      throw new Error('Threshold signature scheme is required');
+    }
+
+    const { roomId, keygenInitResults } = await initKeygen({
       chain,
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
     });
-    const serverKeygenId = keygenInitResult.keygenId;
 
-    // Initial Encrypted Account Credential
-    const rawEac: InitialEAC = {
-      userId,
-      serverKeygenInitResult: JSON.stringify(keygenInitResult),
-      environmentId,
-      chain,
-    };
+    const serverKeygenIds: string[] = keygenInitResults.map(
+      (result: BIP340InitKeygenResult) => result.keygenId,
+    );
 
-    const eac = await evervaultEncrypt(JSON.stringify(rawEac));
+    const eacs: string[] = [];
+    for (const keygenInitResult of keygenInitResults) {
+      // Initial Encrypted Account Credential
+      const rawEac: InitialEAC = {
+        userId,
+        serverKeygenInitResult: JSON.stringify(keygenInitResult),
+        environmentId,
+        chain,
+      };
+
+      const eac = await evervaultEncrypt(JSON.stringify(rawEac));
+      eacs.push(eac);
+    }
 
     // Return the keygen room id and server keygen id to the client
     return res.status(200).json({
       roomId,
-      serverKeygenId,
-      eac,
+      serverKeygenIds,
+      serverEacs: eacs,
     });
   } catch (error) {
     next(error);

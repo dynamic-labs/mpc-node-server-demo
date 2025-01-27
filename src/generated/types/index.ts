@@ -41,6 +41,7 @@ export * from './RefreshSharesType';
 export * from './ReshareRemainingPartyRequestType';
 export * from './ReshareRemainingPartyResponseType';
 export * from './ReshareRemainingPartyType';
+export * from './ServerKeyShareType';
 export * from './SignMessageRequestType';
 export * from './SignMessageResponseType';
 export * from './SignMessageType';
