@@ -5,7 +5,7 @@ import { middleware as OpenApiValidator } from 'express-openapi-validator';
 
 import 'dotenv/config';
 import { EcdsaPublicKey } from '@sodot/sodot-node-sdk';
-import { EacType } from '../../generated';
+import { EacType, PartialEacType } from '../../generated';
 import { evervaultDecrypt } from '../../services/evervault';
 import { verifyJWT } from '../../services/jwt';
 
@@ -24,18 +24,30 @@ export const registerOperationHandlers = (app: Express) => {
       '/api/v1/actions/ImportPrivateKey',
     ],
     async (req, _res, next) => {
-      if (req.body.eac) {
+      if (req.body.serverEacs) {
         if (isDeployedEnv) {
           // encrypted account credential (EAC) should be decrypted on ingress
-          const { eac: decryptedEACString } = req.body;
-          const eac: EacType = decryptedEACString
-            ? JSON.parse(decryptedEACString)
-            : undefined;
+          // const { eac: decryptedEACString } = req.body;
+          // const eac: EacType = decryptedEACString
+          //   ? JSON.parse(decryptedEACString)
+          //   : undefined;
 
-          req.body.eac = eac;
+          // req.body.eac = eac;
+          
+
         } else {
-          const eac = await evervaultDecrypt(req.body.eac as string);
-          req.body.eac = JSON.parse(eac);
+
+          const serverEacs = req.body.serverEacs;
+          const serverEacParsed = await Promise.all(
+            serverEacs.map(async (eac: string) => {
+              const decryptedEACString = await evervaultDecrypt(eac);
+              console.log('decryptedEACString', decryptedEACString);
+              const parsedEac = JSON.parse(decryptedEACString);
+              console.log('parsedEac', parsedEac);
+              return parsedEac;
+            }),
+          );
+          req.body.serverEacs = serverEacParsed as PartialEacType[];
         }
       }
       next();

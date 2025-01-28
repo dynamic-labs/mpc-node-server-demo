@@ -378,10 +378,8 @@ components:
     CreateWalletAccountRequest:
       type: object
       required:
-        - eac
         - roomId
         - clientKeygenIds
-        - serverKeygenIds
         - thresholdSignatureScheme
         - serverEacs
       properties:
@@ -392,10 +390,6 @@ components:
         roomId:
           type: string
         clientKeygenIds:
-          type: array
-          items:
-            type: string
-        serverKeygenIds:
           type: array
           items:
             type: string

@@ -12,6 +12,7 @@ import {
 } from '../../../generated';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 
 /**
  * /api/v1/actions/CreateWalletAccount
@@ -44,6 +45,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
           JSON.parse(eac.serverKeygenInitResult).keygenId,
       ),
     );
+
     const walletAccounts = await Promise.all(
       serverEacs.map((eac: PartialEacType) =>
         createSingleWalletAccount(
@@ -51,7 +53,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
           roomId,
           clientKeygenIds,
           _serverKeyGenIds,
-          thresholdSignatureScheme,
+          thresholdSignatureScheme as ThresholdSignatureScheme,
         ),
       ),
     );

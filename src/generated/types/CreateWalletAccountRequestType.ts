@@ -14,9 +14,5 @@ export type CreateWalletAccountRequestType = {
    * @type array
    */
   clientKeygenIds: string[];
-  /**
-   * @type array
-   */
-  serverKeygenIds: string[];
   thresholdSignatureScheme: ThresholdSignatureSchemeType;
 };
