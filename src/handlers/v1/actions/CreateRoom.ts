@@ -1,8 +1,5 @@
-import { ThresholdSignatureScheme } from '../../../../../dynamic-wallet-sdk/packages/core/dist/mpc/constants';
-import {
-  createMpcRoom,
-  getKeygenId,
-} from '../../../../../dynamic-wallet-sdk/packages/server/src/mpc/mpc';
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/core';
+import { createMpcRoom, getKeygenId } from '@dynamic-labs-wallet/server';
 import {
   CreateRoom200Type,
   CreateRoom400Type,

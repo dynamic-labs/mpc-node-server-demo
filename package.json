@@ -64,9 +64,8 @@
   },
   "dependencies": {
     "@dynamic-labs-wallet/evm": "^0.0.2",
-    "@dynamic-labs-wallet/server": "file:../dynamic-wallet-sdk/packages/server",
+    "@dynamic-labs-wallet/server": "^0.0.2",
     "@dynamic-labs/sdk-api": "^0.0.574",
-    "@sodot/sodot-node-sdk": "^1.2.1",
     "@solana/web3.js": "^1.95.4",
     "axios": "^1.7.2",
     "bs58": "^6.0.0",
