@@ -1,7 +1,10 @@
-import { PartialEacType } from './PartialEacType';
+import { EacType } from './EacType';
 
 export type ImportPrivateKeyRequestType = {
-  eac: PartialEacType;
+  /**
+   * @type array
+   */
+  serverEacs: EacType[];
   /**
    * @type string
    */

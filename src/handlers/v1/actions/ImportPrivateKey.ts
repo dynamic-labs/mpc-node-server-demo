@@ -1,4 +1,4 @@
-import { importPrivateKey } from '@dynamic-labs-wallet/server';
+import { importSingleServerPartyPrivateKey } from 'services/mpc/importSingleServerPartyPrivateKey';
 import {
   ImportPrivateKey200Type,
   ImportPrivateKey400Type,
@@ -27,54 +27,43 @@ export const ImportPrivateKey: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { eac, roomId, clientKeygenIds } = req.body;
+    const { serverEacs, roomId, clientKeygenIds } = req.body;
 
-    const { userId, serverKeygenInitResult, environmentId, chain } = eac;
+    if (!serverEacs) {
+      throw new Error('Server EACs are required');
+    }
 
-    const {
-      accountAddress,
-      compressedPublicKey,
-      uncompressedPublicKey,
-      serverShare,
-    } = await importPrivateKey({
-      chain,
-      roomId,
-      serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-      clientKeygenIds,
-    });
-    console.log('accountAddress', accountAddress);
-    console.log('compressedPublicKey', compressedPublicKey);
-    console.log('uncompressedPublicKey', uncompressedPublicKey);
+    //make promise await all
+    const _serverKeyGenIds = await Promise.all(
+      serverEacs.map(
+        (eac: PartialEacType) =>
+          JSON.parse(eac.serverKeygenInitResult).keygenId,
+      ),
+    );
+    const walletAccounts = await Promise.all(
+      serverEacs.map((eac: PartialEacType) =>
+        importSingleServerPartyPrivateKey(
+          eac as EAC,
+          roomId,
+          clientKeygenIds,
+          _serverKeyGenIds,
+          thresholdSignatureScheme,
+        ),
+      ),
+    );
 
-    // Encrypted Account Credential
-    const rawEac: EAC = {
-      userId,
-      compressedPublicKey,
-      uncompressedPublicKey,
-      accountAddress,
-      serverKeygenInitResult,
-      serverKeyShare: JSON.stringify(serverShare),
-      environmentId,
-      chain,
-    };
-
-    const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
-
-    console.log({
-      userId,
-      environmentId,
-      accountAddress: accountAddress as any,
-      uncompressedPublicKey: uncompressedPublicKey,
-      compressedPublicKey: compressedPublicKey?.toString(),
-      eac: modifiedEac,
-    });
     return res.status(200).json({
-      userId,
-      environmentId,
-      accountAddress: accountAddress as any,
-      uncompressedPublicKey: uncompressedPublicKey,
-      compressedPublicKey: compressedPublicKey,
-      eac: modifiedEac,
+      userId: walletAccounts[0].userId,
+      environmentId: walletAccounts[0].environmentId,
+      accountAddress: walletAccounts[0].accountAddress,
+      uncompressedPublicKey: walletAccounts[0].uncompressedPublicKey,
+      compressedPublicKey: walletAccounts[0].compressedPublicKey,
+      serverKeyShares: walletAccounts.map((walletAccount: WalletAccount) => {
+        return {
+          serverKeygenId: walletAccount.serverKeygenId,
+          serverEac: walletAccount.modifiedEac,
+        };
+      }),
     });
   } catch (error) {
     next(error);

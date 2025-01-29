@@ -1,21 +1,12 @@
 import {
   ThresholdSignatureScheme,
-  createWalletAccount,
+  importPrivateKey,
 } from '@dynamic-labs-wallet/server';
 import { evervaultEncrypt } from 'services/evervault';
 import { EAC } from '../../types/credentials';
+import { WalletAccount } from './createSingleWalletAccount';
 
-export type WalletAccount = {
-  userId: string;
-  environmentId: string;
-  modifiedEac: string;
-  accountAddress: string;
-  compressedPublicKey: string;
-  uncompressedPublicKey: string;
-  serverKeygenId: string;
-};
-
-export const createSingleWalletAccount = async (
+export const importSingleServerPartyPrivateKey = async (
   eac: EAC,
   roomId: string,
   clientKeygenIds: string[],
@@ -32,8 +23,8 @@ export const createSingleWalletAccount = async (
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
-    serverKeyShare,
-  } = await createWalletAccount({
+    serverShare,
+  } = await importPrivateKey({
     chain,
     roomId,
     serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
@@ -49,16 +40,12 @@ export const createSingleWalletAccount = async (
     uncompressedPublicKey,
     accountAddress,
     serverKeygenInitResult,
-    serverKeyShare: JSON.stringify(serverKeyShare),
+    serverKeyShare: JSON.stringify(serverShare),
     environmentId,
     chain,
   };
 
   const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
-
-  if (!compressedPublicKey || !uncompressedPublicKey || !accountAddress) {
-    throw new Error('Error creating wallet account');
-  }
 
   return {
     userId,

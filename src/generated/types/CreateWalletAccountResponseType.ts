@@ -13,9 +13,9 @@ export type CreateWalletAccountResponseType = {
    */
   uncompressedPublicKey: string;
   /**
-   * @type string | undefined
+   * @type string
    */
-  compressedPublicKey?: string;
+  compressedPublicKey: string;
   /**
    * @type array
    */

@@ -1,13 +1,13 @@
 type: object
 required:
-  - eac
   - userId
   - environmentId
   - accountAddress
   - uncompressedPublicKey
+  - compressedPublicKey
+  - serverKeyShares
+  
 properties:
-  eac:
-    $ref: ./EncryptedEvervaultString.yaml
   userId:
     $ref: ./UUID.yaml
   environmentId:
@@ -18,3 +18,7 @@ properties:
     type: string
   compressedPublicKey:
     type: string
+  serverKeyShares:
+    type: array
+    items:
+      $ref: ./ServerKeyShare.yaml

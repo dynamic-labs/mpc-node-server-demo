@@ -405,11 +405,11 @@ components:
     CreateWalletAccountResponse:
       type: object
       required:
-        - eac
         - userId
         - environmentId
         - accountAddress
         - uncompressedPublicKey
+        - compressedPublicKey
         - serverKeyShares
       properties:
         userId:
@@ -503,12 +503,14 @@ components:
     ImportPrivateKeyRequest:
       type: object
       required:
-        - eac
+        - serverEacs
         - roomId
         - clientKeygenIds
       properties:
-        eac:
-          $ref: '#/components/schemas/PartialEAC'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EAC'
         roomId:
           type: string
         clientKeygenIds:
@@ -518,14 +520,13 @@ components:
     ImportPrivateKeyResponse:
       type: object
       required:
-        - eac
         - userId
         - environmentId
         - accountAddress
         - uncompressedPublicKey
+        - compressedPublicKey
+        - serverKeyShares
       properties:
-        eac:
-          $ref: '#/components/schemas/EncryptedEvervaultString'
         userId:
           $ref: '#/components/schemas/UUID'
         environmentId:
@@ -536,6 +537,10 @@ components:
           type: string
         compressedPublicKey:
           type: string
+        serverKeyShares:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServerKeyShare'
     HealthCheckResponse:
       type: object
       required:

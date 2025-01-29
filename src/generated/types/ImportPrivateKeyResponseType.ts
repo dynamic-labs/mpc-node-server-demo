@@ -1,8 +1,7 @@
-import { EncryptedEvervaultStringType } from './EncryptedEvervaultStringType';
+import { ServerKeyShareType } from './ServerKeyShareType';
 import { UuidType } from './UuidType';
 
 export type ImportPrivateKeyResponseType = {
-  eac: EncryptedEvervaultStringType;
   userId: UuidType;
   environmentId: UuidType;
   /**
@@ -14,7 +13,11 @@ export type ImportPrivateKeyResponseType = {
    */
   uncompressedPublicKey: string;
   /**
-   * @type string | undefined
+   * @type string
    */
-  compressedPublicKey?: string;
+  compressedPublicKey: string;
+  /**
+   * @type array
+   */
+  serverKeyShares: ServerKeyShareType[];
 };
