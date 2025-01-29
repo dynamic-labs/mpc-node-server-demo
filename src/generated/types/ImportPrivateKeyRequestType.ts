@@ -1,4 +1,5 @@
 import { EacType } from './EacType';
+import { ThresholdSignatureSchemeType } from './ThresholdSignatureSchemeType';
 
 export type ImportPrivateKeyRequestType = {
   /**
@@ -9,6 +10,7 @@ export type ImportPrivateKeyRequestType = {
    * @type string
    */
   roomId: string;
+  thresholdSignatureScheme: ThresholdSignatureSchemeType;
   /**
    * @type array
    */

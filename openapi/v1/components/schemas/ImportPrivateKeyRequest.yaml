@@ -3,6 +3,7 @@ required:
   - serverEacs
   - roomId
   - clientKeygenIds
+  - thresholdSignatureScheme
 properties:
   serverEacs:
     type: array
@@ -10,6 +11,8 @@ properties:
       $ref: ./EAC.yaml
   roomId:
     type: string
+  thresholdSignatureScheme:
+    $ref: ./ThresholdSignatureScheme.yaml
   clientKeygenIds:
     type: array
     items:

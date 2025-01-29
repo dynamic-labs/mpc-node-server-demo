@@ -13,6 +13,7 @@ export type WalletAccount = {
   compressedPublicKey: string;
   uncompressedPublicKey: string;
   serverKeygenId: string;
+  derivationPath: string;
 };
 
 export const createSingleWalletAccount = async (
@@ -33,6 +34,7 @@ export const createSingleWalletAccount = async (
     compressedPublicKey,
     uncompressedPublicKey,
     serverKeyShare,
+    derivationPath,
   } = await createWalletAccount({
     chain,
     roomId,
@@ -41,6 +43,8 @@ export const createSingleWalletAccount = async (
     thresholdSignatureScheme:
       thresholdSignatureScheme as ThresholdSignatureScheme,
   });
+
+  const serializedDerivationPath = JSON.stringify(derivationPath);
 
   // Encrypted Account Credential
   const rawEac: EAC = {
@@ -52,6 +56,7 @@ export const createSingleWalletAccount = async (
     serverKeyShare: JSON.stringify(serverKeyShare),
     environmentId,
     chain,
+    derivationPath: serializedDerivationPath,
   };
 
   const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
@@ -67,6 +72,7 @@ export const createSingleWalletAccount = async (
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
+    derivationPath: serializedDerivationPath,
     serverKeygenId: JSON.parse(serverKeygenInitResult).keygenId,
   };
 };

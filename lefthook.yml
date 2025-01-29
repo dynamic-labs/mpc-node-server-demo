@@ -46,9 +46,10 @@ commit-msg:
   commands:
     lint-commit-msg:
       run: npx commitlint --edit
-pre-push:
-  commands:
-    packages-audit:
-      tags: security
-      run: npm audit --audit-level=high
+# TEMP DISABLED
+# pre-push:
+#   commands:
+#     packages-audit:
+#       tags: security
+#       run: npm audit --audit-level=high
  

@@ -6,7 +6,7 @@ required:
   - uncompressedPublicKey
   - compressedPublicKey
   - serverKeyShares
-  
+  - derivationPath
 properties:
   userId:
     $ref: ./UUID.yaml
@@ -17,6 +17,8 @@ properties:
   uncompressedPublicKey:
     type: string
   compressedPublicKey:
+    type: string
+  derivationPath:
     type: string
   serverKeyShares:
     type: array

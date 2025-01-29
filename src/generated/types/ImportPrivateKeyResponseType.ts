@@ -17,6 +17,10 @@ export type ImportPrivateKeyResponseType = {
    */
   compressedPublicKey: string;
   /**
+   * @type string
+   */
+  derivationPath: string;
+  /**
    * @type array
    */
   serverKeyShares: ServerKeyShareType[];

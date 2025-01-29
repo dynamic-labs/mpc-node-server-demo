@@ -17,6 +17,10 @@ export type CreateWalletAccountResponseType = {
    */
   compressedPublicKey: string;
   /**
+   * @type string
+   */
+  derivationPath: string;
+  /**
    * @type array
    */
   serverKeyShares: ServerKeyShareType[];

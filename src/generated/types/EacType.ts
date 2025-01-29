@@ -25,4 +25,8 @@ export type EacType = {
    */
   serverKeyShare?: string;
   chain: ChainType;
+  /**
+   * @type string
+   */
+  derivationPath: string;
 };

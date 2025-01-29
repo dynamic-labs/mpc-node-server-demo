@@ -6,6 +6,7 @@ required:
   - environmentId
   - serverKeygenInitResult
   - chain
+  - derivationPath
 properties:
   userId:
     $ref: ./UUID.yaml
@@ -23,3 +24,5 @@ properties:
     type: string
   chain:
     $ref: ./Chain.yaml
+  derivationPath:
+    type: string

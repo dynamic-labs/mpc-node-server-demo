@@ -1,3 +1,4 @@
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import { importSingleServerPartyPrivateKey } from 'services/mpc/importSingleServerPartyPrivateKey';
 import {
   ImportPrivateKey200Type,
@@ -5,8 +6,9 @@ import {
   ImportPrivateKey403Type,
   ImportPrivateKey500Type,
   ImportPrivateKeyRequestType,
+  PartialEacType,
 } from '../../../generated';
-import { evervaultEncrypt } from '../../../services/evervault';
+import { WalletAccount } from '../../../services/mpc/createSingleWalletAccount';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
@@ -27,7 +29,8 @@ export const ImportPrivateKey: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { serverEacs, roomId, clientKeygenIds } = req.body;
+    const { serverEacs, roomId, clientKeygenIds, thresholdSignatureScheme } =
+      req.body;
 
     if (!serverEacs) {
       throw new Error('Server EACs are required');
@@ -47,7 +50,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
           roomId,
           clientKeygenIds,
           _serverKeyGenIds,
-          thresholdSignatureScheme,
+          thresholdSignatureScheme as ThresholdSignatureScheme,
         ),
       ),
     );
@@ -58,6 +61,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
       accountAddress: walletAccounts[0].accountAddress,
       uncompressedPublicKey: walletAccounts[0].uncompressedPublicKey,
       compressedPublicKey: walletAccounts[0].compressedPublicKey,
+      derivationPath: walletAccounts[0].derivationPath,
       serverKeyShares: walletAccounts.map((walletAccount: WalletAccount) => {
         return {
           serverKeygenId: walletAccount.serverKeygenId,

@@ -2,7 +2,6 @@ import {
   ThresholdSignatureScheme,
   initKeygen,
 } from '@dynamic-labs-wallet/server';
-import { BIP340InitKeygenResult } from '../../../../../dynamic-wallet-sdk/packages/lib-mpc-internal/dist/dist';
 import {
   InitKeygen200Type,
   InitKeygen400Type,
@@ -44,7 +43,7 @@ export const InitKeygen: TypedRequestHandler<{
     });
 
     const serverKeygenIds: string[] = keygenInitResults.map(
-      (result: BIP340InitKeygenResult) => result.keygenId,
+      (result: any) => result.keygenId,
     );
 
     const eacs: string[] = [];

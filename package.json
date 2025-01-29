@@ -1,5 +1,5 @@
 {
-  "name": "embedded-wallet-enclave",
+  "name": "wallet-service",
   "version": "0.0.1",
   "description": "A backend service for creating wallets and session keys",
   "scripts": {
@@ -63,8 +63,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@dynamic-labs-wallet/evm": "^0.0.0-local.1738098400384",
-    "@dynamic-labs-wallet/server": "^0.0.0-local.1738098400384",
+    "@dynamic-labs-wallet/evm": "^0.0.0-local.1738171485808",
+    "@dynamic-labs-wallet/server": "^0.0.0-local.1738171485808",
     "@dynamic-labs/sdk-api": "^0.0.574",
     "@solana/web3.js": "^1.95.4",
     "axios": "^1.7.2",

@@ -321,6 +321,7 @@ components:
         - environmentId
         - serverKeygenInitResult
         - chain
+        - derivationPath
       properties:
         userId:
           $ref: '#/components/schemas/UUID'
@@ -338,6 +339,8 @@ components:
           type: string
         chain:
           $ref: '#/components/schemas/Chain'
+        derivationPath:
+          type: string
     CreateRoomRequest:
       type: object
       required:
@@ -411,6 +414,7 @@ components:
         - uncompressedPublicKey
         - compressedPublicKey
         - serverKeyShares
+        - derivationPath
       properties:
         userId:
           $ref: '#/components/schemas/UUID'
@@ -421,6 +425,8 @@ components:
         uncompressedPublicKey:
           type: string
         compressedPublicKey:
+          type: string
+        derivationPath:
           type: string
         serverKeyShares:
           type: array
@@ -506,6 +512,7 @@ components:
         - serverEacs
         - roomId
         - clientKeygenIds
+        - thresholdSignatureScheme
       properties:
         serverEacs:
           type: array
@@ -513,6 +520,8 @@ components:
             $ref: '#/components/schemas/EAC'
         roomId:
           type: string
+        thresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
         clientKeygenIds:
           type: array
           items:
@@ -526,6 +535,7 @@ components:
         - uncompressedPublicKey
         - compressedPublicKey
         - serverKeyShares
+        - derivationPath
       properties:
         userId:
           $ref: '#/components/schemas/UUID'
@@ -536,6 +546,8 @@ components:
         uncompressedPublicKey:
           type: string
         compressedPublicKey:
+          type: string
+        derivationPath:
           type: string
         serverKeyShares:
           type: array

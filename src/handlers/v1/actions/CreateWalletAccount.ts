@@ -1,3 +1,4 @@
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import {
   WalletAccount,
   createSingleWalletAccount,
@@ -12,7 +13,6 @@ import {
 } from '../../../generated';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
-import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 
 /**
  * /api/v1/actions/CreateWalletAccount
@@ -64,6 +64,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
       accountAddress: walletAccounts[0].accountAddress,
       uncompressedPublicKey: walletAccounts[0].uncompressedPublicKey,
       compressedPublicKey: walletAccounts[0].compressedPublicKey,
+      derivationPath: walletAccounts[0].derivationPath,
       serverKeyShares: walletAccounts.map((walletAccount: WalletAccount) => {
         return {
           serverKeygenId: walletAccount.serverKeygenId,

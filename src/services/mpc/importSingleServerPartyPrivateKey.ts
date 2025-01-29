@@ -11,7 +11,7 @@ export const importSingleServerPartyPrivateKey = async (
   roomId: string,
   clientKeygenIds: string[],
   serverKeygenIds: string[],
-  thresholdSignatureScheme: ThresholdSignatureScheme,
+  _thresholdSignatureScheme: ThresholdSignatureScheme,
 ): Promise<WalletAccount> => {
   const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
@@ -24,14 +24,16 @@ export const importSingleServerPartyPrivateKey = async (
     compressedPublicKey,
     uncompressedPublicKey,
     serverShare,
+    derivationPath,
   } = await importPrivateKey({
     chain,
     roomId,
     serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-    keygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
-    thresholdSignatureScheme:
-      thresholdSignatureScheme as ThresholdSignatureScheme,
+    clientKeygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
+    // thresholdSignatureScheme, @ts-ignore
   });
+
+  const serializedDerivationPath = JSON.stringify(derivationPath);
 
   // Encrypted Account Credential
   const rawEac: EAC = {
@@ -43,9 +45,14 @@ export const importSingleServerPartyPrivateKey = async (
     serverKeyShare: JSON.stringify(serverShare),
     environmentId,
     chain,
+    derivationPath: serializedDerivationPath,
   };
 
   const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
+
+  if (!compressedPublicKey || !uncompressedPublicKey || !accountAddress) {
+    throw new Error('Error creating wallet account');
+  }
 
   return {
     userId,
@@ -55,5 +62,6 @@ export const importSingleServerPartyPrivateKey = async (
     compressedPublicKey,
     uncompressedPublicKey,
     serverKeygenId: JSON.parse(serverKeygenInitResult).keygenId,
+    derivationPath: serializedDerivationPath,
   };
 };

@@ -4,7 +4,6 @@ import { Express } from 'express';
 import { middleware as OpenApiValidator } from 'express-openapi-validator';
 
 import 'dotenv/config';
-import { EcdsaPublicKey } from '@sodot/sodot-node-sdk';
 import { EacType, PartialEacType } from '../../generated';
 import { evervaultDecrypt } from '../../services/evervault';
 import { verifyJWT } from '../../services/jwt';
@@ -31,12 +30,8 @@ export const registerOperationHandlers = (app: Express) => {
           // const eac: EacType = decryptedEACString
           //   ? JSON.parse(decryptedEACString)
           //   : undefined;
-
           // req.body.eac = eac;
-          
-
         } else {
-
           const serverEacs = req.body.serverEacs;
           const serverEacParsed = await Promise.all(
             serverEacs.map(async (eac: string) => {
