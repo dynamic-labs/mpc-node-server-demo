@@ -351,8 +351,10 @@ components:
           $ref: '#/components/schemas/Chain'
         thresholdSignatureScheme:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
-        authorizedServerEac:
-          $ref: '#/components/schemas/EAC'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EAC'
     CreateRoomResponse:
       type: object
       required:
@@ -360,8 +362,10 @@ components:
       properties:
         roomId:
           type: string
-        serverKeygenId:
-          type: string
+        serverKeygenIds:
+          type: array
+          items:
+            type: string
     PartialEAC:
       type: object
       required:

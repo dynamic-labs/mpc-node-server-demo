@@ -4,7 +4,7 @@ export type CreateRoomResponseType = {
    */
   roomId: string;
   /**
-   * @type string | undefined
+   * @type array | undefined
    */
-  serverKeygenId?: string;
+  serverKeygenIds?: string[];
 };

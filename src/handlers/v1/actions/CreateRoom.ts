@@ -1,11 +1,14 @@
 import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/core';
 import { createMpcRoom, getKeygenId } from '@dynamic-labs-wallet/server';
+import { getSingleServerPartyKeygenId } from 'services/mpc/getSingleServerPartyKeygenId';
+import { EAC } from 'types/credentials';
 import {
   CreateRoom200Type,
   CreateRoom400Type,
   CreateRoom403Type,
   CreateRoom500Type,
   CreateRoomRequestType,
+  PartialEacType,
 } from '../../../generated';
 import { TypedRequestHandler } from '../../../types/express';
 
@@ -26,30 +29,27 @@ export const CreateRoom: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, thresholdSignatureScheme, authorizedServerEac } = req.body;
+    const { chain, thresholdSignatureScheme, serverEacs } = req.body;
     const { roomId } = await createMpcRoom({
       chain,
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
     });
 
-    console.log('eac', authorizedServerEac);
-    let serverKeygenId: string | undefined;
-    if (authorizedServerEac) {
-      if (!authorizedServerEac.serverKeyShare) {
-        throw new Error('Server key share is required');
-      }
-      const serverKeyShare = JSON.parse(authorizedServerEac.serverKeyShare);
-      serverKeygenId = await getKeygenId({
-        chainName: chain,
-        clientKeyshare: serverKeyShare,
-      });
+    if (!serverEacs) {
+      throw new Error('Server EACs are required');
     }
+
+    const serverKeygenIds = await Promise.all(
+      serverEacs.map((eac: PartialEacType) =>
+        getSingleServerPartyKeygenId(eac as EAC, chain),
+      ),
+    );
 
     // Return the room id to the client
     return res.status(200).json({
       roomId,
-      serverKeygenId,
+      serverKeygenIds,
     });
   } catch (error) {
     next(error);
