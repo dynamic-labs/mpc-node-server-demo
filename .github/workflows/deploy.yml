@@ -31,6 +31,9 @@ jobs:
   deploy-preprod:
     runs-on: ubuntu-latest
     # needs: test
+    concurrency:
+      group: preprod-deploy
+      cancel-in-progress: false
     environment:
       name: preproduction
       url: https://wallet-service-preprod.app-32d15525a875.enclave.evervault.com
