@@ -1,17 +1,16 @@
 version = 1
-name = "embedded-wallet-service"
-uuid = "enclave_2c665ef52669"
-app_uuid = "app_7e350fdddfbc"
-team_uuid = "team_4fb36bfa6da1"
+name = "wallet-service-preprod"
+uuid = "enclave_a1b9d9aaa3db"
+app_uuid = "app_32d15525a875"
+team_uuid = "team_2cf986d8af8a"
 debug = true
 dockerfile = "./Dockerfile"
-api_key_auth = false
+api_key_auth = true
 trx_logging = true
 tls_termination = true
 forward_proxy_protocol = false
 trusted_headers = []
 healthcheck = "/api/v1/actions/HealthCheck"
-desired_replicas = 1
 
 [egress]
 enabled = true
@@ -20,3 +19,10 @@ destinations = ["*.datadoghq.com", "app.dynamic-preprod.xyz", "*.herokuapp.com"]
 [signing]
 certPath = "./cert.pem"
 keyPath = "./key.pem"
+
+[attestation]
+HashAlgorithm = "Sha384 { ... }"
+PCR0 = "f67d438aca4ae89f23122f89d8e1f2793d7cb63c8a45f6d95a0df2481c0316aa8b79705de600d05f1b50a1f264ab7ca7"
+PCR1 = "0343b056cd8485ca7890ddd833476d78460aed2aa161548e4e26bedf321726696257d623e8805f3f605946b3d8b0c6aa"
+PCR2 = "f4bae60ea0b0cb874ae881ced676416a0df37ba7a9282837150244698e01c9eae7b2d359293292595c6a080712103716"
+PCR8 = "35cbdebb04a1883c63cb19b911933acb6c5ce7977253b400c15b68527590a7df8539f153be9bc39241f2084c5bc96e27"

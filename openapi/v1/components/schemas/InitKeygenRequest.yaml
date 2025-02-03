@@ -13,4 +13,3 @@ properties:
     $ref: ./UUID.yaml
   thresholdSignatureScheme:
     $ref: ./ThresholdSignatureScheme.yaml
-    example: 'TWO_OF_TWO'

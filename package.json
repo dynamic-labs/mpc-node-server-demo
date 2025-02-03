@@ -2,9 +2,10 @@
   "name": "wallet-service",
   "version": "0.0.1",
   "description": "A backend service for creating wallets and session keys",
+  "type": "module",
   "scripts": {
     "clean": "rimraf dist .tsBuildInfo",
-    "install:ev-enclave": "which ev-enclave 2>&1 > /dev/null && ev-enclave update || (curl https://enclave-build-assets.evervault.com/cli/v1/install -sL | sh)",
+    "install:ev-enclave": "which ev 2>&1 > /dev/null && ev update || (curl https://cli.evervault.com/v4/install -sL | sh)",
     "generate": "npm-run-all lint 'generate:**' lint:fix",
     "generate:types": "kubb generate",
     "generate:openapi:v1": "redocly bundle ./openapi/v1/openapi.yaml -o ./src/generated/openapi/api@v1.yaml",
@@ -12,7 +13,7 @@
     "build:api": "tsc",
     "build:openapi": "rimraf dist/src/generated/openapi && cp -r src/generated/openapi dist/src/generated/openapi",
     "test": "npm-run-all clean generate 'test:**'",
-    "test:jest": "NODE_ENV=test jest",
+    "test:jest": "NODE_ENV=test jest --config jest.config.mjs",
     "lint": "biome check",
     "typecheck": "tsc --noEmit",
     "lint:fix": "biome check --write --unsafe",
@@ -63,8 +64,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@dynamic-labs-wallet/evm": "^0.0.0-local.1738252099814",
-    "@dynamic-labs-wallet/server": "^0.0.0-local.1738252099814",
+    "@dynamic-labs-wallet/evm": "^0.0.3",
+    "@dynamic-labs-wallet/server": "^0.0.3",
     "@dynamic-labs/sdk-api": "^0.0.574",
     "@solana/web3.js": "^1.95.4",
     "axios": "^1.7.2",

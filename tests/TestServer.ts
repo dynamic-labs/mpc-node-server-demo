@@ -13,9 +13,7 @@ afterAll(() => {
 
 beforeAll(() => {
   testServer.init();
-  jestOpenAPI(
-    path.join(__dirname, '../src/generated/openapi/api@v1.yaml/openapi.yaml'),
-  );
+  jestOpenAPI(path.join(__dirname, '../src/generated/openapi/api@v1.yaml'));
 });
 
 beforeEach(() => {

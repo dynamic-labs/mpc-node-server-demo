@@ -52,3 +52,7 @@ dist
 
 # Certificates
 *.pem
+
+# Enclave stuff
+enclave.Dockerfile
+nitro-cli-image.Dockerfile

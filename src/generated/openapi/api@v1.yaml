@@ -257,7 +257,6 @@ components:
           $ref: '#/components/schemas/UUID'
         thresholdSignatureScheme:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
-          example: TWO_OF_TWO
     EncryptedEvervaultString:
       type: string
       pattern: ^ev.*
