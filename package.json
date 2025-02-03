@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist .tsBuildInfo",
-    "install:ev-enclave": "which ev 2>&1 > /dev/null && ev update || (curl https://cli.evervault.com/v4/install -sL | sh)",
+    "install:ev-enclave": "which ev 2>&1 > /dev/null && ev update || ((curl https://cli.evervault.com/v4/install -sL | sh) && (curl https://enclave-build-assets.evervault.com/cli/v1/install -sL | sh))",
     "generate": "npm-run-all lint 'generate:**' lint:fix",
     "generate:types": "kubb generate",
     "generate:openapi:v1": "redocly bundle ./openapi/v1/openapi.yaml -o ./src/generated/openapi/api@v1.yaml",
