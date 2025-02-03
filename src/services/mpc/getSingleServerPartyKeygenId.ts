@@ -1,6 +1,4 @@
-import {
-  getKeygenId,
-} from '@dynamic-labs-wallet/server';
+import { getKeygenId } from '@dynamic-labs-wallet/server';
 import { ChainType } from '../../generated';
 import { EAC } from '../../types/credentials';
 
