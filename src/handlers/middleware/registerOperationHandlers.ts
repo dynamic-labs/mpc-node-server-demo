@@ -52,14 +52,14 @@ export const registerOperationHandlers = (app: Express) => {
   app.use(
     '/api',
     OpenApiValidator({
-      apiSpec: path.join(__dirname, '../../generated/openapi/api@v1.yaml'),
+      apiSpec: path.join(process.cwd(), '../../generated/openapi/api@v1.yaml'),
       validateRequests: {
         allowUnknownQueryParameters: false,
         coerceTypes: false,
         removeAdditional: 'failing',
       },
       validateResponses: true,
-      operationHandlers: path.join(__dirname, '../../handlers/v1'),
+      operationHandlers: path.join(process.cwd(), '../../handlers/v1'),
     }),
   );
 
