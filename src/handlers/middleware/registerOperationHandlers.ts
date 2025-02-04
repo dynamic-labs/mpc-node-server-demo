@@ -1,14 +1,18 @@
-import path from 'path';
+import path, { dirname } from 'path';
 import { Express } from 'express';
 
 import { middleware as OpenApiValidator } from 'express-openapi-validator';
 
 import 'dotenv/config';
+import { fileURLToPath } from 'url';
 import { EacType, PartialEacType } from '../../generated';
 import { evervaultDecrypt } from '../../services/evervault';
 import { verifyJWT } from '../../services/jwt';
 
 const isDeployedEnv = process.env.NODE_ENV === 'production';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const registerOperationHandlers = (app: Express) => {
   // EWC and EAC parsing middleware
@@ -52,14 +56,14 @@ export const registerOperationHandlers = (app: Express) => {
   app.use(
     '/api',
     OpenApiValidator({
-      apiSpec: path.join(process.cwd(), '../../generated/openapi/api@v1.yaml'),
+      apiSpec: path.join(__dirname, '../../generated/openapi/api@v1.yaml'),
       validateRequests: {
         allowUnknownQueryParameters: false,
         coerceTypes: false,
         removeAdditional: 'failing',
       },
       validateResponses: true,
-      operationHandlers: path.join(process.cwd(), '../../handlers/v1'),
+      operationHandlers: path.join(__dirname, '../../handlers/v1'),
     }),
   );
 
