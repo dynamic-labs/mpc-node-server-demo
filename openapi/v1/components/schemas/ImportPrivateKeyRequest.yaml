@@ -8,7 +8,7 @@ properties:
   serverEacs:
     type: array
     items:
-      $ref: ./EAC.yaml
+      $ref: ./PartialEAC.yaml
   roomId:
     type: string
   thresholdSignatureScheme:

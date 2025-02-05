@@ -2,5 +2,5 @@ type: object
 properties:
   serverKeygenId:
     type: string
-  serverKeyShare:
+  serverEac:
     $ref: ./EncryptedEvervaultString.yaml

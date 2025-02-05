@@ -406,7 +406,7 @@ components:
       properties:
         serverKeygenId:
           type: string
-        serverKeyShare:
+        serverEac:
           $ref: '#/components/schemas/EncryptedEvervaultString'
     CreateWalletAccountResponse:
       type: object
@@ -520,7 +520,7 @@ components:
         serverEacs:
           type: array
           items:
-            $ref: '#/components/schemas/EAC'
+            $ref: '#/components/schemas/PartialEAC'
         roomId:
           type: string
         thresholdSignatureScheme:

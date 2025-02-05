@@ -1,11 +1,11 @@
-import { EacType } from './EacType';
+import { PartialEacType } from './PartialEacType';
 import { ThresholdSignatureSchemeType } from './ThresholdSignatureSchemeType';
 
 export type ImportPrivateKeyRequestType = {
   /**
    * @type array
    */
-  serverEacs: EacType[];
+  serverEacs: PartialEacType[];
   /**
    * @type string
    */

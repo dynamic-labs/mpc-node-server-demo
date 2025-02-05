@@ -5,5 +5,5 @@ export type ServerKeyShareType = {
    * @type string | undefined
    */
   serverKeygenId?: string;
-  serverKeyShare?: EncryptedEvervaultStringType;
+  serverEac?: EncryptedEvervaultStringType;
 };

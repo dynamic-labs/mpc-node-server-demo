@@ -27,6 +27,7 @@ export const registerOperationHandlers = (app: Express) => {
       '/api/v1/actions/ImportPrivateKey',
     ],
     async (req, _res, next) => {
+      console.log('---original route---', req.originalUrl);
       if (req.body.serverEacs) {
         if (isDeployedEnv) {
           // encrypted account credential (EAC) should be decrypted on ingress
@@ -40,15 +41,22 @@ export const registerOperationHandlers = (app: Express) => {
           const serverEacParsed = await Promise.all(
             serverEacs.map(async (eac: string) => {
               const decryptedEACString = await evervaultDecrypt(eac);
-              console.log('decryptedEACString', decryptedEACString);
               const parsedEac = JSON.parse(decryptedEACString);
-              console.log('parsedEac', parsedEac);
-              return parsedEac;
+              // Don't stringify serverKeygenInitResult if it's already a string
+              return {
+                ...parsedEac,
+                serverKeygenInitResult:
+                  typeof parsedEac.serverKeygenInitResult === 'string'
+                    ? parsedEac.serverKeygenInitResult
+                    : JSON.stringify(parsedEac.serverKeygenInitResult),
+              } as PartialEacType;
             }),
           );
-          req.body.serverEacs = serverEacParsed as PartialEacType[];
+          req.body.serverEacs = serverEacParsed;
+          console.log('Processed serverEacs:', req.body.serverEacs);
         }
       }
+      console.log('next ');
       next();
     },
   );

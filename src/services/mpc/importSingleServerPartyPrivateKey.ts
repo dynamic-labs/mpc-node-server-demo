@@ -23,14 +23,14 @@ export const importSingleServerPartyPrivateKey = async (
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
-    serverShare,
+    serverKeyShare,
     derivationPath,
   } = await importPrivateKey({
     chain,
     roomId,
     serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-    clientKeygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
-    // thresholdSignatureScheme, @ts-ignore
+    keygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
+    thresholdSignatureScheme: _thresholdSignatureScheme,
   });
 
   const serializedDerivationPath = JSON.stringify(derivationPath);
@@ -42,7 +42,7 @@ export const importSingleServerPartyPrivateKey = async (
     uncompressedPublicKey,
     accountAddress,
     serverKeygenInitResult,
-    serverKeyShare: JSON.stringify(serverShare),
+    serverKeyShare: JSON.stringify(serverKeyShare),
     environmentId,
     chain,
     derivationPath: serializedDerivationPath,
@@ -61,7 +61,7 @@ export const importSingleServerPartyPrivateKey = async (
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
-    serverKeygenId: JSON.parse(serverKeygenInitResult).keygenId,
     derivationPath: serializedDerivationPath,
+    serverKeygenId: JSON.parse(serverKeygenInitResult).keygenId,
   };
 };
