@@ -14,15 +14,19 @@ This is the MPC Wallet Service for Dynamic Wallet MPC wallets (v3).
 
 ## Deployment
 
-1. Build the enclave
+1. Configure the environment variables
 
-Get the cert.pem and key.pem values from [1password](https://dynamiclabs.1password.com/app#/rhp23qqkejew7hlnibh5gx2mja/Search/rhp23qqkejew7hlnibh5gx2mjax3lh7sxyl3q2dtq2pmvckxqy7u?itemListId=deploy) or create new ones in the root of the project. Build the enclave with the following command:
+Get the cert.pem and key.pem values from [1password](https://dynamiclabs.1password.com/app#/rhp23qqkejew7hlnibh5gx2mja/Search/rhp23qqkejew7hlnibh5gx2mjax3lh7sxyl3q2dtq2pmvckxqy7u?itemListId=deploy) or create new ones in the root of the project. Add `NPM_TOKEN` to the environment variables.
+
+2. Build the enclave
+
+Build the enclave with the following command:
 
 ```
  ev enclave build -c enclave.preprod.toml --private-key key.pem --signing-cert cert.pem --build-secret id=NPM_TOKEN .
 ```
 
-2. Deploy the enclave with API key:
+3. Deploy the enclave with API key:
 
 ```
 EV_API_KEY=<api-key> ev-enclave deploy -c enclave.preprod.toml --private-key key.pem --signing-cert cert.pem

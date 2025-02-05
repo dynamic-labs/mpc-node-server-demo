@@ -12,7 +12,7 @@ export const getSingleServerPartyKeygenId = async (
   const serverKeyShare = JSON.parse(serverEac.serverKeyShare);
   const serverKeygenId = await getKeygenId({
     chainName: chain,
-    clientKeyshare: serverKeyShare,
+    clientKeyShare: serverKeyShare,
   });
 
   return serverKeygenId;
