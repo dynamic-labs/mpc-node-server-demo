@@ -1,5 +1,4 @@
 import { refreshShares } from '@dynamic-labs-wallet/server';
-import { } from 'express';
 import {
   RefreshShares200Type,
   RefreshShares400Type,
