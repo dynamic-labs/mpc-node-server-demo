@@ -14,7 +14,7 @@ healthcheck = "/api/v1/actions/HealthCheck"
 
 [egress]
 enabled = true
-destinations = ["*.datadoghq.com", "app.dynamic-preprod.xyz", "*.herokuapp.com"]
+destinations = ["*.datadoghq.com", "*.dynamic-preprod.xyz", "*.herokuapp.com"]
 
 [signing]
 certPath = "./cert.pem"

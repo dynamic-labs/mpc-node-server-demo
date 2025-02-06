@@ -17,5 +17,6 @@ enabled = true
 destinations = [
   "*.datadoghq.com",
   "app.dynamicauth.com",
-  "app.dynamic.xyz"
+  "app.dynamic.xyz",
+  "mpc-relay.dynamic-prod.xyz"
 ]
