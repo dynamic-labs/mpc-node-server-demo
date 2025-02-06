@@ -8,7 +8,7 @@
     "generate": "npm-run-all lint 'generate:**' lint:fix",
     "generate:types": "kubb generate",
     "generate:openapi:v1": "redocly bundle ./openapi/v1/openapi.yaml -o ./src/generated/openapi/api@v1.yaml",
-    "build": "npm-run-all clean lint typecheck 'build:**'",
+    "build": "npm-run-all clean typecheck 'build:**'",
     "build:api": "tsc",
     "build:openapi": "rimraf dist/src/generated/openapi && cp -r src/generated/openapi dist/src/generated/openapi",
     "test": "npm-run-all clean generate 'test:**'",
@@ -59,7 +59,6 @@
     "rimraf": "^5.0.7",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.4",
-    "tsx": "^4.15.3",
     "typescript": "^5.4.5"
   },
   "dependencies": {
@@ -77,6 +76,7 @@
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
     "viem": "^2.21.38",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "tsx": "^4.15.3"
   }
 }

@@ -45,4 +45,5 @@ RUN file /datadog-init
 
 EXPOSE 8008
 ENTRYPOINT [ "/datadog-init" ]
-CMD ["node", "/app/dist/src/index.js"]
+WORKDIR "/app"
+CMD ["./node_modules/.bin/tsx", "./dist/src/index.js"]
