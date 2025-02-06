@@ -1,18 +1,14 @@
-import path, { dirname } from 'path';
+import path from 'path';
 import { Express } from 'express';
 
 import { middleware as OpenApiValidator } from 'express-openapi-validator';
 
 import 'dotenv/config';
-import { fileURLToPath } from 'url';
 import { EacType, PartialEacType } from '../../generated';
 import { evervaultDecrypt } from '../../services/evervault';
 import { verifyJWT } from '../../services/jwt';
 
 const isDeployedEnv = process.env.NODE_ENV === 'production';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export const registerOperationHandlers = (app: Express) => {
   // EWC and EAC parsing middleware

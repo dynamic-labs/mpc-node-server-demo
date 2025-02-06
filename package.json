@@ -2,7 +2,6 @@
   "name": "wallet-service",
   "version": "0.0.1",
   "description": "A backend service for creating wallets and session keys",
-  "type": "module",
   "scripts": {
     "clean": "rimraf dist .tsBuildInfo",
     "install:ev-enclave": "which ev 2>&1 > /dev/null && ev update || ((curl https://cli.evervault.com/v4/install -sL | sh) && (curl https://enclave-build-assets.evervault.com/cli/v1/install -sL | sh))",
