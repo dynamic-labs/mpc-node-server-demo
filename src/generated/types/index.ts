@@ -11,6 +11,7 @@ export * from './CreateWalletAccountRequestType';
 export * from './CreateWalletAccountResponseType';
 export * from './CreateWalletAccountType';
 export * from './EacType';
+export * from './EmptyBodyType';
 export * from './EncryptedEvervaultStringType';
 export * from './EwcType';
 export * from './ExportTypeType';

@@ -29,20 +29,22 @@ export const createSingleWalletAccount = async (
     (id) => id !== JSON.parse(serverKeygenInitResult).keygenId,
   );
 
+  type CreateWalletAccountParams = Parameters<typeof createWalletAccount>[0];
+  const createWalletAccountParams: CreateWalletAccountParams = {
+    chain,
+    roomId,
+    serverKeygenInitResult: JSON.parse(serverKeygenInitResult),
+    keygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
+    thresholdSignatureScheme,
+  };
+
   const {
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
     serverKeyShare,
     derivationPath,
-  } = await createWalletAccount({
-    chain,
-    roomId,
-    serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-    keygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
-    thresholdSignatureScheme:
-      thresholdSignatureScheme as ThresholdSignatureScheme,
-  });
+  } = await createWalletAccount(createWalletAccountParams);
 
   const serializedDerivationPath = JSON.stringify(derivationPath);
 

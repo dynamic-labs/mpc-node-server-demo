@@ -12,6 +12,10 @@ post:
   responses:
     "201":
       description: Exported wallet account
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/EmptyBody.yaml
     "400":
       $ref: ../components/responses/BadRequest.yaml
     "403":

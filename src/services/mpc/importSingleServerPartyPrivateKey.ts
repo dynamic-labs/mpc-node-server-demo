@@ -19,19 +19,22 @@ export const importSingleServerPartyPrivateKey = async (
     (id) => id !== JSON.parse(serverKeygenInitResult).keygenId,
   );
 
+  type ImportPrivateKeyParams = Parameters<typeof importPrivateKey>[0];
+  const importPrivateKeyParams: ImportPrivateKeyParams = {
+    chain,
+    roomId,
+    serverKeygenInitResult: JSON.parse(serverKeygenInitResult),
+    keygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
+    thresholdSignatureScheme: _thresholdSignatureScheme,
+  };
+
   const {
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
     serverKeyShare,
     derivationPath,
-  } = await importPrivateKey({
-    chain,
-    roomId,
-    serverKeygenInitResult: JSON.parse(serverKeygenInitResult) as any,
-    keygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
-    thresholdSignatureScheme: _thresholdSignatureScheme,
-  });
+  } = await importPrivateKey(importPrivateKeyParams);
 
   const serializedDerivationPath = JSON.stringify(derivationPath);
 

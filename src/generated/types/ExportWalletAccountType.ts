@@ -1,4 +1,5 @@
 import { BadRequestType } from './BadRequestType';
+import type { EmptyBodyType } from './EmptyBodyType';
 import { ExportWalletAccountRequestType } from './ExportWalletAccountRequestType';
 import { ForbiddenType } from './ForbiddenType';
 import { InternalServerErrorType } from './InternalServerErrorType';
@@ -6,7 +7,7 @@ import { InternalServerErrorType } from './InternalServerErrorType';
 /**
  * @description Exported wallet account
  */
-export type ExportWalletAccount201Type = any;
+export type ExportWalletAccount201Type = EmptyBodyType;
 /**
  * @description Bad Request
  */
@@ -21,7 +22,10 @@ export type ExportWalletAccount403Type = ForbiddenType;
 export type ExportWalletAccount500Type = InternalServerErrorType;
 export type ExportWalletAccountMutationRequestType =
   ExportWalletAccountRequestType;
-export type ExportWalletAccountMutationResponseType = any;
+/**
+ * @description Exported wallet account
+ */
+export type ExportWalletAccountMutationResponseType = EmptyBodyType;
 export type ExportWalletAccountTypeMutation = {
   Response: ExportWalletAccountMutationResponseType;
   Request: ExportWalletAccountMutationRequestType;

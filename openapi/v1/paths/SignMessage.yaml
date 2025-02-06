@@ -12,6 +12,10 @@ post:
   responses:
     "201":
       description: Signed message
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SignMessageResponse.yaml
     "400":
       $ref: ../components/responses/BadRequest.yaml
     "403":

@@ -2,11 +2,12 @@ import { BadRequestType } from './BadRequestType';
 import { ForbiddenType } from './ForbiddenType';
 import { InternalServerErrorType } from './InternalServerErrorType';
 import { SignMessageRequestType } from './SignMessageRequestType';
+import type { SignMessageResponseType } from './SignMessageResponseType';
 
 /**
  * @description Signed message
  */
-export type SignMessage201Type = any;
+export type SignMessage201Type = SignMessageResponseType;
 /**
  * @description Bad Request
  */
@@ -20,7 +21,10 @@ export type SignMessage403Type = ForbiddenType;
  */
 export type SignMessage500Type = InternalServerErrorType;
 export type SignMessageMutationRequestType = SignMessageRequestType;
-export type SignMessageMutationResponseType = any;
+/**
+ * @description Signed message
+ */
+export type SignMessageMutationResponseType = SignMessageResponseType;
 export type SignMessageTypeMutation = {
   Response: SignMessageMutationResponseType;
   Request: SignMessageMutationRequestType;

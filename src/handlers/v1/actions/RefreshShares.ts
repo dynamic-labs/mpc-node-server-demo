@@ -1,12 +1,32 @@
 import { refreshShares } from '@dynamic-labs-wallet/server';
 import { Request, Response } from 'express';
+import {
+  RefreshShares200Type,
+  RefreshShares400Type,
+  RefreshShares403Type,
+  RefreshShares500Type,
+  RefreshSharesRequestType,
+} from 'generated';
+import { TypedRequestHandler } from 'types/express';
 import { evervaultEncrypt } from '../../../services/evervault';
 import { EAC } from '../../../types/credentials';
 
 /**
  * /api/v1/actions/RefreshShares
  */
-export const RefreshShares = async (req: Request, res: Response) => {
+export const RefreshShares: TypedRequestHandler<{
+  request: {
+    body: RefreshSharesRequestType;
+  };
+  response: {
+    body:
+      | RefreshShares200Type
+      | RefreshShares400Type
+      | RefreshShares403Type
+      | RefreshShares500Type;
+    statusCode: 200 | 400 | 403 | 500;
+  };
+}> = async (req, res) => {
   const { roomId, eac } = req.body;
   const { serverKeyShare, chain } = eac as EAC;
   console.log('RefreshShares');

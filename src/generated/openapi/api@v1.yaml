@@ -97,6 +97,10 @@ paths:
       responses:
         '201':
           description: Exported wallet account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyBody'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -118,6 +122,10 @@ paths:
       responses:
         '201':
           description: Signed message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignMessageResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -450,6 +458,9 @@ components:
           type: string
         roomId:
           type: string
+    EmptyBody:
+      type: object
+      additionalProperties: false
     JWT:
       type: string
       pattern: ^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$
@@ -470,6 +481,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EAC'
+    SignMessageResponse:
+      type: object
+      required:
+        - signature
+      properties:
+        signature:
+          type: string
     ReshareRemainingPartyRequest:
       type: object
       required:

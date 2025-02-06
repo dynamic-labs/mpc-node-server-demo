@@ -43,7 +43,7 @@ export const InitKeygen: TypedRequestHandler<{
     });
 
     const serverKeygenIds: string[] = keygenInitResults.map(
-      (result: any) => result.keygenId,
+      (result) => result.keygenId,
     );
 
     const eacs: string[] = [];

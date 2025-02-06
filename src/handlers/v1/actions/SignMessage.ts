@@ -1,18 +1,39 @@
 import { signMessage } from '@dynamic-labs-wallet/server';
 import { Request, Response } from 'express';
+import {
+  SignMessage201Type,
+  SignMessage400Type,
+  SignMessage403Type,
+  SignMessage500Type,
+  SignMessageRequestType,
+} from 'generated';
 import { signSingleServerPartyMessage } from 'services/mpc/signSingleServerPartyMessage';
+import { TypedRequestHandler } from 'types/express';
 import { EAC } from '../../../types/credentials';
 
 /**
  * /api/v1/actions/SignMessage
  */
 
-export const SignMessage = async (req: Request, res: Response) => {
+export const SignMessage: TypedRequestHandler<{
+  request: {
+    body: SignMessageRequestType;
+  };
+  response: {
+    body:
+      | SignMessage201Type
+      | SignMessage400Type
+      | SignMessage403Type
+      | SignMessage500Type;
+    statusCode: 201 | 400 | 403 | 500;
+  };
+}> = async (req, res) => {
   const { message, roomId, serverEacs } = req.body;
 
   await Promise.all(
-    serverEacs.map((serverEac: EAC) =>
-      signSingleServerPartyMessage(message, roomId, serverEac),
+    serverEacs.map((serverEac) =>
+      // @todo: Fix this type error with serverEac
+      signSingleServerPartyMessage(message, roomId, serverEac as EAC),
     ),
   );
 
