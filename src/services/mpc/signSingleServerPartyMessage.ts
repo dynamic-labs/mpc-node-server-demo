@@ -1,5 +1,5 @@
 import { signMessage } from '@dynamic-labs-wallet/server';
-import { EAC } from 'types/credentials';
+import { EAC } from '../../types/credentials';
 
 export const signSingleServerPartyMessage = async (
   message: string,

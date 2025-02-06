@@ -2,8 +2,8 @@ import {
   ThresholdSignatureScheme,
   createWalletAccount,
 } from '@dynamic-labs-wallet/server';
-import { evervaultEncrypt } from 'services/evervault';
 import { EAC } from '../../types/credentials';
+import { evervaultEncrypt } from '../evervault';
 
 export type WalletAccount = {
   userId: string;

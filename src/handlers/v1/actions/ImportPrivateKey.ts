@@ -1,5 +1,4 @@
 import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
-import { importSingleServerPartyPrivateKey } from 'services/mpc/importSingleServerPartyPrivateKey';
 import {
   ImportPrivateKey200Type,
   ImportPrivateKey400Type,
@@ -9,6 +8,7 @@ import {
   PartialEacType,
 } from '../../../generated';
 import { WalletAccount } from '../../../services/mpc/createSingleWalletAccount';
+import { importSingleServerPartyPrivateKey } from '../../../services/mpc/importSingleServerPartyPrivateKey';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 

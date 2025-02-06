@@ -1,7 +1,5 @@
 import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/core';
-import { createMpcRoom, getKeygenId } from '@dynamic-labs-wallet/server';
-import { getSingleServerPartyKeygenId } from 'services/mpc/getSingleServerPartyKeygenId';
-import { EAC } from 'types/credentials';
+import { createMpcRoom } from '@dynamic-labs-wallet/server';
 import {
   CreateRoom200Type,
   CreateRoom400Type,
@@ -10,6 +8,8 @@ import {
   CreateRoomRequestType,
   PartialEacType,
 } from '../../../generated';
+import { getSingleServerPartyKeygenId } from '../../../services/mpc/getSingleServerPartyKeygenId';
+import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**

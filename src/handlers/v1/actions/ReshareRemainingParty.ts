@@ -1,5 +1,3 @@
-import { reshareRemainingParty } from '@dynamic-labs-wallet/server';
-import { Request, Response } from 'express';
 import {
   ReshareRemainingParty200Type,
   ReshareRemainingParty400Type,
@@ -7,10 +5,8 @@ import {
   ReshareRemainingParty500Type,
   ReshareRemainingPartyRequestType,
   badRequestErrorCode,
-} from 'generated';
-import { TypedRequestHandler } from 'types/express';
-import { evervaultEncrypt } from '../../../services/evervault';
-import { EAC } from '../../../types/credentials';
+} from '../../../generated';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/ReshareRemainingParty

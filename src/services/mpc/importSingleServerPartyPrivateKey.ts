@@ -2,8 +2,8 @@ import {
   ThresholdSignatureScheme,
   importPrivateKey,
 } from '@dynamic-labs-wallet/server';
-import { evervaultEncrypt } from 'services/evervault';
 import { EAC } from '../../types/credentials';
+import { evervaultEncrypt } from '../evervault';
 import { WalletAccount } from './createSingleWalletAccount';
 
 export const importSingleServerPartyPrivateKey = async (

@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { HealthCheck200Type, HealthCheck400Type } from 'generated';
-import { TypedRequestHandler } from 'types/express';
+import { Request } from 'express';
+import { HealthCheck200Type, HealthCheck400Type } from '../../../generated';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/HealthCheck

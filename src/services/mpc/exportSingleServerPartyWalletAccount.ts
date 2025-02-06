@@ -1,5 +1,5 @@
 import { exportWalletAccount } from '@dynamic-labs-wallet/server';
-import { EAC } from 'types/credentials';
+import { EAC } from '../../types/credentials';
 
 export const exportSingleServerPartyWalletAccount = async (
   exportId: string,

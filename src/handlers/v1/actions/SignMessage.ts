@@ -1,15 +1,13 @@
-import { signMessage } from '@dynamic-labs-wallet/server';
-import { Request, Response } from 'express';
 import {
   SignMessage201Type,
   SignMessage400Type,
   SignMessage403Type,
   SignMessage500Type,
   SignMessageRequestType,
-} from 'generated';
-import { signSingleServerPartyMessage } from 'services/mpc/signSingleServerPartyMessage';
-import { TypedRequestHandler } from 'types/express';
+} from '../../../generated';
+import { signSingleServerPartyMessage } from '../../../services/mpc/signSingleServerPartyMessage';
 import { EAC } from '../../../types/credentials';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/SignMessage

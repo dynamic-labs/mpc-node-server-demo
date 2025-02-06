@@ -1,15 +1,15 @@
 import { refreshShares } from '@dynamic-labs-wallet/server';
-import { Request, Response } from 'express';
+import { } from 'express';
 import {
   RefreshShares200Type,
   RefreshShares400Type,
   RefreshShares403Type,
   RefreshShares500Type,
   RefreshSharesRequestType,
-} from 'generated';
-import { TypedRequestHandler } from 'types/express';
+} from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
 import { EAC } from '../../../types/credentials';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/RefreshShares

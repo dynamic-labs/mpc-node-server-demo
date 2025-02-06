@@ -1,9 +1,5 @@
 import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import {
-  WalletAccount,
-  createSingleWalletAccount,
-} from 'services/mpc/createSingleWalletAccount';
-import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
   CreateWalletAccount403Type,
@@ -11,6 +7,10 @@ import {
   CreateWalletAccountRequestType,
   PartialEacType,
 } from '../../../generated';
+import {
+  WalletAccount,
+  createSingleWalletAccount,
+} from '../../../services/mpc/createSingleWalletAccount';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 

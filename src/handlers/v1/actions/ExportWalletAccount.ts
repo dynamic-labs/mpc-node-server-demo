@@ -4,10 +4,10 @@ import {
   ExportWalletAccount403Type,
   ExportWalletAccount500Type,
   ExportWalletAccountRequestType,
-} from 'generated';
-import { exportSingleServerPartyWalletAccount } from 'services/mpc/exportSingleServerPartyWalletAccount';
-import { EAC } from 'types/credentials';
-import { TypedRequestHandler } from 'types/express';
+} from '../../../generated';
+import { exportSingleServerPartyWalletAccount } from '../../../services/mpc/exportSingleServerPartyWalletAccount';
+import { EAC } from '../../../types/credentials';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/ExportWalletAccount
