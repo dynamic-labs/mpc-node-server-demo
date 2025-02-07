@@ -1,5 +1,6 @@
 import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/core';
 import { createMpcRoom } from '@dynamic-labs-wallet/server';
+import { BadRequest } from 'express-openapi-validator/dist/framework/types';
 import {
   CreateRoom200Type,
   CreateRoom400Type,
@@ -37,7 +38,10 @@ export const CreateRoom: TypedRequestHandler<{
     });
 
     if (!serverEacs) {
-      throw new Error('Server EACs are required');
+      throw new BadRequest({
+        path: '/api/v1/actions/CreateRoom',
+        message: 'Server EACs are required',
+      });
     }
 
     const serverKeygenIds = await Promise.all(
