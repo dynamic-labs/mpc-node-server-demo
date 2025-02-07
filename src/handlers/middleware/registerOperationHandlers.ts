@@ -27,10 +27,12 @@ export const registerOperationHandlers = (app: Express) => {
       if (req.body.serverEacs) {
         if (isDeployedEnv) {
           // encrypted account credential (EAC) should be decrypted on ingress
-          const { serverEacs: decryptedEACString } = req.body;
-          const eacs: PartialEacType[] = decryptedEACString
-            ? JSON.parse(decryptedEACString)
+          const { serverEacs: decryptedEACStrings } = req.body;
+          console.log('decryptedEACString', decryptedEACStrings);
+          const eacs: PartialEacType[] = decryptedEACStrings
+            ? decryptedEACStrings.map((eac: string) => JSON.parse(eac))
             : undefined;
+          console.log('eacs', eacs);
           req.body.serverEacs = eacs;
         } else {
           const serverEacs = req.body.serverEacs;
