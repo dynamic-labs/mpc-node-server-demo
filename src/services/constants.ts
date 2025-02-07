@@ -4,7 +4,7 @@ export const getDynamicBaseApiUrl = (hostname: string) =>
   `https://${hostname}/api/v0`;
 
 export const DATA_POLICY_ROLE =
-  process.env.DATA_POLICY_ROLE || 'wallets-service-role';
+  process.env.DATA_POLICY_ROLE || 'wallet-service-enclv';
 
 export const EVERVAULT_HOST = 'http://127.0.0.1:9999';
 
