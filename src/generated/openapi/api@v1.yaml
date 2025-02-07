@@ -122,10 +122,6 @@ paths:
       responses:
         '201':
           description: Signed message
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SignMessageResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -315,7 +311,7 @@ components:
           type: string
           enum:
             - internal_server_error
-            - turnkey_api_error
+            - unknown_error
         error_message:
           type: string
           example: Internal Server Error
@@ -481,13 +477,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EAC'
-    SignMessageResponse:
-      type: object
-      required:
-        - signature
-      properties:
-        signature:
-          type: string
     ReshareRemainingPartyRequest:
       type: object
       required:

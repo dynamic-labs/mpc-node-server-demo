@@ -1,6 +1,6 @@
 export type SignMessageResponseType = {
   /**
-   * @type string
+   * @type string | undefined
    */
-  signature: string;
+  signature?: string;
 };

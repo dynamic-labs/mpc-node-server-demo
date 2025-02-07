@@ -25,15 +25,19 @@ export const SignMessage: TypedRequestHandler<{
       | SignMessage500Type;
     statusCode: 201 | 400 | 403 | 500;
   };
-}> = async (req, res) => {
-  const { message, roomId, serverEacs } = req.body;
+}> = async (req, res, next) => {
+  try {
+    const { message, roomId, serverEacs } = req.body;
 
-  await Promise.all(
-    serverEacs.map((serverEac) =>
-      // @todo: Fix this type error with serverEac
-      signSingleServerPartyMessage(message, roomId, serverEac as EAC),
-    ),
-  );
+    await Promise.all(
+      serverEacs.map((serverEac) =>
+        // @todo: Fix this type error with serverEac
+        signSingleServerPartyMessage(message, roomId, serverEac as EAC),
+      ),
+    );
 
-  return res.status(201).json();
+    return res.status(201).send();
+  } catch (error) {
+    next(error);
+  }
 };

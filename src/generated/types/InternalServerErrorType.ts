@@ -1,6 +1,6 @@
 export const internalServerErrorErrorCode = {
   internal_server_error: 'internal_server_error',
-  turnkey_api_error: 'turnkey_api_error',
+  unknown_error: 'unknown_error',
 } as const;
 export type InternalServerErrorErrorCodeType =
   (typeof internalServerErrorErrorCode)[keyof typeof internalServerErrorErrorCode];

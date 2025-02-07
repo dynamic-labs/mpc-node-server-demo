@@ -32,10 +32,6 @@ export const InitKeygen: TypedRequestHandler<{
   try {
     const { chain, environmentId, userId, thresholdSignatureScheme } = req.body;
 
-    if (!thresholdSignatureScheme) {
-      throw new Error('Threshold signature scheme is required');
-    }
-
     const { roomId, keygenInitResults } = await initKeygen({
       chain,
       thresholdSignatureScheme:
