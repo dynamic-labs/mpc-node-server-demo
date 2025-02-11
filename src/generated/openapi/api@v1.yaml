@@ -358,6 +358,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EAC'
+        parties:
+          type: string
+          enum:
+            - threshold
+            - full
     CreateRoomResponse:
       type: object
       required:
@@ -502,20 +507,24 @@ components:
     RefreshSharesRequest:
       type: object
       required:
-        - eac
+        - serverEacs
         - roomId
       properties:
-        eac:
-          $ref: '#/components/schemas/EAC'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EAC'
         roomId:
           type: string
     RefreshSharesResponse:
       type: object
       required:
-        - eac
+        - serverEacs
       properties:
-        eac:
-          $ref: '#/components/schemas/EncryptedEvervaultString'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EncryptedEvervaultString'
     ImportPrivateKeyRequest:
       type: object
       required:

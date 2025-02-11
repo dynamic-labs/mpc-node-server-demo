@@ -1,4 +1,3 @@
-import { refreshShares } from '@dynamic-labs-wallet/server';
 import {
   RefreshShares200Type,
   RefreshShares400Type,
@@ -6,7 +5,8 @@ import {
   RefreshShares500Type,
   RefreshSharesRequestType,
 } from '../../../generated';
-import { evervaultEncrypt } from '../../../services/evervault';
+
+import { refreshSinglePartyShare } from '../../../services/mpc/refreshSinglePartyShare';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
@@ -26,25 +26,16 @@ export const RefreshShares: TypedRequestHandler<{
     statusCode: 200 | 400 | 403 | 500;
   };
 }> = async (req, res) => {
-  const { roomId, eac } = req.body;
-  const { serverKeyShare, chain } = eac as EAC;
-  console.log('RefreshShares');
-  console.log('serverShare', serverKeyShare);
-  // Refresh the shares
-  const { serverKeyShare: refreshedServerKeyShare } = await refreshShares({
-    chain,
-    roomId,
-    serverKeyShare: JSON.parse(serverKeyShare),
-  });
+  const { roomId, serverEacs } = req.body;
 
-  const rawEac: EAC = {
-    ...eac,
-    serverKeyShare: JSON.stringify(refreshedServerKeyShare),
-  };
-
-  const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
+  const refreshedServerEacs = await Promise.all(
+    serverEacs.map((serverEac) =>
+      // @todo: Fix this type error with serverEac
+      refreshSinglePartyShare(roomId, serverEac as EAC),
+    ),
+  );
 
   return res.status(200).json({
-    eac: modifiedEac,
+    serverEacs: refreshedServerEacs,
   });
 };

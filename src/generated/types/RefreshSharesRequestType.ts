@@ -1,7 +1,10 @@
 import { EacType } from './EacType';
 
 export type RefreshSharesRequestType = {
-  eac: EacType;
+  /**
+   * @type array
+   */
+  serverEacs: EacType[];
   /**
    * @type string
    */

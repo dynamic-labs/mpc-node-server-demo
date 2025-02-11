@@ -1,6 +1,8 @@
 type: object
 required:
-  - eac
+  - serverEacs
 properties:
-  eac:
-    $ref: ./EncryptedEvervaultString.yaml
+  serverEacs:
+    type: array
+    items:
+      $ref: ./EncryptedEvervaultString.yaml

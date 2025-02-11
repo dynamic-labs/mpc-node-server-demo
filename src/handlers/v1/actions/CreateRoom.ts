@@ -1,4 +1,7 @@
-import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/core';
+import {
+  CreateRoomPartiesOptions,
+  ThresholdSignatureScheme,
+} from '@dynamic-labs-wallet/core';
 import { createMpcRoom } from '@dynamic-labs-wallet/server';
 import { BadRequest } from 'express-openapi-validator/dist/framework/types';
 import {
@@ -30,11 +33,15 @@ export const CreateRoom: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    const { chain, thresholdSignatureScheme, serverEacs } = req.body;
+    const { chain, thresholdSignatureScheme, serverEacs, parties } = req.body;
+
     const { roomId } = await createMpcRoom({
       chain,
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
+      parties: parties
+        ? (parties as CreateRoomPartiesOptions)
+        : CreateRoomPartiesOptions.THRESHOLD,
     });
 
     if (!serverEacs) {

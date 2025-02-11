@@ -1,10 +1,11 @@
 type: object
 required:
-  - eac
+  - serverEacs
   - roomId
 properties:
-  eac:
-    $ref: ./EAC.yaml
+  serverEacs:
+    type: array
+    items:
+      $ref: ./EAC.yaml
   roomId:
     type: string
-
