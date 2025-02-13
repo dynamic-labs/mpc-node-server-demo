@@ -1,5 +1,5 @@
-import { signMessage } from '@dynamic-labs-wallet/server';
 import { EAC } from '../../types/credentials';
+import { mpcClient } from './constants';
 
 export const signSingleServerPartyMessage = async (
   message: string,
@@ -7,7 +7,7 @@ export const signSingleServerPartyMessage = async (
   serverEac: EAC,
 ) => {
   const { serverKeyShare, chain } = serverEac as EAC;
-  await signMessage({
+  await mpcClient.signMessage({
     message,
     chain,
     roomId,

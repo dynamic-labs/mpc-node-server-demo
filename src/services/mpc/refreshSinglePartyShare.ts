@@ -1,11 +1,11 @@
-import { refreshShares } from '@dynamic-labs-wallet/server';
 import { EAC } from '../../types/credentials';
 import { evervaultEncrypt } from '../evervault';
+import { mpcClient } from './constants';
 
 export const refreshSinglePartyShare = async (roomId: string, eac: EAC) => {
   const { serverKeyShare, chain } = eac;
 
-  const refreshedServerKeyShare = await refreshShares({
+  const refreshedServerKeyShare = await mpcClient.refreshShares({
     chain,
     roomId,
     serverKeyShare: JSON.parse(serverKeyShare),

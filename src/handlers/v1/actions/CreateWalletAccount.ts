@@ -45,7 +45,6 @@ export const CreateWalletAccount: TypedRequestHandler<{
           JSON.parse(eac.serverKeygenInitResult).keygenId,
       ),
     );
-
     const walletAccounts = await Promise.all(
       serverEacs.map((eac: PartialEacType) =>
         createSingleWalletAccount(

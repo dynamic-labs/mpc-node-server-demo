@@ -2,7 +2,6 @@ import {
   CreateRoomPartiesOptions,
   ThresholdSignatureScheme,
 } from '@dynamic-labs-wallet/core';
-import { createMpcRoom } from '@dynamic-labs-wallet/server';
 import { BadRequest } from 'express-openapi-validator/dist/framework/types';
 import {
   CreateRoom200Type,
@@ -12,6 +11,7 @@ import {
   CreateRoomRequestType,
   PartialEacType,
 } from '../../../generated';
+import { mpcClient } from '../../../services/mpc/constants';
 import { getSingleServerPartyKeygenId } from '../../../services/mpc/getSingleServerPartyKeygenId';
 import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
@@ -35,7 +35,7 @@ export const CreateRoom: TypedRequestHandler<{
   try {
     const { chain, thresholdSignatureScheme, serverEacs, parties } = req.body;
 
-    const { roomId } = await createMpcRoom({
+    const { roomId } = await mpcClient.createMpcRoom({
       chain,
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,

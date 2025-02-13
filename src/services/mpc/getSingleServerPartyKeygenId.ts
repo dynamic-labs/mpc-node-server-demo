@@ -1,6 +1,6 @@
-import { getKeygenId } from '@dynamic-labs-wallet/server';
 import { ChainType } from '../../generated';
 import { EAC } from '../../types/credentials';
+import { mpcClient } from './constants';
 
 export const getSingleServerPartyKeygenId = async (
   serverEac: EAC,
@@ -10,9 +10,10 @@ export const getSingleServerPartyKeygenId = async (
     throw new Error('Server key share is required');
   }
   const serverKeyShare = JSON.parse(serverEac.serverKeyShare);
-  const serverKeygenId = await getKeygenId({
+
+  const serverKeygenId = await mpcClient.getKeygenId({
     chainName: chain,
-    clientKeyShare: serverKeyShare,
+    serverKeyShare: serverKeyShare,
   });
 
   return serverKeygenId;

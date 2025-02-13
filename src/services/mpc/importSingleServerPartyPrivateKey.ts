@@ -1,9 +1,7 @@
-import {
-  ThresholdSignatureScheme,
-  importPrivateKey,
-} from '@dynamic-labs-wallet/server';
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import { EAC } from '../../types/credentials';
 import { evervaultEncrypt } from '../evervault';
+import { mpcClient } from './constants';
 import { WalletAccount } from './createSingleWalletAccount';
 
 export const importSingleServerPartyPrivateKey = async (
@@ -19,7 +17,9 @@ export const importSingleServerPartyPrivateKey = async (
     (id) => id !== JSON.parse(serverKeygenInitResult).keygenId,
   );
 
-  type ImportPrivateKeyParams = Parameters<typeof importPrivateKey>[0];
+  type ImportPrivateKeyParams = Parameters<
+    typeof mpcClient.importPrivateKey
+  >[0];
   const importPrivateKeyParams: ImportPrivateKeyParams = {
     chain,
     roomId,
@@ -34,7 +34,7 @@ export const importSingleServerPartyPrivateKey = async (
     uncompressedPublicKey,
     serverKeyShare,
     derivationPath,
-  } = await importPrivateKey(importPrivateKeyParams);
+  } = await mpcClient.importPrivateKey(importPrivateKeyParams);
 
   const serializedDerivationPath = JSON.stringify(derivationPath);
 

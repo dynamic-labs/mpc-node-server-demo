@@ -1,9 +1,7 @@
-import {
-  ThresholdSignatureScheme,
-  createWalletAccount,
-} from '@dynamic-labs-wallet/server';
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import { EAC } from '../../types/credentials';
 import { evervaultEncrypt } from '../evervault';
+import { mpcClient } from './constants';
 
 export type WalletAccount = {
   userId: string;
@@ -29,7 +27,9 @@ export const createSingleWalletAccount = async (
     (id) => id !== JSON.parse(serverKeygenInitResult).keygenId,
   );
 
-  type CreateWalletAccountParams = Parameters<typeof createWalletAccount>[0];
+  type CreateWalletAccountParams = Parameters<
+    typeof mpcClient.createWalletAccount
+  >[0];
   const createWalletAccountParams: CreateWalletAccountParams = {
     chain,
     roomId,
@@ -44,7 +44,7 @@ export const createSingleWalletAccount = async (
     uncompressedPublicKey,
     serverKeyShare,
     derivationPath,
-  } = await createWalletAccount(createWalletAccountParams);
+  } = await mpcClient.createWalletAccount(createWalletAccountParams);
 
   const serializedDerivationPath = JSON.stringify(derivationPath);
 

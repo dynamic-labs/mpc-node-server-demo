@@ -1,5 +1,5 @@
-import { exportWalletAccount } from '@dynamic-labs-wallet/server';
 import { EAC } from '../../types/credentials';
+import { mpcClient } from './constants';
 
 export const exportSingleServerPartyWalletAccount = async (
   exportId: string,
@@ -7,7 +7,7 @@ export const exportSingleServerPartyWalletAccount = async (
   serverEac: EAC,
 ) => {
   const { chain, serverKeyShare } = serverEac;
-  const exportedKey = await exportWalletAccount({
+  const exportedKey = await mpcClient.exportWalletAccount({
     chain,
     roomId,
     serverKeyShare: JSON.parse(serverKeyShare),

@@ -1,7 +1,4 @@
-import {
-  ThresholdSignatureScheme,
-  initKeygen,
-} from '@dynamic-labs-wallet/server';
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import {
   InitKeygen200Type,
   InitKeygen400Type,
@@ -10,6 +7,7 @@ import {
   InitKeygenRequestType,
 } from '../../../generated';
 import { evervaultEncrypt } from '../../../services/evervault';
+import { mpcClient } from '../../../services/mpc/constants';
 import { InitialEAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
@@ -32,7 +30,7 @@ export const InitKeygen: TypedRequestHandler<{
   try {
     const { chain, environmentId, userId, thresholdSignatureScheme } = req.body;
 
-    const { roomId, keygenInitResults } = await initKeygen({
+    const { roomId, keygenInitResults } = await mpcClient.initKeygen({
       chain,
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,

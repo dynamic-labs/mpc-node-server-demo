@@ -29,11 +29,8 @@ export const ImportPrivateKey: TypedRequestHandler<{
   };
 }> = async (req, res, next) => {
   try {
-    console.log('IMPORTING PRIVATE KEY 1');
     const { serverEacs, roomId, clientKeygenIds, thresholdSignatureScheme } =
       req.body;
-
-    console.log('IMPORTING PRIVATE KEY 2');
 
     if (!serverEacs) {
       throw new Error('Server EACs are required');

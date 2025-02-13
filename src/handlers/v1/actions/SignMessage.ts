@@ -32,7 +32,7 @@ export const SignMessage: TypedRequestHandler<{
     await Promise.all(
       serverEacs.map((serverEac) =>
         // @todo: Fix this type error with serverEac
-        signSingleServerPartyMessage(message, roomId, serverEac as EAC),
+        signSingleServerPartyMessage(roomId, message, serverEac as EAC),
       ),
     );
 
