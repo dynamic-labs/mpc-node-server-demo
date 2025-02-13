@@ -1,16 +1,18 @@
-import { initKeygen } from '@dynamic-labs-wallet/server';
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
 import * as evervault from '../../../services/evervault';
+import { mpcClient } from '../../../services/mpc/constants';
 
-// Mock only createMpcRoom
-jest.mock('@dynamic-labs-wallet/server', () => ({
-  ...jest.requireActual('@dynamic-labs-wallet/server'),
-  initKeygen: jest.fn(),
+// Mock the MPC client
+jest.mock('../../../services/mpc/constants', () => ({
+  mpcClient: {
+    initKeygen: jest.fn(),
+  },
 }));
 
 describe('InitKeygen', () => {
-  const mockInitKeygen = initKeygen as jest.MockedFunction<typeof initKeygen>;
+  // Cast the mock to retain type information
+  const mockInitKeygen = jest.mocked(mpcClient.initKeygen);
   const evervaultEncryptSpy = jest.spyOn(evervault, 'evervaultEncrypt');
 
   const mockRoomId = faker.string.uuid();
@@ -45,7 +47,6 @@ describe('InitKeygen', () => {
           userId: faker.string.uuid(),
         });
 
-      console.log('result', result.body);
       expect(result.status).toBe(200);
       expect(result).toSatisfyApiSpec();
       expect(result.body.roomId).toBe(mockRoomId);

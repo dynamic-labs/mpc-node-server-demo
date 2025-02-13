@@ -1,19 +1,19 @@
-import { createMpcRoom } from '@dynamic-labs-wallet/server';
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
 import * as evervault from '../../../services/evervault';
+import { mpcClient } from '../../../services/mpc/constants';
 import * as getSingleServerPartyKeygenId from '../../../services/mpc/getSingleServerPartyKeygenId';
 
-// Mock only createMpcRoom
-jest.mock('@dynamic-labs-wallet/server', () => ({
-  ...jest.requireActual('@dynamic-labs-wallet/server'),
-  createMpcRoom: jest.fn(),
+// Mock the MPC client
+jest.mock('../../../services/mpc/constants', () => ({
+  mpcClient: {
+    createMpcRoom: jest.fn(),
+  },
 }));
 
 describe('CreateRoom', () => {
-  const mockCreateMpcRoom = createMpcRoom as jest.MockedFunction<
-    typeof createMpcRoom
-  >;
+  // Cast the mock to retain type information
+  const mockCreateMpcRoom = jest.mocked(mpcClient.createMpcRoom);
   const evervaultDecryptSpy = jest.spyOn(evervault, 'evervaultDecrypt');
   const getSingleServerPartyKeygenIdSpy = jest.spyOn(
     getSingleServerPartyKeygenId,

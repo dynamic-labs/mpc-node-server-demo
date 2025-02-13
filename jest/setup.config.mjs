@@ -6,4 +6,5 @@ export default async function globalSetup() {
     launchTimeout: 5000,
     port: 9999,
   });
+  process.env.RELAY_API_KEY = '123456';
 }
