@@ -32,15 +32,8 @@ export const ImportPrivateKey: TypedRequestHandler<{
     const { serverEacs, roomId, clientKeygenIds, thresholdSignatureScheme } =
       req.body;
 
-    if (!serverEacs) {
-      throw new Error('Server EACs are required');
-    }
-
-    const _serverKeyGenIds = await Promise.all(
-      serverEacs.map(
-        (eac: PartialEacType) =>
-          JSON.parse(eac.serverKeygenInitResult).keygenId,
-      ),
+    const _serverKeyGenIds = serverEacs.map(
+      (eac: PartialEacType) => JSON.parse(eac.serverKeygenInitResult).keygenId,
     );
 
     const walletAccounts = await Promise.all(

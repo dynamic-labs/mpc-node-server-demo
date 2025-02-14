@@ -43,7 +43,6 @@ describe('ExportWalletAccount', () => {
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockEac)],
         });
-      console.log(result.body);
       expect(result.status).toBe(201);
       expect(result).toSatisfyApiSpec();
       expect(mockExportWalletAccount).toHaveBeenCalledTimes(1);

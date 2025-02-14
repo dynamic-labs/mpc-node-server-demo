@@ -39,7 +39,6 @@ describe('SignMessage', () => {
           message: mockMessage,
         });
 
-      console.log('result', result.body);
       expect(result.status).toBe(201);
       expect(result).toSatisfyApiSpec();
       expect(signSingleServerPartyMessageSpy).toHaveBeenCalled();

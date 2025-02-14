@@ -10,7 +10,6 @@ describe('HealthCheck', () => {
       .get('/api/v1/actions/HealthCheck')
       .set('Accept', 'application/json');
 
-    console.log(result.body);
     expect(result.status).toBe(200);
     expect(result).toSatisfyApiSpec();
   });
