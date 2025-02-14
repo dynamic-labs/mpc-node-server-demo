@@ -55,7 +55,6 @@ describe('signSingleServerPartyMessage', () => {
       eac: { ...mockServerEac, serverKeyShare: undefined },
     };
 
-    // Act & Assert
     await expect(signSingleServerPartyMessage(mockParams)).rejects.toThrow(
       SERVER_KEY_SHARE_IS_MISSING_ERROR,
     );

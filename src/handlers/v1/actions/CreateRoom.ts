@@ -9,11 +9,9 @@ import {
   CreateRoom403Type,
   CreateRoom500Type,
   CreateRoomRequestType,
-  PartialEacType,
 } from '../../../generated';
 import { mpcClient } from '../../../services/mpc/constants';
 import { getSingleServerPartyKeygenId } from '../../../services/mpc/getSingleServerPartyKeygenId';
-import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
@@ -52,8 +50,11 @@ export const CreateRoom: TypedRequestHandler<{
     }
 
     const serverKeygenIds = await Promise.all(
-      serverEacs.map((eac: PartialEacType) =>
-        getSingleServerPartyKeygenId(eac as EAC, chain),
+      serverEacs.map((eac) =>
+        getSingleServerPartyKeygenId({
+          eac,
+          chain,
+        }),
       ),
     );
 

@@ -1,15 +1,17 @@
-import { ChainType } from '../../generated';
-import { EAC } from '../../types/credentials';
-import { mpcClient } from './constants';
+import { ChainType, EacType } from '../../generated';
+import { SERVER_KEY_SHARE_IS_MISSING_ERROR, mpcClient } from './constants';
 
-export const getSingleServerPartyKeygenId = async (
-  serverEac: EAC,
-  chain: ChainType,
-): Promise<string> => {
-  if (!serverEac.serverKeyShare) {
-    throw new Error('Server key share is required');
+export const getSingleServerPartyKeygenId = async ({
+  eac,
+  chain,
+}: {
+  eac: EacType;
+  chain: ChainType;
+}): Promise<string> => {
+  if (!eac.serverKeyShare) {
+    throw new Error(SERVER_KEY_SHARE_IS_MISSING_ERROR);
   }
-  const serverKeyShare = JSON.parse(serverEac.serverKeyShare);
+  const serverKeyShare = JSON.parse(eac.serverKeyShare);
 
   const serverKeygenId = await mpcClient.getKeygenId({
     chainName: chain,
