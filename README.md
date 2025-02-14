@@ -1,16 +1,15 @@
-# MPC Wallet Service
+# Wallet Service
 
-This is the MPC Wallet Service for Dynamic Wallet MPC wallets (v3).
+This is the Wallet Service for Dynamic Wallet MPC wallets (v3). It is responsible for acting as a server party for MPC ceremonies using the [Dynamic Labs Wallet SDK server package](https://github.com/dynamic-labs-wallet/dynamic-labs-wallet-sdk) deployed as an [Evervault enclave](https://docs.evervault.com/primitives/enclaves).
 
-## Shared packages
+![Wallet Service Architecture](./architecture.png)
 
-`@dynamic-labs-wallet/server` - The server package for the Dynamic Wallet SDK.
+## Getting Started
 
-## How to run your project
-
-1. `npm install`
-2. run `ev-enclave dev` to start the enclave
-3. run `npm run start` to start the server
+1. `npm install` to install the dependencies
+2. `npm run install:ev-enclave` to install the Evervault CLI
+3. run `ev-enclave dev` to start a local enclave encyrption service
+4. run `npm run start` to start the server
 
 ## Deployment
 
