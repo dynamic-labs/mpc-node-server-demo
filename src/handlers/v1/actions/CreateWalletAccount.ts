@@ -34,10 +34,6 @@ export const CreateWalletAccount: TypedRequestHandler<{
     const { serverEacs, roomId, clientKeygenIds, thresholdSignatureScheme } =
       req.body;
 
-    if (!serverEacs) {
-      throw new Error('Server EACs are required');
-    }
-
     const _serverKeyGenIds = serverEacs.map(
       (eac: PartialEacType) => JSON.parse(eac.serverKeygenInitResult).keygenId,
     );

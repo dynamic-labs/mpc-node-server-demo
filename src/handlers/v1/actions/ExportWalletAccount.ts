@@ -25,15 +25,23 @@ export const ExportWalletAccount: TypedRequestHandler<{
       | ExportWalletAccount500Type;
     statusCode: 201 | 400 | 403 | 500;
   };
-}> = async (req, res) => {
-  const { exportId, roomId, serverEacs } = req.body;
+}> = async (req, res, next) => {
+  try {
+    const { exportId, roomId, serverEacs } = req.body;
 
-  await Promise.all(
-    serverEacs.map((serverEac) =>
-      // @TODO: Fix this type error with serverEac
-      exportSingleServerPartyWalletAccount(exportId, roomId, serverEac as EAC),
-    ),
-  );
+    await Promise.all(
+      serverEacs.map((serverEac) =>
+        // @TODO: Fix this type error with serverEac
+        exportSingleServerPartyWalletAccount(
+          exportId,
+          roomId,
+          serverEac as EAC,
+        ),
+      ),
+    );
 
-  return res.status(201).json();
+    return res.status(201).json({});
+  } catch (error) {
+    next(error);
+  }
 };
