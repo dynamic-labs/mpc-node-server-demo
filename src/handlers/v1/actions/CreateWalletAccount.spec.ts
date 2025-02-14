@@ -95,13 +95,14 @@ describe('CreateWalletAccount', () => {
       expect(createSingleWalletAccountSpy).toHaveBeenCalledTimes(1);
       expect(createSingleWalletAccountSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          userId: mockEac.userId,
-          chain: mockEac.chain,
+          eac: mockEac,
+          roomId,
+          clientKeygenIds,
+          serverKeygenIds: [
+            JSON.parse(mockEac.serverKeygenInitResult).keygenId,
+          ],
+          thresholdSignatureScheme: 'TWO_OF_THREE',
         }),
-        roomId,
-        clientKeygenIds,
-        [JSON.parse(mockEac.serverKeygenInitResult).keygenId],
-        'TWO_OF_THREE',
       );
     });
 

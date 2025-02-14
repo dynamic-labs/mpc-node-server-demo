@@ -1,4 +1,3 @@
-import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
@@ -11,7 +10,6 @@ import {
   WalletAccount,
   createSingleWalletAccount,
 } from '../../../services/mpc/createSingleWalletAccount';
-import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
@@ -39,13 +37,13 @@ export const CreateWalletAccount: TypedRequestHandler<{
     );
     const walletAccounts = await Promise.all(
       serverEacs.map((eac: PartialEacType) =>
-        createSingleWalletAccount(
-          eac as EAC,
+        createSingleWalletAccount({
+          eac,
           roomId,
           clientKeygenIds,
-          _serverKeyGenIds,
-          thresholdSignatureScheme as ThresholdSignatureScheme,
-        ),
+          serverKeygenIds: _serverKeyGenIds,
+          thresholdSignatureScheme,
+        }),
       ),
     );
 

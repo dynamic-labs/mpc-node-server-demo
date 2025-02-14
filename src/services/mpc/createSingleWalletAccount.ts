@@ -1,7 +1,11 @@
 import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
-import { EAC } from '../../types/credentials';
+import {
+  EacType,
+  PartialEacType,
+  ThresholdSignatureSchemeType,
+} from '../../generated';
 import { evervaultEncrypt } from '../evervault';
-import { mpcClient } from './constants';
+import { WALLET_ACCOUNT_CREATION_ERROR, mpcClient } from './constants';
 
 export type WalletAccount = {
   userId: string;
@@ -14,13 +18,19 @@ export type WalletAccount = {
   derivationPath: string;
 };
 
-export const createSingleWalletAccount = async (
-  eac: EAC,
-  roomId: string,
-  clientKeygenIds: string[],
-  serverKeygenIds: string[],
-  thresholdSignatureScheme: ThresholdSignatureScheme,
-): Promise<WalletAccount> => {
+export const createSingleWalletAccount = async ({
+  eac,
+  roomId,
+  clientKeygenIds,
+  serverKeygenIds,
+  thresholdSignatureScheme,
+}: {
+  eac: PartialEacType;
+  roomId: string;
+  clientKeygenIds: string[];
+  serverKeygenIds: string[];
+  thresholdSignatureScheme: ThresholdSignatureSchemeType;
+}): Promise<WalletAccount> => {
   const { userId, serverKeygenInitResult, environmentId, chain } = eac;
 
   const otherServerKeygenIds = serverKeygenIds.filter(
@@ -35,7 +45,8 @@ export const createSingleWalletAccount = async (
     roomId,
     serverKeygenInitResult: JSON.parse(serverKeygenInitResult),
     keygenIds: [...otherServerKeygenIds, ...clientKeygenIds],
-    thresholdSignatureScheme,
+    thresholdSignatureScheme:
+      thresholdSignatureScheme as ThresholdSignatureScheme,
   };
 
   const {
@@ -49,7 +60,7 @@ export const createSingleWalletAccount = async (
   const serializedDerivationPath = JSON.stringify(derivationPath);
 
   // Encrypted Account Credential
-  const rawEac: EAC = {
+  const rawEac: EacType = {
     userId,
     compressedPublicKey,
     uncompressedPublicKey,
@@ -61,11 +72,11 @@ export const createSingleWalletAccount = async (
     derivationPath: serializedDerivationPath,
   };
 
-  const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
-
   if (!compressedPublicKey || !uncompressedPublicKey || !accountAddress) {
-    throw new Error('Error creating wallet account');
+    throw new Error(WALLET_ACCOUNT_CREATION_ERROR);
   }
+
+  const modifiedEac = await evervaultEncrypt(JSON.stringify(rawEac));
 
   return {
     userId,
