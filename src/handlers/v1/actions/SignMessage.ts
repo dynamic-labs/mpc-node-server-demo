@@ -6,7 +6,6 @@ import {
   SignMessageRequestType,
 } from '../../../generated';
 import { signSingleServerPartyMessage } from '../../../services/mpc/signSingleServerPartyMessage';
-import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
@@ -31,8 +30,11 @@ export const SignMessage: TypedRequestHandler<{
 
     await Promise.all(
       serverEacs.map((serverEac) =>
-        // @todo: Fix this type error with serverEac
-        signSingleServerPartyMessage(roomId, message, serverEac as EAC),
+        signSingleServerPartyMessage({
+          roomId,
+          message,
+          serverEac,
+        }),
       ),
     );
 
