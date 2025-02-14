@@ -7,7 +7,6 @@ import {
 } from '../../../generated';
 
 import { refreshSinglePartyShare } from '../../../services/mpc/refreshSinglePartyShare';
-import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
@@ -31,8 +30,7 @@ export const RefreshShares: TypedRequestHandler<{
 
     const refreshedServerEacs = await Promise.all(
       serverEacs.map((serverEac) =>
-        // @todo: Fix this type error with serverEac
-        refreshSinglePartyShare(roomId, serverEac as EAC),
+        refreshSinglePartyShare({ roomId, eac: serverEac }),
       ),
     );
 

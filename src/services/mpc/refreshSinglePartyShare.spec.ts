@@ -1,15 +1,15 @@
 import { faker } from '@faker-js/faker';
 import { EacType } from '../../generated';
 import { SERVER_KEY_SHARE_IS_MISSING_ERROR, mpcClient } from './constants';
-import { signSingleServerPartyMessage } from './signSingleServerPartyMessage';
+import { refreshSinglePartyShare } from './refreshSinglePartyShare';
 
 jest.mock('./constants', () => ({
   mpcClient: {
-    signMessage: jest.fn(),
+    refreshShares: jest.fn(),
   },
 }));
 
-describe('signSingleServerPartyMessage', () => {
+describe('refreshSinglePartyShare', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -26,47 +26,47 @@ describe('signSingleServerPartyMessage', () => {
     derivationPath: faker.string.uuid(),
   };
 
-  it('should call mpcClient.signMessage with correct parameters', async () => {
-    const mockSignMessage = jest.mocked(mpcClient.signMessage);
+  it('should call mpcClient.refreshShares with correct parameters', async () => {
+    const mockRefreshShares = jest
+      .mocked(mpcClient.refreshShares)
+      .mockResolvedValue({
+        serverKeyShare: { key: 'newKeyShare' },
+      });
 
     const mockParams = {
-      message: 'test message',
       roomId: 'room123',
       eac: mockServerEac,
     };
 
-    await signSingleServerPartyMessage(mockParams);
+    await refreshSinglePartyShare(mockParams);
 
-    expect(mockSignMessage).toHaveBeenCalledWith({
-      message: mockParams.message,
+    expect(mockRefreshShares).toHaveBeenCalledWith({
       roomId: mockParams.roomId,
       serverKeyShare: JSON.parse(mockParams.eac.serverKeyShare as string),
       chain: mockParams.eac.chain,
     });
-    expect(mockSignMessage).toHaveBeenCalledTimes(1);
+    expect(mockRefreshShares).toHaveBeenCalledTimes(1);
   });
 
   it('should throw error when serverKeyShare is missing', async () => {
-    const mockSignMessage = jest.mocked(mpcClient.signMessage);
+    const mockRefreshShares = jest.mocked(mpcClient.refreshShares);
 
     const mockParams = {
-      message: 'test message',
       roomId: 'room123',
       eac: { ...mockServerEac, serverKeyShare: undefined },
     };
 
     // Act & Assert
-    await expect(signSingleServerPartyMessage(mockParams)).rejects.toThrow(
+    await expect(refreshSinglePartyShare(mockParams)).rejects.toThrow(
       SERVER_KEY_SHARE_IS_MISSING_ERROR,
     );
-    expect(mockSignMessage).not.toHaveBeenCalled();
+    expect(mockRefreshShares).not.toHaveBeenCalled();
   });
 
   it('should handle invalid JSON in serverKeyShare', async () => {
-    jest.mocked(mpcClient.signMessage);
+    jest.mocked(mpcClient.refreshShares);
 
     const mockParams = {
-      message: 'test message',
       roomId: 'room123',
       eac: {
         ...mockServerEac,
@@ -74,7 +74,7 @@ describe('signSingleServerPartyMessage', () => {
       },
     };
 
-    await expect(signSingleServerPartyMessage(mockParams)).rejects.toThrow(
+    await expect(refreshSinglePartyShare(mockParams)).rejects.toThrow(
       SyntaxError,
     );
   });

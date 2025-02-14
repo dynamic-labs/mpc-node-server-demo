@@ -4,13 +4,13 @@ import { mpcClient } from './constants';
 export const signSingleServerPartyMessage = async ({
   message,
   roomId,
-  serverEac,
+  eac,
 }: {
   message: string;
   roomId: string;
-  serverEac: EacType;
+  eac: EacType;
 }) => {
-  const { serverKeyShare, chain } = serverEac;
+  const { serverKeyShare, chain } = eac;
   if (!serverKeyShare) {
     throw new Error('Server key share is required');
   }

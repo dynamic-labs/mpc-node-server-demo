@@ -33,7 +33,7 @@ export const SignMessage: TypedRequestHandler<{
         signSingleServerPartyMessage({
           roomId,
           message,
-          serverEac,
+          eac: serverEac,
         }),
       ),
     );
