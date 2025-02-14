@@ -1,4 +1,3 @@
-import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
 import {
   ImportPrivateKey200Type,
   ImportPrivateKey400Type,
@@ -9,7 +8,6 @@ import {
 } from '../../../generated';
 import { WalletAccount } from '../../../services/mpc/createSingleWalletAccount';
 import { importSingleServerPartyPrivateKey } from '../../../services/mpc/importSingleServerPartyPrivateKey';
-import { EAC } from '../../../types/credentials';
 import { TypedRequestHandler } from '../../../types/express';
 
 /**
@@ -38,13 +36,13 @@ export const ImportPrivateKey: TypedRequestHandler<{
 
     const walletAccounts = await Promise.all(
       serverEacs.map((eac: PartialEacType) =>
-        importSingleServerPartyPrivateKey(
-          eac as EAC,
+        importSingleServerPartyPrivateKey({
+          eac,
           roomId,
           clientKeygenIds,
-          _serverKeyGenIds,
-          thresholdSignatureScheme as ThresholdSignatureScheme,
-        ),
+          serverKeygenIds: _serverKeyGenIds,
+          thresholdSignatureScheme,
+        }),
       ),
     );
 

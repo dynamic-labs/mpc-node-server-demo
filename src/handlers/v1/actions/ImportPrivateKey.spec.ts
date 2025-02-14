@@ -61,13 +61,13 @@ describe('ImportPrivateKey', () => {
       expect(result.status).toBe(200);
       expect(result).toSatisfyApiSpec();
       expect(importSingleServerPartyPrivateKeySpy).toHaveBeenCalledTimes(1);
-      expect(importSingleServerPartyPrivateKeySpy).toHaveBeenCalledWith(
-        expect.objectContaining(mockEac),
-        mockRoomId,
-        mockClientKeygenIds,
-        [JSON.parse(mockEac.serverKeygenInitResult).keygenId],
-        'TWO_OF_THREE',
-      );
+      expect(importSingleServerPartyPrivateKeySpy).toHaveBeenCalledWith({
+        eac: expect.objectContaining(mockEac),
+        roomId: mockRoomId,
+        clientKeygenIds: mockClientKeygenIds,
+        serverKeygenIds: [JSON.parse(mockEac.serverKeygenInitResult).keygenId],
+        thresholdSignatureScheme: 'TWO_OF_THREE',
+      });
 
       expect(result.body).toEqual({
         userId: mockWalletAccount.userId,
