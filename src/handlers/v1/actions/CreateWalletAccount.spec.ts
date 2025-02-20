@@ -1,4 +1,4 @@
-import { EcdsaKeygenResult } from '@dynamic-labs-wallet/lib-mpc-node';
+import { EcdsaKeygenResult } from '@dynamic-labs-wallet/server';
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
 import * as evervault from '../../../services/evervault';

@@ -45,7 +45,7 @@ describe('importSingleServerPartyPrivateKey', () => {
       .mocked(mpcClient.importPrivateKey)
       .mockResolvedValue({
         accountAddress: mockServerEac.accountAddress,
-        compressedPublicKey: mockServerEac.compressedPublicKey,
+        compressedPublicKey: mockServerEac.compressedPublicKey as string,
         uncompressedPublicKey: mockServerEac.uncompressedPublicKey,
         serverKeyShare: mockServerEac.serverKeyShare,
         derivationPath: new Uint32Array([1, 2, 3]),
