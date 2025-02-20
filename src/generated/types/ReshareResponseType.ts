@@ -1,6 +1,6 @@
 import { EncryptedEvervaultStringType } from './EncryptedEvervaultStringType';
 
-export type ReshareRemainingPartyResponseType = {
+export type ReshareResponseType = {
   /**
    * @type array
    */

@@ -17,14 +17,16 @@ paths:
     $ref: paths/ExportWalletAccount.yaml
   /api/v1/actions/SignMessage:
     $ref: paths/SignMessage.yaml
-  /api/v1/actions/ReshareRemainingParty:
-    $ref: paths/ReshareRemainingParty.yaml
+  /api/v1/actions/Reshare:
+    $ref: paths/Reshare.yaml
   /api/v1/actions/RefreshShares:
     $ref: paths/RefreshShares.yaml
   /api/v1/actions/ImportPrivateKey:
     $ref: paths/ImportPrivateKey.yaml
   /api/v1/actions/HealthCheck:
     $ref: paths/HealthCheck.yaml
+  /api/v1/actions/CreateRoomForReshare:
+    $ref: paths/CreateRoomForReshare.yaml
 components:
   securitySchemes:
     BasicAuth:

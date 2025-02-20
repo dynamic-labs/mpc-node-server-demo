@@ -1,0 +1,24 @@
+post:
+  operationId: Reshare
+  summary: Reshare to update the threshold signature scheme
+  description: this reshares the remaining party to update the threshold signature scheme and add new parties if necessary
+  x-eov-operation-handler: actions/Reshare
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ReshareRequest.yaml
+  responses:
+    "200":
+      description: Successfully reshares all the parties
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ReshareResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
+    "500":
+      $ref: ../components/responses/InternalServerError.yaml

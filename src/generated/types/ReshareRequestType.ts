@@ -1,7 +1,7 @@
 import { PartialEacType } from './PartialEacType';
 import { ThresholdSignatureSchemeType } from './ThresholdSignatureSchemeType';
 
-export type ReshareRemainingPartyRequestType = {
+export type ReshareRequestType = {
   /**
    * @type string
    */

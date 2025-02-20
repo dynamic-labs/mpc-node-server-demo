@@ -128,25 +128,25 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/ReshareRemainingParty:
+  /api/v1/actions/Reshare:
     post:
-      operationId: ReshareRemainingParty
-      summary: Reshare Remaining Party
-      description: This reshares the remaining party for a given user
-      x-eov-operation-handler: actions/ReshareRemainingParty
+      operationId: Reshare
+      summary: Reshare to update the threshold signature scheme
+      description: this reshares the remaining party to update the threshold signature scheme and add new parties if necessary
+      x-eov-operation-handler: actions/Reshare
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReshareRemainingPartyRequest'
+              $ref: '#/components/schemas/ReshareRequest'
       responses:
         '200':
-          description: Successfully reshares the remaining party
+          description: Successfully reshares all the parties
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReshareRemainingPartyResponse'
+                $ref: '#/components/schemas/ReshareResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '403':
@@ -218,6 +218,31 @@ paths:
                 $ref: '#/components/schemas/HealthCheckResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+  /api/v1/actions/CreateRoomForReshare:
+    post:
+      operationId: CreateRoomForReshare
+      summary: Create Room for Reshare
+      description: This creates a room for MPC key generation
+      x-eov-operation-handler: actions/CreateRoomForReshare
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoomForReshareRequest'
+      responses:
+        '200':
+          description: Successfully created room
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRoomForReshareResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     BasicAuth:
@@ -482,28 +507,43 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EAC'
-    ReshareRemainingPartyRequest:
+    ReshareRequest:
       type: object
       required:
-        - eac
         - roomId
-        - clientKeygenIds
+        - allPartyKeygenIds
+        - serverEacs
+        - newServerEacs
+        - oldThresholdSignatureScheme
+        - newThresholdSignatureScheme
       properties:
-        eac:
-          $ref: '#/components/schemas/PartialEAC'
         roomId:
           type: string
-        clientKeygenIds:
+        allPartyKeygenIds:
           type: array
           items:
             type: string
-    ReshareRemainingPartyResponse:
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartialEAC'
+        newServerEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartialEAC'
+        oldThresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
+        newThresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
+    ReshareResponse:
       type: object
       required:
-        - eac
+        - serverEacs
       properties:
-        eac:
-          $ref: '#/components/schemas/EncryptedEvervaultString'
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EncryptedEvervaultString'
     RefreshSharesRequest:
       type: object
       required:
@@ -579,6 +619,47 @@ components:
       properties:
         status:
           type: string
+    CreateRoomForReshareRequest:
+      type: object
+      required:
+        - oldThresholdSignatureScheme
+        - newThresholdSignatureScheme
+      properties:
+        serverEacs:
+          type: array
+          items:
+            $ref: '#/components/schemas/EAC'
+        newThresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
+        oldThresholdSignatureScheme:
+          $ref: '#/components/schemas/ThresholdSignatureScheme'
+    CreateRoomForReshareResponse:
+      type: object
+      required:
+        - roomId
+        - serverKeygenIds
+        - serverEacs
+        - newServerKeygenIds
+        - newServerEacs
+      properties:
+        roomId:
+          type: string
+        serverKeygenIds:
+          type: array
+          items:
+            type: string
+        serverEacs:
+          type: array
+          items:
+            type: string
+        newServerKeygenIds:
+          type: array
+          items:
+            type: string
+        newServerEacs:
+          type: array
+          items:
+            type: string
   responses:
     BadRequest:
       description: Bad Request

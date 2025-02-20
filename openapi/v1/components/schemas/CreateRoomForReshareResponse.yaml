@@ -1,0 +1,26 @@
+type: object
+required:
+  - roomId
+  - serverKeygenIds
+  - serverEacs
+  - newServerKeygenIds
+  - newServerEacs
+properties:
+  roomId:
+    type: string
+  serverKeygenIds:
+    type: array
+    items:
+      type: string
+  serverEacs:
+    type: array
+    items:
+      type: string
+  newServerKeygenIds:
+    type: array
+    items:
+      type: string
+  newServerEacs:
+    type: array
+    items:
+      type: string

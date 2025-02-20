@@ -10,9 +10,35 @@ import { verifyJWT } from '../../services/jwt';
 
 const isDeployedEnv = process.env.NODE_ENV === 'production';
 
+/**
+ * Helper function to process EACs
+ * @param {string[]} eacs - The EACs to process
+ * @returns {Promise<PartialEacType[] | undefined>} The processed EACs
+ */
+const processEacs = async (
+  eacs: string[],
+): Promise<PartialEacType[] | undefined> => {
+  if (isDeployedEnv) {
+    return eacs ? eacs.map((eac: string) => JSON.parse(eac)) : undefined;
+  }
+
+  return Promise.all(
+    eacs.map(async (eac: string) => {
+      const decryptedEACString = await evervaultDecrypt(eac);
+      const parsedEac = JSON.parse(decryptedEACString);
+      return {
+        ...parsedEac,
+        serverKeygenInitResult:
+          typeof parsedEac.serverKeygenInitResult === 'string'
+            ? parsedEac.serverKeygenInitResult
+            : JSON.stringify(parsedEac.serverKeygenInitResult),
+      } as PartialEacType;
+    }),
+  );
+};
+
 export const registerOperationHandlers = (app: Express) => {
   // EWC and EAC parsing middleware
-  //TODO: make sure i add all the routes that need this encryption middleware
   app.use(
     [
       '/api/v1/actions/CreateWalletAccount',
@@ -21,40 +47,32 @@ export const registerOperationHandlers = (app: Express) => {
       '/api/v1/actions/RefreshShares',
       '/api/v1/actions/CreateRoom',
       '/api/v1/actions/ImportPrivateKey',
+      '/api/v1/actions/Reshare',
+      '/api/v1/actions/CreateRoomForReshare',
     ],
     async (req, _res, next) => {
       console.log('---original route---', req.originalUrl);
+
       if (req.body.serverEacs) {
-        if (isDeployedEnv) {
-          // encrypted account credential (EAC) should be decrypted on ingress
-          const { serverEacs: decryptedEACStrings } = req.body;
-          console.log('decryptedEACString', decryptedEACStrings);
-          const eacs: PartialEacType[] = decryptedEACStrings
-            ? decryptedEACStrings.map((eac: string) => JSON.parse(eac))
-            : undefined;
-          console.log('eacs', eacs);
-          req.body.serverEacs = eacs;
-        } else {
-          const serverEacs = req.body.serverEacs;
-          const serverEacParsed = await Promise.all(
-            serverEacs.map(async (eac: string) => {
-              const decryptedEACString = await evervaultDecrypt(eac);
-              const parsedEac = JSON.parse(decryptedEACString);
-              // Don't stringify serverKeygenInitResult if it's already a string
-              return {
-                ...parsedEac,
-                serverKeygenInitResult:
-                  typeof parsedEac.serverKeygenInitResult === 'string'
-                    ? parsedEac.serverKeygenInitResult
-                    : JSON.stringify(parsedEac.serverKeygenInitResult),
-              } as PartialEacType;
-            }),
-          );
-          req.body.serverEacs = serverEacParsed;
-          console.log('Processed serverEacs:', req.body.serverEacs);
-        }
+        req.body.serverEacs = await processEacs(req.body.serverEacs);
+        console.log('Processed serverEacs:', req.body.serverEacs);
       }
-      console.log('next ');
+
+      if (req.body.newServerEacs) {
+        req.body.newServerEacs = await processEacs(req.body.newServerEacs);
+        console.log('Processed newServerEacs:', req.body.newServerEacs);
+      }
+
+      if (req.body.existingServerEacs) {
+        req.body.existingServerEacs = await processEacs(
+          req.body.existingServerEacs,
+        );
+        console.log(
+          'Processed existingServerEacs:',
+          req.body.existingServerEacs,
+        );
+      }
+
       next();
     },
   );
