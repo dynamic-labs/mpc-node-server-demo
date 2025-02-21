@@ -18,6 +18,7 @@ describe('CreateRoomForReshare', () => {
   const mockCreateMpcRoom = jest.mocked(mpcClient.createMpcRoom);
   const mockReshareStrategy = jest.mocked(mpcClient.reshareStrategy);
   const evervaultDecryptSpy = jest.spyOn(evervault, 'evervaultDecrypt');
+  const evervaultEncryptSpy = jest.spyOn(evervault, 'evervaultEncrypt');
   const getSingleServerPartyKeygenIdSpy = jest.spyOn(
     getSingleServerPartyKeygenId,
     'getSingleServerPartyKeygenId',
@@ -41,10 +42,12 @@ describe('CreateRoomForReshare', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    evervaultDecryptSpy.mockResolvedValue(JSON.stringify(mockEac));
+    evervaultDecryptSpy.mockImplementation((eac) => Promise.resolve(eac));
+    evervaultEncryptSpy.mockImplementation(async (str) => `ev:${str}`);
     mockReshareStrategy.mockResolvedValue({
       newServerKeygenInitResults: ['mockKeygenInitResult-1'],
       newServerKeygenIds: ['mockKeygenId-1'],
+      existingServerKeygenIds: ['mockKeygenId-2'],
     });
   });
 
@@ -67,6 +70,50 @@ describe('CreateRoomForReshare', () => {
         .send(mockRequestBody);
 
       expect(result.status).toBe(200);
+    });
+
+    it('should properly filter and handle existing server EACs', async () => {
+      mockCreateMpcRoom.mockResolvedValue({ roomId: mockRoomId });
+      evervaultDecryptSpy.mockImplementation((eac) => Promise.resolve(eac));
+
+      // Mock different keygenIds for the two input EACs
+      getSingleServerPartyKeygenIdSpy.mockImplementation(({ eac }) => {
+        const serverKeygenInitResult = JSON.parse(eac.serverKeygenInitResult);
+        return Promise.resolve(serverKeygenInitResult.keygenId);
+      });
+
+      mockReshareStrategy.mockResolvedValue({
+        newServerKeygenInitResults: ['mockKeygenInitResult-1'],
+        newServerKeygenIds: ['mockKeygenId-1'],
+        existingServerKeygenIds: ['mockKeygenId-2'],
+      });
+
+      const mockRequestBody = {
+        oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
+        newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
+        serverEacs: [
+          JSON.stringify({
+            ...mockEac,
+            serverKeygenInitResult: {
+              keygenId: 'mockKeygenId-2',
+            },
+          }),
+          JSON.stringify({
+            ...mockEac,
+            serverKeygenInitResult: {
+              keygenId: 'mockKeygenId-3',
+            },
+          }),
+        ],
+      };
+
+      const result = await testServer.app
+        .post('/api/v1/actions/CreateRoomForReshare')
+        .set('Accept', 'application/json')
+        .send(mockRequestBody);
+
+      expect(result.status).toBe(200);
+      expect(result.body.serverEacs).toHaveLength(1);
     });
 
     it('should throw an error if the serverEacs are not provided', async () => {

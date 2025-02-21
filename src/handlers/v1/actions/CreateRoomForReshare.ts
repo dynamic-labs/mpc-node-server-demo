@@ -57,22 +57,38 @@ export const CreateRoomForReshare: TypedRequestHandler<{
       parties: CreateRoomPartiesOptions.FULL,
     });
 
-    const { newServerKeygenInitResults, newServerKeygenIds } =
-      await mpcClient.reshareStrategy({
-        chain,
-        oldThresholdSignatureScheme:
-          oldThresholdSignatureScheme as ThresholdSignatureScheme,
-        newThresholdSignatureScheme:
-          newThresholdSignatureScheme as ThresholdSignatureScheme,
-      });
-
     const serverKeygenIds = await Promise.all(
       serverEacs.map((eac: PartialEacType) =>
         getSingleServerPartyKeygenId({ eac: eac as EacType, chain }),
       ),
     );
+
+    const {
+      newServerKeygenInitResults,
+      newServerKeygenIds,
+      existingServerKeygenIds,
+    } = await mpcClient.reshareStrategy({
+      chain,
+      serverKeygenIds,
+      oldThresholdSignatureScheme:
+        oldThresholdSignatureScheme as ThresholdSignatureScheme,
+      newThresholdSignatureScheme:
+        newThresholdSignatureScheme as ThresholdSignatureScheme,
+    });
+
+    const existingServerEacs: EacType[] = [];
+    for (const serverEac of serverEacs) {
+      const serverKeygenId = await getSingleServerPartyKeygenId({
+        eac: serverEac,
+        chain,
+      });
+      if (existingServerKeygenIds.includes(serverKeygenId)) {
+        existingServerEacs.push(serverEac);
+      }
+    }
+
     const encryptedServerEacs = await Promise.all(
-      serverEacs.map((eac) => evervaultEncrypt(JSON.stringify(eac))),
+      existingServerEacs.map((eac) => evervaultEncrypt(JSON.stringify(eac))),
     );
 
     const encryptedNewServerEacs = await Promise.all(
@@ -90,7 +106,7 @@ export const CreateRoomForReshare: TypedRequestHandler<{
 
     return res.status(200).json({
       roomId,
-      serverKeygenIds,
+      serverKeygenIds: existingServerKeygenIds,
       serverEacs: encryptedServerEacs,
       newServerKeygenIds,
       newServerEacs: encryptedNewServerEacs,

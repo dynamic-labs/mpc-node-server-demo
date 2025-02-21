@@ -34,11 +34,6 @@ export const reshareSingleNewParty = async ({
       newThreshold: MPC_CONFIG[newThresholdSignatureScheme].threshold,
     });
 
-  console.log(
-    '--<reshareSingleNewParty> refreshedServerKeyShare',
-    refreshedServerKeyShare,
-  );
-
   const rawEac = {
     ...baseServerEac,
     serverKeyShare: JSON.stringify(refreshedServerKeyShare),
