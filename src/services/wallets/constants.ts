@@ -5,12 +5,6 @@ export const THRESHOLD = process.env.THRESHOLD
   ? parseInt(process.env.THRESHOLD)
   : 2;
 
-export const RELAY_API_KEY =
-  process.env.RELAY_API_KEY || 'ABEiM0RVZneImaq7zN3u8g==';
-
-export const RELAY_API_URL =
-  process.env.RELAY_API_URL || 'relay.dynamic-preprod.xyz';
-
 export enum SigningAlgorithm {
   ECDSA = 'ECDSA',
   ED25519 = 'ED25519',
