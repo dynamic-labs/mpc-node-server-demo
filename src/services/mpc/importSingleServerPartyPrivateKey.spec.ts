@@ -78,12 +78,12 @@ describe('importSingleServerPartyPrivateKey', () => {
     const mockImportPrivateKey = jest
       .mocked(mpcClient.importPrivateKey)
       .mockResolvedValue({
-        accountAddress: undefined,
-        compressedPublicKey: mockServerEac.compressedPublicKey,
+        accountAddress: '',
+        compressedPublicKey: '',
         uncompressedPublicKey: mockServerEac.uncompressedPublicKey,
         serverKeyShare: mockServerEac.serverKeyShare,
         derivationPath: new Uint32Array([1, 2, 3]),
-      } as any);
+      });
 
     const mockParams = {
       eac: mockPartialEac,

@@ -1,4 +1,7 @@
 import {
+  BIP340InitKeygenResult,
+  EcdsaInitKeygenResult,
+  Ed25519InitKeygenResult,
   MPC_CONFIG,
   ThresholdSignatureScheme,
 } from '@dynamic-labs-wallet/server';
@@ -18,7 +21,10 @@ export const reshareSingleNewParty = async ({
 }: {
   chain: ChainType;
   roomId: string;
-  keygenInitResult: any;
+  keygenInitResult:
+    | Ed25519InitKeygenResult
+    | EcdsaInitKeygenResult
+    | BIP340InitKeygenResult;
   allPartyKeygenIds: string[];
   baseServerEac: PartialEacType;
   oldThresholdSignatureScheme: ThresholdSignatureScheme;

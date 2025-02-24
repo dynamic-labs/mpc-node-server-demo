@@ -78,12 +78,12 @@ describe('createSingleWalletAccount', () => {
     const mockCreateWalletAccount = jest
       .mocked(mpcClient.createWalletAccount)
       .mockResolvedValue({
-        accountAddress: undefined,
-        compressedPublicKey: undefined,
-        uncompressedPublicKey: undefined,
-        serverKeyShare: undefined,
-        derivationPath: undefined,
-      } as any);
+        accountAddress: '',
+        compressedPublicKey: '',
+        uncompressedPublicKey: '',
+        serverKeyShare: '',
+        derivationPath: new Uint32Array(),
+      });
 
     const mockParams = {
       eac: mockPartialEac,

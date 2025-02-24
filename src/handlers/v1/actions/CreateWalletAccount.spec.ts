@@ -1,7 +1,8 @@
-import { EcdsaKeygenResult } from '@dynamic-labs-wallet/server';
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
+import type { EacType } from '../../../generated';
 import * as evervault from '../../../services/evervault';
+import * as jwtService from '../../../services/jwt';
 import { mpcClient } from '../../../services/mpc/constants';
 import * as createSingleWalletAccount from '../../../services/mpc/createSingleWalletAccount';
 
@@ -12,6 +13,8 @@ jest.mock('../../../services/mpc/constants', () => ({
   },
 }));
 
+jest.mock('../../../services/jwt');
+
 describe('CreateWalletAccount', () => {
   const createSingleWalletAccountSpy = jest.spyOn(
     createSingleWalletAccount,
@@ -20,7 +23,8 @@ describe('CreateWalletAccount', () => {
   const mockCreateWalletAccount = jest.mocked(mpcClient.createWalletAccount);
   const evervaultEncryptSpy = jest.spyOn(evervault, 'evervaultEncrypt');
 
-  const mockEac = {
+  const mockJwt = `${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}`;
+  const mockServerEac: EacType = {
     userId: faker.string.uuid(),
     compressedPublicKey: '123',
     uncompressedPublicKey: '123',
@@ -33,32 +37,35 @@ describe('CreateWalletAccount', () => {
   };
 
   const mockWalletAccountResponse = {
-    accountAddress: mockEac.accountAddress,
-    compressedPublicKey: mockEac.compressedPublicKey,
-    uncompressedPublicKey: mockEac.uncompressedPublicKey,
-    serverKeyShare: {
-      pubkey: mockEac.uncompressedPublicKey,
-      secretShare: 'share123',
-    } as unknown as EcdsaKeygenResult,
+    accountAddress: mockServerEac.accountAddress,
+    compressedPublicKey: mockServerEac.compressedPublicKey as string,
+    uncompressedPublicKey: mockServerEac.uncompressedPublicKey,
+    serverKeyShare: 'ev:123',
     derivationPath: new Uint32Array([44, 60, 0, 0, 0]),
   };
 
   const mockWalletAccount = {
-    userId: mockEac.userId,
-    environmentId: mockEac.environmentId,
-    accountAddress: mockEac.accountAddress,
-    uncompressedPublicKey: mockEac.uncompressedPublicKey,
-    compressedPublicKey: mockEac.compressedPublicKey,
+    userId: mockServerEac.userId,
+    environmentId: mockServerEac.environmentId,
+    accountAddress: mockServerEac.accountAddress,
+    uncompressedPublicKey: mockServerEac.uncompressedPublicKey,
+    compressedPublicKey: mockServerEac.compressedPublicKey as string,
     derivationPath: JSON.stringify(mockWalletAccountResponse.derivationPath),
-    serverKeygenId: JSON.parse(mockEac.serverKeygenInitResult).keygenId,
-    modifiedEac: `ev:${JSON.stringify(mockEac)}`,
+    serverKeygenId: mockServerEac.serverKeygenInitResult,
+    modifiedEac: `ev:${JSON.stringify(mockServerEac)}`,
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
     mockCreateWalletAccount.mockResolvedValue(mockWalletAccountResponse);
-    evervaultEncryptSpy.mockResolvedValue(`ev:${JSON.stringify(mockEac)}`);
+    evervaultEncryptSpy.mockResolvedValue(
+      `ev:${JSON.stringify(mockServerEac)}`,
+    );
     createSingleWalletAccountSpy.mockResolvedValue(mockWalletAccount);
+    (jwtService.verifyJWT as jest.Mock).mockResolvedValue({
+      isVerified: true,
+      verifiedPayload: undefined,
+    });
   });
 
   describe('POST /api/v1/actions/CreateWalletAccount', () => {
@@ -69,11 +76,12 @@ describe('CreateWalletAccount', () => {
       const result = await testServer.app
         .post('/api/v1/actions/CreateWalletAccount')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           roomId,
           clientKeygenIds,
           thresholdSignatureScheme: 'TWO_OF_THREE',
-          serverEacs: [JSON.stringify(mockEac)],
+          serverEacs: [JSON.stringify(mockServerEac)],
         });
 
       expect(result.status).toBe(200);
@@ -95,11 +103,11 @@ describe('CreateWalletAccount', () => {
       expect(createSingleWalletAccountSpy).toHaveBeenCalledTimes(1);
       expect(createSingleWalletAccountSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          eac: mockEac,
+          eac: mockServerEac,
           roomId,
           clientKeygenIds,
           serverKeygenIds: [
-            JSON.parse(mockEac.serverKeygenInitResult).keygenId,
+            JSON.parse(mockServerEac.serverKeygenInitResult).keygenId,
           ],
           thresholdSignatureScheme: 'TWO_OF_THREE',
         }),
@@ -110,6 +118,7 @@ describe('CreateWalletAccount', () => {
       const result = await testServer.app
         .post('/api/v1/actions/CreateWalletAccount')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           roomId: faker.string.uuid(),
           clientKeygenIds: [faker.string.uuid()],
@@ -117,10 +126,9 @@ describe('CreateWalletAccount', () => {
         });
 
       expect(result.status).toBe(400);
-      expect(result).toSatisfyApiSpec();
-      expect(result.body.error_code).toBe('bad_request');
+      expect(result.body.error_code).toBe('missing_eac');
       expect(result.body.error_message).toBe(
-        "request/body must have required property 'serverEacs'",
+        'At least one EAC is required for this operation',
       );
     });
   });

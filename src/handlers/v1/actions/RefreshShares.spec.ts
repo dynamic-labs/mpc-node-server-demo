@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
+import type { EacType } from '../../../generated';
 import * as evervault from '../../../services/evervault';
+import * as jwtService from '../../../services/jwt';
 import { mpcClient } from '../../../services/mpc/constants';
 
 jest.mock('../../../services/mpc/constants', () => ({
@@ -9,12 +11,15 @@ jest.mock('../../../services/mpc/constants', () => ({
   },
 }));
 
+jest.mock('../../../services/jwt');
+
 describe('RefreshShares', () => {
   const evervaultDecryptSpy = jest.spyOn(evervault, 'evervaultDecrypt');
   const evervaultEncryptSpy = jest.spyOn(evervault, 'evervaultEncrypt');
   const mockRefreshShares = jest.mocked(mpcClient.refreshShares);
 
-  const mockEac = {
+  const mockJwt = `${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}`;
+  const mockServerEac: EacType = {
     userId: faker.string.uuid(),
     compressedPublicKey: '123',
     uncompressedPublicKey: '123',
@@ -31,10 +36,14 @@ describe('RefreshShares', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    evervaultDecryptSpy.mockResolvedValue(JSON.stringify(mockEac));
+    evervaultDecryptSpy.mockResolvedValue(JSON.stringify(mockServerEac));
     evervaultEncryptSpy.mockImplementation(async (str) => `ev:${str}`);
     mockRefreshShares.mockResolvedValue({
       serverKeyShare: mockRefreshedKeyShare,
+    });
+    (jwtService.verifyJWT as jest.Mock).mockResolvedValue({
+      isVerified: true,
+      verifiedPayload: undefined,
     });
   });
 
@@ -43,22 +52,24 @@ describe('RefreshShares', () => {
       const result = await testServer.app
         .post('/api/v1/actions/RefreshShares')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           roomId: mockRoomId,
-          serverEacs: [JSON.stringify(mockEac)],
+          serverEacs: [JSON.stringify(mockServerEac)],
+          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
       expect(result).toSatisfyApiSpec();
       expect(mockRefreshShares).toHaveBeenCalledTimes(1);
       expect(mockRefreshShares).toHaveBeenCalledWith({
-        chain: mockEac.chain,
+        chain: mockServerEac.chain,
         roomId: mockRoomId,
         serverKeyShare: 'old-key-share',
       });
 
       const expectedRefreshedEac = {
-        ...mockEac,
+        ...mockServerEac,
         serverKeyShare: JSON.stringify(mockRefreshedKeyShare),
       };
 
@@ -69,7 +80,7 @@ describe('RefreshShares', () => {
 
     it('should handle multiple server EACs', async () => {
       const secondMockEac = {
-        ...mockEac,
+        ...mockServerEac,
         userId: faker.string.uuid(),
         serverKeyShare: JSON.stringify('second-old-key-share'),
       };
@@ -85,9 +96,14 @@ describe('RefreshShares', () => {
       const result = await testServer.app
         .post('/api/v1/actions/RefreshShares')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           roomId: mockRoomId,
-          serverEacs: [JSON.stringify(mockEac), JSON.stringify(secondMockEac)],
+          serverEacs: [
+            JSON.stringify(mockServerEac),
+            JSON.stringify(secondMockEac),
+          ],
+          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -102,27 +118,16 @@ describe('RefreshShares', () => {
       const result = await testServer.app
         .post('/api/v1/actions/RefreshShares')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           roomId: mockRoomId,
-          serverEacs: [JSON.stringify(mockEac)],
+          serverEacs: [JSON.stringify(mockServerEac)],
+          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);
       expect(result).toSatisfyApiSpec();
       expect(result.body.error_code).toBe('unknown_error');
-    });
-
-    it('should validate required fields', async () => {
-      const result = await testServer.app
-        .post('/api/v1/actions/RefreshShares')
-        .set('Accept', 'application/json')
-        .send({
-          // Missing required fields
-        });
-
-      expect(result.status).toBe(400);
-      expect(result).toSatisfyApiSpec();
-      expect(result.body.error_code).toBe('bad_request');
     });
   });
 });

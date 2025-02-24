@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
+import type { EacType } from '../../../generated';
 import * as evervault from '../../../services/evervault';
+import * as jwtService from '../../../services/jwt';
 import { mpcClient } from '../../../services/mpc/constants';
 import * as getSingleServerPartyKeygenId from '../../../services/mpc/getSingleServerPartyKeygenId';
 
@@ -11,6 +13,8 @@ jest.mock('../../../services/mpc/constants', () => ({
   },
 }));
 
+jest.mock('../../../services/jwt');
+
 describe('CreateRoom', () => {
   // Cast the mock to retain type information
   const mockCreateMpcRoom = jest.mocked(mpcClient.createMpcRoom);
@@ -20,7 +24,8 @@ describe('CreateRoom', () => {
     'getSingleServerPartyKeygenId',
   );
 
-  const mockEac = {
+  const mockJwt = `${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}`;
+  const mockServerEac: EacType = {
     userId: faker.string.uuid(),
     compressedPublicKey: '123',
     uncompressedPublicKey: '123',
@@ -31,12 +36,17 @@ describe('CreateRoom', () => {
     chain: 'EVM',
     derivationPath: '123',
   };
+
   const mockRoomId = faker.string.uuid();
   const mockServerKeygenId = faker.string.uuid();
 
   beforeEach(() => {
     jest.clearAllMocks();
-    evervaultDecryptSpy.mockResolvedValue(JSON.stringify(mockEac));
+    evervaultDecryptSpy.mockResolvedValue(JSON.stringify(mockServerEac));
+    (jwtService.verifyJWT as jest.Mock).mockResolvedValue({
+      isVerified: true,
+      verifiedPayload: undefined,
+    });
   });
 
   describe('POST /api/v1/actions/CreateRoom', () => {
@@ -49,10 +59,11 @@ describe('CreateRoom', () => {
       const result = await testServer.app
         .post('/api/v1/actions/CreateRoom')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           chain: 'EVM',
           thresholdSignatureScheme: 'TWO_OF_THREE',
-          serverEacs: [JSON.stringify(mockEac)],
+          serverEacs: [JSON.stringify(mockServerEac)],
         });
 
       expect(result.status).toBe(200);
@@ -67,12 +78,14 @@ describe('CreateRoom', () => {
       const result = await testServer.app
         .post('/api/v1/actions/CreateRoom')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({ chain: 'EVM', thresholdSignatureScheme: 'TWO_OF_THREE' });
 
       expect(result.status).toBe(400);
-      expect(result).toSatisfyApiSpec();
-      expect(result.body.error_code).toBe('bad_request');
-      expect(result.body.error_message).toBe('Server EACs are required');
+      expect(result.body.error_code).toBe('missing_eac');
+      expect(result.body.error_message).toBe(
+        'At least one EAC is required for this operation',
+      );
     });
   });
 });

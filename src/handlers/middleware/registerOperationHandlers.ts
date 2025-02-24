@@ -1,14 +1,24 @@
 import path from 'path';
-import { Express } from 'express';
-
+import type { Express } from 'express';
 import { middleware as OpenApiValidator } from 'express-openapi-validator';
-
 import 'dotenv/config';
-import { EacType, PartialEacType } from '../../generated';
+import type { EacType, PartialEacType } from '../../generated';
 import { evervaultDecrypt } from '../../services/evervault';
 import { verifyJWT } from '../../services/jwt';
 
 const isDeployedEnv = process.env.NODE_ENV === 'production';
+
+const PROTECTED_ROUTES = [
+  '/api/v1/actions/CreateRoom',
+  '/api/v1/actions/CreateWalletAccount',
+  '/api/v1/actions/ExportWalletAccount',
+  '/api/v1/actions/ImportPrivateKey',
+  '/api/v1/actions/RefreshShares',
+  '/api/v1/actions/ReshareRemainingParty',
+  '/api/v1/actions/SignMessage',
+  '/api/v1/actions/Reshare',
+  '/api/v1/actions/CreateRoomForReshare',
+];
 
 /**
  * Helper function to process EACs
@@ -39,20 +49,10 @@ const processEacs = async (
 
 export const registerOperationHandlers = (app: Express) => {
   // EWC and EAC parsing middleware
-  app.use(
-    [
-      '/api/v1/actions/CreateWalletAccount',
-      '/api/v1/actions/ExportWalletAccount',
-      '/api/v1/actions/SignMessage',
-      '/api/v1/actions/RefreshShares',
-      '/api/v1/actions/CreateRoom',
-      '/api/v1/actions/ImportPrivateKey',
-      '/api/v1/actions/Reshare',
-      '/api/v1/actions/CreateRoomForReshare',
-    ],
-    async (req, _res, next) => {
-      console.log('---original route---', req.originalUrl);
+  app.use(PROTECTED_ROUTES, async (req, _res, next) => {
+    console.log('---original route---', req.originalUrl);
 
+    try {
       if (req.body.serverEacs) {
         req.body.serverEacs = await processEacs(req.body.serverEacs);
         console.log('Processed serverEacs:', req.body.serverEacs);
@@ -74,8 +74,54 @@ export const registerOperationHandlers = (app: Express) => {
       }
 
       next();
-    },
-  );
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // JWT verification middleware
+  app.use(PROTECTED_ROUTES, async (req, res, next) => {
+    const { jwt, serverEacs } = req.body;
+
+    if (!serverEacs || !Array.isArray(serverEacs) || serverEacs.length === 0) {
+      return res.status(400).json({
+        error_code: 'missing_eac',
+        error_message: 'At least one EAC is required for this operation',
+      });
+    }
+
+    const firstEac = serverEacs[0] as EacType;
+    const { environmentId, userId } = firstEac;
+
+    if (!environmentId || !userId) {
+      return res.status(400).json({
+        error_code: 'invalid_eac',
+        error_message: 'First EAC must contain environmentId and userId',
+      });
+    }
+
+    try {
+      const { isVerified } = await verifyJWT({
+        environmentId,
+        dynamicUserId: userId,
+        rawJwt: jwt,
+      });
+
+      if (!isVerified) {
+        return res.status(403).json({
+          error_code: 'jwt_invalid',
+          error_message: 'The JWT could not be verified',
+        });
+      }
+
+      next();
+    } catch {
+      return res.status(403).json({
+        error_code: 'jwt_verification_failed',
+        error_message: 'JWT verification failed',
+      });
+    }
+  });
 
   app.use(
     '/api',
@@ -90,34 +136,4 @@ export const registerOperationHandlers = (app: Express) => {
       operationHandlers: path.join(__dirname, '../../handlers/v1'),
     }),
   );
-
-  //todo: add other actions that need this middleware
-  app.use(['/api/v1/actions/CreateWalletAccount'], async (req, res, next) => {
-    const { jwt, eac } = req.body;
-    let environmentId, userId;
-    if (eac) {
-      ({ environmentId, userId } = eac as EacType);
-    }
-
-    if (!environmentId || !userId) {
-      return res.status(403).send({
-        error_code: 'jwt_invalid',
-        error_message: 'The JWT could not be verified',
-      });
-    }
-    const { isVerified } = await verifyJWT({
-      environmentId,
-      dynamicUserId: userId,
-      rawJwt: jwt,
-    });
-
-    // If the JWT cannot be not verified, return unauthorized
-    if (!isVerified) {
-      return res.status(403).send({
-        error_code: 'jwt_invalid',
-        error_message: 'The JWT could not be verified',
-      });
-    }
-    next();
-  });
 };

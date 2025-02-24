@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
 import * as evervault from '../../../services/evervault';
+import * as jwtService from '../../../services/jwt';
 import { mpcClient } from '../../../services/mpc/constants';
 
 // Mock the MPC client
@@ -10,11 +11,14 @@ jest.mock('../../../services/mpc/constants', () => ({
   },
 }));
 
+jest.mock('../../../services/jwt');
+
 describe('InitKeygen', () => {
   // Cast the mock to retain type information
   const mockInitKeygen = jest.mocked(mpcClient.initKeygen);
   const evervaultEncryptSpy = jest.spyOn(evervault, 'evervaultEncrypt');
 
+  const mockJwt = `${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}`;
   const mockRoomId = faker.string.uuid();
   const mockServerKeygenId = faker.string.uuid();
   const mockInitKeygenResult = {
@@ -31,20 +35,25 @@ describe('InitKeygen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     evervaultEncryptSpy.mockResolvedValue('ev:123');
+    mockInitKeygen.mockResolvedValue(mockInitKeygenResult);
+    (jwtService.verifyJWT as jest.Mock).mockResolvedValue({
+      isVerified: true,
+      verifiedPayload: undefined,
+    });
   });
 
   describe('POST /api/v1/actions/InitKeygen', () => {
     it('should initialize keygen and return the room id and keygen init results', async () => {
-      mockInitKeygen.mockResolvedValue(mockInitKeygenResult);
-
       const result = await testServer.app
         .post('/api/v1/actions/InitKeygen')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           chain: 'EVM',
           thresholdSignatureScheme: 'TWO_OF_THREE',
           environmentId: faker.string.uuid(),
           userId: faker.string.uuid(),
+          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -60,11 +69,13 @@ describe('InitKeygen', () => {
       const result = await testServer.app
         .post('/api/v1/actions/InitKeygen')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           chain: 'EVM',
           thresholdSignatureScheme: 'TWO_OF_THREE',
           environmentId: faker.string.uuid(),
           userId: faker.string.uuid(),
+          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);

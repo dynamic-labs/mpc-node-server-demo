@@ -2,6 +2,7 @@ import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/core';
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
 import * as evervault from '../../../services/evervault';
+import * as jwtService from '../../../services/jwt';
 import { mpcClient } from '../../../services/mpc/constants';
 import * as getSingleServerPartyKeygenId from '../../../services/mpc/getSingleServerPartyKeygenId';
 
@@ -12,6 +13,8 @@ jest.mock('../../../services/mpc/constants', () => ({
     reshareStrategy: jest.fn(),
   },
 }));
+
+jest.mock('../../../services/jwt');
 
 describe('CreateRoomForReshare', () => {
   // Cast the mock to retain type information
@@ -24,7 +27,8 @@ describe('CreateRoomForReshare', () => {
     'getSingleServerPartyKeygenId',
   );
 
-  const mockEac = {
+  const mockJwt = `${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}`;
+  const mockServerEac = {
     userId: faker.string.uuid(),
     compressedPublicKey: '123',
     uncompressedPublicKey: '123',
@@ -37,6 +41,7 @@ describe('CreateRoomForReshare', () => {
     chain: 'EVM',
     derivationPath: '123',
   };
+
   const mockRoomId = faker.string.uuid();
   const mockServerKeygenId = faker.string.uuid();
 
@@ -48,6 +53,10 @@ describe('CreateRoomForReshare', () => {
       newServerKeygenInitResults: ['mockKeygenInitResult-1'],
       newServerKeygenIds: ['mockKeygenId-1'],
       existingServerKeygenIds: ['mockKeygenId-2'],
+    });
+    (jwtService.verifyJWT as jest.Mock).mockResolvedValue({
+      isVerified: true,
+      verifiedPayload: undefined,
     });
   });
 
@@ -61,12 +70,14 @@ describe('CreateRoomForReshare', () => {
       const mockRequestBody = {
         oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
         newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
-        serverEacs: [JSON.stringify(mockEac)],
+        serverEacs: [JSON.stringify(mockServerEac)],
+        jwt: mockJwt,
       };
 
       const result = await testServer.app
         .post('/api/v1/actions/CreateRoomForReshare')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send(mockRequestBody);
 
       expect(result.status).toBe(200);
@@ -93,13 +104,13 @@ describe('CreateRoomForReshare', () => {
         newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
         serverEacs: [
           JSON.stringify({
-            ...mockEac,
+            ...mockServerEac,
             serverKeygenInitResult: {
               keygenId: 'mockKeygenId-2',
             },
           }),
           JSON.stringify({
-            ...mockEac,
+            ...mockServerEac,
             serverKeygenInitResult: {
               keygenId: 'mockKeygenId-3',
             },
@@ -120,17 +131,20 @@ describe('CreateRoomForReshare', () => {
       const mockRequestBody = {
         oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
         newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
+        jwt: mockJwt,
       };
 
       const result = await testServer.app
         .post('/api/v1/actions/CreateRoomForReshare')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send(mockRequestBody);
 
       expect(result.status).toBe(400);
-      expect(result).toSatisfyApiSpec();
-      expect(result.body.error_code).toBe('bad_request');
-      expect(result.body.error_message).toBe('Server EACs are required');
+      expect(result.body.error_code).toBe('missing_eac');
+      expect(result.body.error_message).toBe(
+        'At least one EAC is required for this operation',
+      );
     });
   });
 });

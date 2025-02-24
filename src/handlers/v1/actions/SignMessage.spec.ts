@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { testServer } from '../../../../tests/TestServer';
-import { EacType } from '../../../generated';
+import type { EacType } from '../../../generated';
+import * as jwtService from '../../../services/jwt';
 import * as signSingleServerPartyMessage from '../../../services/mpc/signSingleServerPartyMessage';
+
+jest.mock('../../../services/jwt');
 
 describe('SignMessage', () => {
   const signSingleServerPartyMessageSpy = jest.spyOn(
@@ -10,7 +13,7 @@ describe('SignMessage', () => {
   );
 
   const mockRoomId = faker.string.uuid();
-  const _mockServerKeygenId = faker.string.uuid();
+  const mockJwt = `${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}`;
   const mockServerEac: EacType = {
     userId: faker.string.uuid(),
     uncompressedPublicKey: faker.string.hexadecimal(),
@@ -26,6 +29,10 @@ describe('SignMessage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     signSingleServerPartyMessageSpy.mockResolvedValue();
+    (jwtService.verifyJWT as jest.Mock).mockResolvedValue({
+      isVerified: true,
+      verifiedPayload: undefined,
+    });
   });
 
   describe('POST /api/v1/actions/SignMessage', () => {
@@ -37,7 +44,11 @@ describe('SignMessage', () => {
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
           message: mockMessage,
+          jwt: mockJwt,
         });
+
+      console.log(result.body);
+      console.log(result.error);
 
       expect(result.status).toBe(201);
       expect(result).toSatisfyApiSpec();
@@ -56,6 +67,7 @@ describe('SignMessage', () => {
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
           message: mockMessage,
+          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);
