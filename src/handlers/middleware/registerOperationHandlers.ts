@@ -81,7 +81,11 @@ export const registerOperationHandlers = (app: Express) => {
 
   // JWT verification middleware
   app.use(PROTECTED_ROUTES, async (req, res, next) => {
-    const { jwt, serverEacs } = req.body;
+    const { serverEacs } = req.body;
+    const authorization = (req.headers.authorization ?? '').replace(
+      'Bearer ',
+      '',
+    );
 
     if (!serverEacs || !Array.isArray(serverEacs) || serverEacs.length === 0) {
       return res.status(400).json({
@@ -104,7 +108,7 @@ export const registerOperationHandlers = (app: Express) => {
       const { isVerified } = await verifyJWT({
         environmentId,
         dynamicUserId: userId,
-        rawJwt: jwt,
+        rawJwt: authorization,
       });
 
       if (!isVerified) {

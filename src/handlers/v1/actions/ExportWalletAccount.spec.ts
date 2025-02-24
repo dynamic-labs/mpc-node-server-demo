@@ -53,7 +53,6 @@ describe('ExportWalletAccount', () => {
           exportId: mockExportId,
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
-          jwt: mockJwt,
         });
       expect(result.status).toBe(201);
       expect(result).toSatisfyApiSpec();
@@ -83,7 +82,6 @@ describe('ExportWalletAccount', () => {
             JSON.stringify(mockServerEac),
             JSON.stringify(secondMockEac),
           ],
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(201);
@@ -102,7 +100,6 @@ describe('ExportWalletAccount', () => {
           exportId: mockExportId,
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);
@@ -117,7 +114,6 @@ describe('ExportWalletAccount', () => {
         .set('Authorization', `Bearer ${mockJwt}`)
         .send({
           // Missing required fields
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(400);

@@ -13,7 +13,6 @@ describe('SignMessage', () => {
   );
 
   const mockRoomId = faker.string.uuid();
-  const mockJwt = `${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}.${faker.string.alphanumeric(32)}`;
   const mockServerEac: EacType = {
     userId: faker.string.uuid(),
     uncompressedPublicKey: faker.string.hexadecimal(),
@@ -44,11 +43,7 @@ describe('SignMessage', () => {
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
           message: mockMessage,
-          jwt: mockJwt,
         });
-
-      console.log(result.body);
-      console.log(result.error);
 
       expect(result.status).toBe(201);
       expect(result).toSatisfyApiSpec();
@@ -67,7 +62,6 @@ describe('SignMessage', () => {
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
           message: mockMessage,
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);

@@ -53,7 +53,6 @@ describe('InitKeygen', () => {
           thresholdSignatureScheme: 'TWO_OF_THREE',
           environmentId: faker.string.uuid(),
           userId: faker.string.uuid(),
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -75,7 +74,6 @@ describe('InitKeygen', () => {
           thresholdSignatureScheme: 'TWO_OF_THREE',
           environmentId: faker.string.uuid(),
           userId: faker.string.uuid(),
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);

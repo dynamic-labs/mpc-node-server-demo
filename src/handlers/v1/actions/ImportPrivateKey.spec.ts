@@ -66,7 +66,6 @@ describe('ImportPrivateKey', () => {
           clientKeygenIds: mockClientKeygenIds,
           serverEacs: [JSON.stringify(mockServerEac)],
           thresholdSignatureScheme: 'TWO_OF_THREE',
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -130,7 +129,6 @@ describe('ImportPrivateKey', () => {
             JSON.stringify(secondMockEac),
           ],
           thresholdSignatureScheme: 'TWO_OF_THREE',
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -153,7 +151,6 @@ describe('ImportPrivateKey', () => {
           clientKeygenIds: mockClientKeygenIds,
           serverEacs: [JSON.stringify(mockServerEac)],
           thresholdSignatureScheme: 'TWO_OF_THREE',
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);

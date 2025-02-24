@@ -44,8 +44,8 @@ describe('registerOperationHandlers', () => {
     it('should allow requests with valid JWT and EAC', async () => {
       const response = await request(app)
         .post('/api/v1/actions/CreateRoom')
+        .set('Authorization', `Bearer ${validJwt}`)
         .send({
-          jwt: validJwt,
           serverEacs: [JSON.stringify(validEac)],
         });
 

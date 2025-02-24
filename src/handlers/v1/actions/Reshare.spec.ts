@@ -75,7 +75,6 @@ describe('Reshare', () => {
           allPartyKeygenIds: mockAllPartyKeygenIds,
           oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
           newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -107,7 +106,6 @@ describe('Reshare', () => {
           allPartyKeygenIds: mockAllPartyKeygenIds,
           oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
           newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -131,7 +129,6 @@ describe('Reshare', () => {
           allPartyKeygenIds: mockAllPartyKeygenIds,
           oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
           newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);

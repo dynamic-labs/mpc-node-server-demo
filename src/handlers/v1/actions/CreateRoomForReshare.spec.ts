@@ -71,7 +71,6 @@ describe('CreateRoomForReshare', () => {
         oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
         newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
         serverEacs: [JSON.stringify(mockServerEac)],
-        jwt: mockJwt,
       };
 
       const result = await testServer.app
@@ -121,6 +120,7 @@ describe('CreateRoomForReshare', () => {
       const result = await testServer.app
         .post('/api/v1/actions/CreateRoomForReshare')
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${mockJwt}`)
         .send(mockRequestBody);
 
       expect(result.status).toBe(200);
@@ -131,7 +131,6 @@ describe('CreateRoomForReshare', () => {
       const mockRequestBody = {
         oldThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_TWO,
         newThresholdSignatureScheme: ThresholdSignatureScheme.TWO_OF_THREE,
-        jwt: mockJwt,
       };
 
       const result = await testServer.app

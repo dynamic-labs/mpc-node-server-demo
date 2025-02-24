@@ -56,7 +56,6 @@ describe('RefreshShares', () => {
         .send({
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -103,7 +102,6 @@ describe('RefreshShares', () => {
             JSON.stringify(mockServerEac),
             JSON.stringify(secondMockEac),
           ],
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(200);
@@ -122,7 +120,6 @@ describe('RefreshShares', () => {
         .send({
           roomId: mockRoomId,
           serverEacs: [JSON.stringify(mockServerEac)],
-          jwt: mockJwt,
         });
 
       expect(result.status).toBe(500);
