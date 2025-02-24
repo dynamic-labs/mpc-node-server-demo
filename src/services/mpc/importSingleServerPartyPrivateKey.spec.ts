@@ -48,7 +48,7 @@ describe('importSingleServerPartyPrivateKey', () => {
         compressedPublicKey: mockServerEac.compressedPublicKey as string,
         uncompressedPublicKey: mockServerEac.uncompressedPublicKey,
         serverKeyShare: mockServerEac.serverKeyShare,
-        derivationPath: new Uint32Array([1, 2, 3]),
+        derivationPath: new Uint32Array([1, 2, 3]).toString(),
       });
     const evervaultEncryptSpy = jest.spyOn(evervault, 'evervaultEncrypt');
 
