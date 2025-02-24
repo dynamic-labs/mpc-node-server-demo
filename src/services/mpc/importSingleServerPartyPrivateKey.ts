@@ -47,8 +47,6 @@ export const importSingleServerPartyPrivateKey = async ({
     derivationPath,
   } = await mpcClient.importPrivateKey(importPrivateKeyParams);
 
-  const serializedDerivationPath = JSON.stringify(derivationPath);
-
   // Encrypted Account Credential
   const rawEac: EacType = {
     userId,
@@ -59,7 +57,7 @@ export const importSingleServerPartyPrivateKey = async ({
     serverKeyShare: JSON.stringify(serverKeyShare),
     environmentId,
     chain,
-    derivationPath: serializedDerivationPath,
+    derivationPath,
   };
 
   if (!compressedPublicKey || !uncompressedPublicKey || !accountAddress) {
@@ -75,7 +73,7 @@ export const importSingleServerPartyPrivateKey = async ({
     accountAddress,
     compressedPublicKey,
     uncompressedPublicKey,
-    derivationPath: serializedDerivationPath,
+    derivationPath,
     serverKeygenId: JSON.parse(serverKeygenInitResult).keygenId,
   };
 };
