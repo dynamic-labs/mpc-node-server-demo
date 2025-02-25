@@ -14,7 +14,6 @@ const PROTECTED_ROUTES = [
   '/api/v1/actions/ExportWalletAccount',
   '/api/v1/actions/ImportPrivateKey',
   '/api/v1/actions/RefreshShares',
-  '/api/v1/actions/ReshareRemainingParty',
   '/api/v1/actions/SignMessage',
   '/api/v1/actions/Reshare',
   '/api/v1/actions/CreateRoomForReshare',
