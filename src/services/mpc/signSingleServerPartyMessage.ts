@@ -10,7 +10,7 @@ export const signSingleServerPartyMessage = async ({
   roomId: string;
   eac: EacType;
 }) => {
-  const { serverKeyShare, chain } = eac;
+  const { serverKeyShare, chain, derivationPath } = eac;
   if (!serverKeyShare) {
     throw new Error('Server key share is required');
   }
@@ -20,5 +20,6 @@ export const signSingleServerPartyMessage = async ({
     chain,
     roomId,
     serverKeyShare: JSON.parse(serverKeyShare),
+    derivationPath,
   });
 };
