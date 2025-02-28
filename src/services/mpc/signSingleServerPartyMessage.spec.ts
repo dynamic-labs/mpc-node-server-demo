@@ -23,7 +23,7 @@ describe('signSingleServerPartyMessage', () => {
     accountAddress: faker.finance.ethereumAddress(),
     environmentId: faker.string.uuid(),
     serverKeygenInitResult: faker.string.uuid(),
-    derivationPath: faker.string.uuid(),
+    derivationPath: '',
   };
 
   it('should call mpcClient.signMessage with correct parameters', async () => {
@@ -33,6 +33,7 @@ describe('signSingleServerPartyMessage', () => {
       message: 'test message',
       roomId: 'room123',
       eac: mockServerEac,
+      derivationPath: '',
     };
 
     await signSingleServerPartyMessage(mockParams);
@@ -42,6 +43,7 @@ describe('signSingleServerPartyMessage', () => {
       roomId: mockParams.roomId,
       serverKeyShare: JSON.parse(mockParams.eac.serverKeyShare as string),
       chain: mockParams.eac.chain,
+      derivationPath: mockParams.eac.derivationPath,
     });
     expect(mockSignMessage).toHaveBeenCalledTimes(1);
   });
@@ -70,6 +72,7 @@ describe('signSingleServerPartyMessage', () => {
       eac: {
         ...mockServerEac,
         serverKeyShare: JSON.parse(mockServerKeyShare),
+        derivationPath: faker.string.uuid(),
       },
     };
 
