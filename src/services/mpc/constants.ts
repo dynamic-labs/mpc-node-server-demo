@@ -1,9 +1,11 @@
 import { DynamicWalletServerClient } from '@dynamic-labs-wallet/server';
 
-export const RELAY_API_KEY = process.env.RELAY_API_KEY;
+const RELAY_API_KEY = process.env.RELAY_API_KEY;
+const MPC_RELAY_URL = process.env.MPC_RELAY_URL;
 
 export const mpcClient = new DynamicWalletServerClient({
   relayApiKey: RELAY_API_KEY,
+  mpcRelayApiUrl: MPC_RELAY_URL,
 });
 
 export const SERVER_KEY_SHARE_IS_MISSING_ERROR = 'Server key share is required';

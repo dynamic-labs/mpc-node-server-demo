@@ -7,4 +7,5 @@ export default async function globalSetup() {
     port: 9999,
   });
   process.env.RELAY_API_KEY = '123456';
+  process.env.MPC_RELAY_URL = 'test.relay.com';
 }
