@@ -103,12 +103,6 @@ export const registerOperationHandlers = (app: Express) => {
       });
     }
 
-    // this is a temporary block to allow code freeze testing
-    // TODO: remove this once server-side JWT pass-through is implemented
-    if (!authorization) {
-      return next();
-    }
-
     try {
       const { isVerified } = await verifyJWT({
         environmentId,

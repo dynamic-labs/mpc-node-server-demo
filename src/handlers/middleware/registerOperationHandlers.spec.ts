@@ -71,7 +71,7 @@ describe('registerOperationHandlers', () => {
       });
     });
 
-    it.skip('should reject requests with invalid JWT', async () => {
+    it('should reject requests with invalid JWT', async () => {
       (verifyJWT as jest.Mock).mockResolvedValue({ isVerified: false });
 
       const response = await request(app)
@@ -88,7 +88,7 @@ describe('registerOperationHandlers', () => {
       });
     });
 
-    it.skip('should reject requests with JWT verification errors', async () => {
+    it('should reject requests with JWT verification errors', async () => {
       (verifyJWT as jest.Mock).mockRejectedValue({
         isVerified: false,
         verifiedPayload: undefined,
