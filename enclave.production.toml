@@ -18,6 +18,6 @@ destinations = [
   "*.datadoghq.com",
   "app.dynamicauth.com",
   "app.dynamic.xyz",
-  "mpc-relay.dynamic-prod.xyz",
+  "relay.dynamicauth.com",
   "relay.dynamic-preprod.xyz"
 ]
