@@ -1,8 +1,0 @@
-.github/CODEOWNERS @matt-mertens @paololim @alliu930410 @gfarrisi @macelai
-
-
-src/** @matt-mertens @paololim @alliu930410 @gfarrisi @macelai
-open-api/** @matt-mertens @paololim @alliu930410 @gfarrisi @macelai
-tests/** @matt-mertens @paololim @alliu930410 @gfarrisi @macelai
-lefthook.yml @matt-mertens @paololim @alliu930410 @gfarrisi @macelai
-

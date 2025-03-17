@@ -1,67 +1,41 @@
+import { DynamicWalletClient } from "@dynamic-labs-wallet/node";
+import { CreateWalletAccountRequestType } from "../../../generated";
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
-  CreateWalletAccount403Type,
-  CreateWalletAccount500Type,
-  CreateWalletAccountRequestType,
-  PartialEacType,
-} from '../../../generated';
+} from "../../../generated";
 import {
-  WalletAccount,
-  createSingleWalletAccount,
-} from '../../../services/mpc/createSingleWalletAccount';
-import { TypedRequestHandler } from '../../../types/express';
+  authToken,
+  environmentId,
+  mpcClient,
+} from "../../../services/mpc/constants";
+import { TypedRequestHandler } from "../../../types/express";
 
 /**
  * /api/v1/actions/CreateWalletAccount
  */
+
 export const CreateWalletAccount: TypedRequestHandler<{
   request: {
     body: CreateWalletAccountRequestType;
   };
   response: {
-    body:
-      | CreateWalletAccount200Type
-      | CreateWalletAccount400Type
-      | CreateWalletAccount403Type
-      | CreateWalletAccount500Type;
-    statusCode: 200 | 400 | 403 | 500;
+    body: CreateWalletAccount200Type | CreateWalletAccount400Type;
+    statusCode: 200 | 400;
   };
-}> = async (req, res, next) => {
-  try {
-    const { serverEacs, roomId, clientKeygenIds, thresholdSignatureScheme } =
-      req.body;
+}> = async (req, res) => {
+  const { chainName, thresholdSignatureScheme } = req.body;
+  console.log("creating server wallet client");
+  const { rawPublicKey, externalServerKeyGenResults } = await mpcClient.keyGen({
+    chainName,
+    thresholdSignatureScheme,
+  });
 
-    const _serverKeyGenIds = serverEacs.map(
-      (eac: PartialEacType) => JSON.parse(eac.serverKeygenInitResult).keygenId,
-    );
-    const walletAccounts = await Promise.all(
-      serverEacs.map((eac: PartialEacType) =>
-        createSingleWalletAccount({
-          eac,
-          roomId,
-          clientKeygenIds,
-          serverKeygenIds: _serverKeyGenIds,
-          thresholdSignatureScheme,
-        }),
-      ),
-    );
+  console.log(rawPublicKey);
+  console.log(externalServerKeyGenResults);
 
-    return res.status(200).json({
-      userId: walletAccounts[0].userId,
-      environmentId: walletAccounts[0].environmentId,
-      accountAddress: walletAccounts[0].accountAddress,
-      uncompressedPublicKey: walletAccounts[0].uncompressedPublicKey,
-      compressedPublicKey: walletAccounts[0].compressedPublicKey,
-      derivationPath: walletAccounts[0].derivationPath,
-      serverKeyShares: walletAccounts.map((walletAccount: WalletAccount) => {
-        return {
-          serverKeygenId: walletAccount.serverKeygenId,
-          serverEac: walletAccount.modifiedEac,
-        };
-      }),
-    });
-  } catch (error) {
-    next(error);
-  }
+  return res.status(200).json({
+    rawPublicKey: JSON.stringify(rawPublicKey),
+    externalServerKeyGenResults: JSON.stringify(externalServerKeyGenResults),
+  });
 };

@@ -1,6 +1,0 @@
-type: object
-properties:
-  serverKeygenId:
-    type: string
-  serverEac:
-    $ref: ./EncryptedEvervaultString.yaml

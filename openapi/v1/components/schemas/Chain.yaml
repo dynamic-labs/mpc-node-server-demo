@@ -1,8 +1,0 @@
-type: string
-enum:
-  - EVM
-  - SOL
-  - COSMOS
-  - BTC
-  - FLOW
-  - SUI

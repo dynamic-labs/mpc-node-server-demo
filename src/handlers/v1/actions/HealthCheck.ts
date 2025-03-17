@@ -12,5 +12,6 @@ export const HealthCheck: TypedRequestHandler<{
     statusCode: 200 | 400;
   };
 }> = (_req, res) => {
+  console.log('HealthCheck your mom');
   return res.status(200).json({ status: 'OK' });
 };

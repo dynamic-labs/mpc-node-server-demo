@@ -4,205 +4,9 @@ info:
   description: Securely provision and manage wallets
   version: 1.0.0
 servers:
-  - url: http://localhost:8008
+  - url: http://localhost:8010
     description: Local
 paths:
-  /api/v1/actions/InitKeygen:
-    post:
-      operationId: InitKeygen
-      summary: Init Keygen
-      description: This initializes the keygen process
-      x-eov-operation-handler: actions/InitKeygen
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InitKeygenRequest'
-      responses:
-        '200':
-          description: Successfully initialized keygen
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InitKeygenResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/CreateRoom:
-    post:
-      operationId: CreateRoom
-      summary: Create Room
-      description: This creates a room for MPC key generation
-      x-eov-operation-handler: actions/CreateRoom
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateRoomRequest'
-      responses:
-        '200':
-          description: Successfully created room
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateRoomResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/CreateWalletAccount:
-    post:
-      operationId: CreateWalletAccount
-      summary: Create Wallet Account
-      description: This creates a wallet for a given user
-      x-eov-operation-handler: actions/CreateWalletAccount
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateWalletAccountRequest'
-      responses:
-        '200':
-          description: Successfully created wallet account
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateWalletAccountResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/ExportWalletAccount:
-    post:
-      operationId: ExportWalletAccount
-      summary: Export wallet account
-      description: This exports a wallet account
-      x-eov-operation-handler: actions/ExportWalletAccount
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExportWalletAccountRequest'
-      responses:
-        '201':
-          description: Exported wallet account
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyBody'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/SignMessage:
-    post:
-      operationId: SignMessage
-      summary: Sign message
-      description: This signs a message
-      x-eov-operation-handler: actions/SignMessage
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SignMessageRequest'
-      responses:
-        '201':
-          description: Signed message
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/Reshare:
-    post:
-      operationId: Reshare
-      summary: Reshare to update the threshold signature scheme
-      description: this reshares the remaining party to update the threshold signature scheme and add new parties if necessary
-      x-eov-operation-handler: actions/Reshare
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReshareRequest'
-      responses:
-        '200':
-          description: Successfully reshares all the parties
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReshareResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/RefreshShares:
-    post:
-      operationId: RefreshShares
-      summary: Refresh Shares
-      description: This refreshes the shares for a given user
-      x-eov-operation-handler: actions/RefreshShares
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshSharesRequest'
-      responses:
-        '200':
-          description: Successfully refreshed shares
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RefreshSharesResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/ImportPrivateKey:
-    post:
-      operationId: ImportPrivateKey
-      summary: Import Private Key
-      description: This imports a private key into the server
-      x-eov-operation-handler: actions/ImportPrivateKey
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ImportPrivateKeyRequest'
-      responses:
-        '200':
-          description: Successfully imported private key
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImportPrivateKeyResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /api/v1/actions/HealthCheck:
     get:
       operationId: HealthCheck
@@ -218,95 +22,40 @@ paths:
                 $ref: '#/components/schemas/HealthCheckResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
-  /api/v1/actions/CreateRoomForReshare:
-    post:
-      operationId: CreateRoomForReshare
-      summary: Create Room for Reshare
-      description: This creates a room for MPC key generation
-      x-eov-operation-handler: actions/CreateRoomForReshare
+  /api/v1/actions/CreateWalletAccount:
+    get:
+      operationId: CreateWalletAccount
+      summary: Create a wallet account
+      description: Create a wallet account
+      x-eov-operation-handler: actions/CreateWalletAccount
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRoomForReshareRequest'
+              $ref: '#/components/schemas/CreateWalletAccountRequest'
       responses:
         '200':
-          description: Successfully created room
+          description: Successfully revoked session key
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateRoomForReshareResponse'
+                $ref: '#/components/schemas/CreateWalletAccountResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
   schemas:
-    Chain:
-      type: string
-      enum:
-        - EVM
-        - SOL
-        - COSMOS
-        - BTC
-        - FLOW
-        - SUI
-    UUID:
-      type: string
-      pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-      minLength: 36
-      maxLength: 36
-      example: 95b11417-f18f-457f-8804-68e361f9164f
-    ThresholdSignatureScheme:
-      type: string
-      enum:
-        - TWO_OF_TWO
-        - TWO_OF_THREE
-        - THREE_OF_FIVE
-    InitKeygenRequest:
+    HealthCheckResponse:
       type: object
       required:
-        - chain
-        - environmentId
-        - userId
-        - thresholdSignatureScheme
+        - status
       properties:
-        chain:
-          $ref: '#/components/schemas/Chain'
-        environmentId:
-          $ref: '#/components/schemas/UUID'
-        userId:
-          $ref: '#/components/schemas/UUID'
-        thresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
-    EncryptedEvervaultString:
-      type: string
-      pattern: ^ev.*
-      example: ev:debug:Tk9D:2X9ZSLTbX7/v+gnZ:AjX3AoXEr7zyV8lMdeBoyZwpoyJ6SedJlSzmdwiOCdSZ:KkpgDb/MC+EarhwFeXwjSjJX25sGgYsvQ0yKSlyNq6UgBiAC6r88f/blx0xVnjA5BimHIKa+WCQLe6bCvcn3m36jI6w/OtJpxCHjIpbdRwdOMa/tPe/YGpZZv4F80ja+Lj9QekDgCF/C1ES+20JSg3n5Wgnkp6IVwH22NiCXvYbdmFMSbUdpH6i42g1AGtLF61nHPlb3Aue5N55b9WS2Xtydnwn6VdSSOxVt1myFYv8Y+tNmnE0UX+99WH8cEMeGFG7s1LqWBDyyf6Ma9MjcENLK1xJKxXcMEuMnigAaMPVnWy/rrVpLv2EbpiWZZqOsVCh0I1e0V6ScRlGIplLtF/14hSJLvwO6F04yptnG31YJUnXCLBuB48lOHexHJZv5ujnGjO1f+69F4q6Z5x++P5d71azu7pAxNNqOCfDmqVOraRMiW+RI2xzLah3LVNsuz3BSVMqGR5UKnEG4fdAuIUz+erWr5lGJdSIwF4JNkAEk2krffHRTlIg66lH6vukM5Kva4SaRsT9ftAthLnBSbv5t:$
-    InitKeygenResponse:
-      type: object
-      required:
-        - roomId
-        - serverKeygenIds
-        - serverEacs
-      properties:
-        roomId:
+        status:
           type: string
-        serverKeygenIds:
-          type: array
-          items:
-            type: string
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EncryptedEvervaultString'
     BadRequest:
       type: object
       properties:
@@ -316,350 +65,32 @@ components:
             - bad_request
         error_message:
           type: string
-    Forbidden:
-      type: object
-      required:
-        - error_code
-        - error_message
-      properties:
-        error_code:
-          type: string
-          enum:
-            - jwt_invalid
-            - jwt_not_authorized
-        error_message:
-          type: string
-    InternalServerError:
-      type: object
-      properties:
-        error_code:
-          type: string
-          enum:
-            - internal_server_error
-            - unknown_error
-        error_message:
-          type: string
-          example: Internal Server Error
-    EAC:
-      type: object
-      required:
-        - userId
-        - uncompressedPublicKey
-        - accountAddress
-        - environmentId
-        - serverKeygenInitResult
-        - chain
-        - derivationPath
-      properties:
-        userId:
-          $ref: '#/components/schemas/UUID'
-        compressedPublicKey:
-          type: string
-        uncompressedPublicKey:
-          type: string
-        accountAddress:
-          type: string
-        environmentId:
-          $ref: '#/components/schemas/UUID'
-        serverKeygenInitResult:
-          type: string
-        serverKeyShare:
-          type: string
-        chain:
-          $ref: '#/components/schemas/Chain'
-        derivationPath:
-          type: string
-    CreateRoomRequest:
-      type: object
-      required:
-        - chain
-        - thresholdSignatureScheme
-      properties:
-        chain:
-          $ref: '#/components/schemas/Chain'
-        thresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EAC'
-        parties:
-          type: string
-          enum:
-            - threshold
-            - full
-    CreateRoomResponse:
-      type: object
-      required:
-        - roomId
-      properties:
-        roomId:
-          type: string
-        serverKeygenIds:
-          type: array
-          items:
-            type: string
-    PartialEAC:
-      type: object
-      required:
-        - userId
-        - environmentId
-        - serverKeygenInitResult
-        - chain
-      properties:
-        userId:
-          $ref: '#/components/schemas/UUID'
-        environmentId:
-          $ref: '#/components/schemas/UUID'
-        serverKeygenInitResult:
-          type: string
-        chain:
-          $ref: '#/components/schemas/Chain'
+    ThresholdSignatureScheme:
+      type: string
+      enum:
+        - TWO_OF_TWO
+        - TWO_OF_THREE
+        - THREE_OF_FIVE
     CreateWalletAccountRequest:
       type: object
       required:
-        - roomId
-        - clientKeygenIds
+        - chainName
         - thresholdSignatureScheme
-        - serverEacs
       properties:
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartialEAC'
-        roomId:
+        chainName:
           type: string
-        clientKeygenIds:
-          type: array
-          items:
-            type: string
         thresholdSignatureScheme:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
-    ServerKeyShare:
-      type: object
-      properties:
-        serverKeygenId:
-          type: string
-        serverEac:
-          $ref: '#/components/schemas/EncryptedEvervaultString'
     CreateWalletAccountResponse:
       type: object
       required:
-        - userId
-        - environmentId
-        - accountAddress
-        - uncompressedPublicKey
-        - compressedPublicKey
-        - serverKeyShares
-        - derivationPath
+        - rawPublicKey
+        - externalServerKeyGenResults
       properties:
-        userId:
-          $ref: '#/components/schemas/UUID'
-        environmentId:
-          $ref: '#/components/schemas/UUID'
-        accountAddress:
+        rawPublicKey:
           type: string
-        uncompressedPublicKey:
+        externalServerKeyGenResults:
           type: string
-        compressedPublicKey:
-          type: string
-        derivationPath:
-          type: string
-        serverKeyShares:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServerKeyShare'
-    ExportWalletAccountRequest:
-      type: object
-      required:
-        - serverEacs
-        - exportId
-        - roomId
-      properties:
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EAC'
-        exportId:
-          type: string
-        roomId:
-          type: string
-    EmptyBody:
-      type: object
-      additionalProperties: false
-    JWT:
-      type: string
-      pattern: ^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$
-    SignMessageRequest:
-      type: object
-      required:
-        - roomId
-        - message
-        - serverEacs
-      properties:
-        jwt:
-          $ref: '#/components/schemas/JWT'
-        message:
-          type: string
-        roomId:
-          type: string
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EAC'
-    ReshareRequest:
-      type: object
-      required:
-        - roomId
-        - allPartyKeygenIds
-        - serverEacs
-        - newServerEacs
-        - oldThresholdSignatureScheme
-        - newThresholdSignatureScheme
-      properties:
-        roomId:
-          type: string
-        allPartyKeygenIds:
-          type: array
-          items:
-            type: string
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartialEAC'
-        newServerEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartialEAC'
-        oldThresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
-        newThresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
-    ReshareResponse:
-      type: object
-      required:
-        - serverEacs
-      properties:
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EncryptedEvervaultString'
-    RefreshSharesRequest:
-      type: object
-      required:
-        - serverEacs
-        - roomId
-      properties:
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EAC'
-        roomId:
-          type: string
-    RefreshSharesResponse:
-      type: object
-      required:
-        - serverEacs
-      properties:
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EncryptedEvervaultString'
-    ImportPrivateKeyRequest:
-      type: object
-      required:
-        - serverEacs
-        - roomId
-        - clientKeygenIds
-        - thresholdSignatureScheme
-      properties:
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartialEAC'
-        roomId:
-          type: string
-        thresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
-        clientKeygenIds:
-          type: array
-          items:
-            type: string
-    ImportPrivateKeyResponse:
-      type: object
-      required:
-        - userId
-        - environmentId
-        - accountAddress
-        - uncompressedPublicKey
-        - compressedPublicKey
-        - serverKeyShares
-        - derivationPath
-      properties:
-        userId:
-          $ref: '#/components/schemas/UUID'
-        environmentId:
-          $ref: '#/components/schemas/UUID'
-        accountAddress:
-          type: string
-        uncompressedPublicKey:
-          type: string
-        compressedPublicKey:
-          type: string
-        derivationPath:
-          type: string
-        serverKeyShares:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServerKeyShare'
-    HealthCheckResponse:
-      type: object
-      required:
-        - status
-      properties:
-        status:
-          type: string
-    CreateRoomForReshareRequest:
-      type: object
-      required:
-        - oldThresholdSignatureScheme
-        - newThresholdSignatureScheme
-      properties:
-        serverEacs:
-          type: array
-          items:
-            $ref: '#/components/schemas/EAC'
-        newThresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
-        oldThresholdSignatureScheme:
-          $ref: '#/components/schemas/ThresholdSignatureScheme'
-    CreateRoomForReshareResponse:
-      type: object
-      required:
-        - roomId
-        - serverKeygenIds
-        - serverEacs
-        - newServerKeygenIds
-        - newServerEacs
-      properties:
-        roomId:
-          type: string
-        serverKeygenIds:
-          type: array
-          items:
-            type: string
-        serverEacs:
-          type: array
-          items:
-            type: string
-        newServerKeygenIds:
-          type: array
-          items:
-            type: string
-        newServerEacs:
-          type: array
-          items:
-            type: string
   responses:
     BadRequest:
       description: Bad Request
@@ -667,15 +98,3 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BadRequest'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Forbidden'
-    InternalServerError:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/InternalServerError'

@@ -4,29 +4,13 @@ info:
   description: Securely provision and manage wallets
   version: 1.0.0
 servers:
-  - url: http://localhost:8008
+  - url: http://localhost:8010
     description: Local
 paths:
-  /api/v1/actions/InitKeygen:
-    $ref: paths/InitKeygen.yaml
-  /api/v1/actions/CreateRoom:
-    $ref: paths/CreateRoom.yaml
-  /api/v1/actions/CreateWalletAccount:
-    $ref: paths/CreateWalletAccount.yaml
-  /api/v1/actions/ExportWalletAccount:
-    $ref: paths/ExportWalletAccount.yaml
-  /api/v1/actions/SignMessage:
-    $ref: paths/SignMessage.yaml
-  /api/v1/actions/Reshare:
-    $ref: paths/Reshare.yaml
-  /api/v1/actions/RefreshShares:
-    $ref: paths/RefreshShares.yaml
-  /api/v1/actions/ImportPrivateKey:
-    $ref: paths/ImportPrivateKey.yaml
   /api/v1/actions/HealthCheck:
     $ref: paths/HealthCheck.yaml
-  /api/v1/actions/CreateRoomForReshare:
-    $ref: paths/CreateRoomForReshare.yaml
+  /api/v1/actions/CreateWalletAccount:
+    $ref: paths/CreateWalletAccount.yaml
 components:
   securitySchemes:
     BasicAuth:

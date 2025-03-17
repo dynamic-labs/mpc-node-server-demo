@@ -1,0 +1,19 @@
+type: object
+required:
+  - keygenId
+  - keygenResult
+properties:
+  keygenId:
+    type: string
+  keygenResult:
+    type: object
+    properties:
+      pubkey:
+        type: object
+        properties:
+          pubkey:
+            type: array
+            items:
+              type: integer
+      secretShare:
+        type: string

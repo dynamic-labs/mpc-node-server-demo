@@ -1,19 +1,9 @@
 type: object
 required:
-  - roomId
-  - clientKeygenIds
+  - chainName
   - thresholdSignatureScheme
-  - serverEacs
 properties:
-  serverEacs:
-    type: array
-    items:
-      $ref: ./PartialEAC.yaml
-  roomId:
+  chainName:
     type: string
-  clientKeygenIds:
-    type: array
-    items:
-      type: string
   thresholdSignatureScheme:
-     $ref: ./ThresholdSignatureScheme.yaml
+    $ref: ./ThresholdSignatureScheme.yaml

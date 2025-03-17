@@ -1,37 +1,24 @@
-import { BadRequestType } from './BadRequestType';
-import { CreateWalletAccountRequestType } from './CreateWalletAccountRequestType';
-import type { CreateWalletAccountResponseType } from './CreateWalletAccountResponseType';
-import { ForbiddenType } from './ForbiddenType';
-import { InternalServerErrorType } from './InternalServerErrorType';
+import { BadRequestType } from "./BadRequestType";
+import { CreateWalletAccountRequestType } from "./CreateWalletAccountRequestType";
+import type { CreateWalletAccountResponseType } from "./CreateWalletAccountResponseType";
 
 /**
- * @description Successfully created wallet account
+ * @description Successfully revoked session key
  */
 export type CreateWalletAccount200Type = CreateWalletAccountResponseType;
 /**
  * @description Bad Request
  */
 export type CreateWalletAccount400Type = BadRequestType;
-/**
- * @description Forbidden
- */
-export type CreateWalletAccount403Type = ForbiddenType;
-/**
- * @description Internal Server Error
- */
-export type CreateWalletAccount500Type = InternalServerErrorType;
-export type CreateWalletAccountMutationRequestType =
+export type CreateWalletAccountQueryRequestType =
   CreateWalletAccountRequestType;
 /**
- * @description Successfully created wallet account
+ * @description Successfully revoked session key
  */
-export type CreateWalletAccountMutationResponseType =
+export type CreateWalletAccountQueryResponseType =
   CreateWalletAccountResponseType;
-export type CreateWalletAccountTypeMutation = {
-  Response: CreateWalletAccountMutationResponseType;
-  Request: CreateWalletAccountMutationRequestType;
-  Errors:
-    | CreateWalletAccount400Type
-    | CreateWalletAccount403Type
-    | CreateWalletAccount500Type;
+export type CreateWalletAccountTypeQuery = {
+  Response: CreateWalletAccountQueryResponseType;
+  Request: CreateWalletAccountQueryRequestType;
+  Errors: CreateWalletAccount400Type;
 };
