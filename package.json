@@ -62,8 +62,9 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@dynamic-labs-wallet/node": "^0.0.0-local.1742218148414",
-    "@dynamic-labs-wallet/server": "^0.0.0-local.1742218148414",
+    "@dynamic-labs-wallet/node": "^0.0.0-local.1742332803156",
+    "@dynamic-labs-wallet/node-evm": "^0.0.0-local.1742332803156",
+    "@dynamic-labs-wallet/server": "^0.0.0-local.1742332803156",
     "@dynamic-labs/sdk-api": "^0.0.574",
     "@solana/web3.js": "^1.95.4",
     "axios": "^1.7.2",

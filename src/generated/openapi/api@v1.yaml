@@ -86,10 +86,16 @@ components:
       required:
         - rawPublicKey
         - externalServerKeyGenResults
+        - accountAddress
+        - publicKeyHex
       properties:
         rawPublicKey:
           type: string
         externalServerKeyGenResults:
+          type: string
+        accountAddress:
+          type: string
+        publicKeyHex:
           type: string
   responses:
     BadRequest:

@@ -1,6 +1,6 @@
 export type HealthCheckResponseType = {
-  /**
-   * @type string
-   */
-  status: string;
+    /**
+     * @type string
+    */
+    status: string;
 };
