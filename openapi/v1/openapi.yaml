@@ -11,6 +11,12 @@ paths:
     $ref: paths/HealthCheck.yaml
   /api/v1/actions/CreateWalletAccount:
     $ref: paths/CreateWalletAccount.yaml
+  /api/v1/actions/SignMessage:
+    $ref: paths/SignMessage.yaml
+  /api/v1/actions/SignTransaction:
+    $ref: paths/SignTransaction.yaml
+  /api/v1/actions/ImportPrivateKey:
+    $ref: paths/ImportPrivateKey.yaml
 components:
   securitySchemes:
     BasicAuth:

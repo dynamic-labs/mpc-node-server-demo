@@ -1,0 +1,20 @@
+post:
+  operationId: SignMessage
+  summary: Sign a message
+  description: Sign a message
+  x-eov-operation-handler: actions/SignMessage
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/SignMessageRequest.yaml
+  responses:
+    "200":
+      description: Successfully signed message
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SignMessageResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml

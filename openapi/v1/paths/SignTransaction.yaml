@@ -1,0 +1,20 @@
+post:
+  operationId: SignTransaction
+  summary: Sign a transaction
+  description: Sign a transaction
+  x-eov-operation-handler: actions/SignTransaction
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/SignTransactionRequest.yaml
+  responses:
+    "200":
+      description: Successfully signed transaction
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/SignTransactionResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml

@@ -1,15 +1,15 @@
 type: object
 required:
-  - rawPublicKey
-  - externalServerKeyGenResults
   - accountAddress
   - publicKeyHex
+  - rawPublicKey
+  - serverKeyShares
 properties:
-  rawPublicKey:
-    type: string
-  externalServerKeyGenResults:
-    type: string
   accountAddress:
     type: string
   publicKeyHex:
+    type: string
+  rawPublicKey:
+    type: string
+  serverKeyShares:
     type: string

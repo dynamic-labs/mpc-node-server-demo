@@ -1,14 +1,10 @@
-import { DynamicWalletClient } from "@dynamic-labs-wallet/node";
+import { ThresholdSignatureScheme } from "@dynamic-labs-wallet/server";
 import { CreateWalletAccountRequestType } from "../../../generated";
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
 } from "../../../generated";
-import {
-  authToken,
-  environmentId,
-  mpcClient,
-} from "../../../services/mpc/constants";
+import { evmClient } from "../../../services/mpc/constants";
 import { TypedRequestHandler } from "../../../types/express";
 
 /**
@@ -26,16 +22,24 @@ export const CreateWalletAccount: TypedRequestHandler<{
 }> = async (req, res) => {
   const { chainName, thresholdSignatureScheme } = req.body;
   console.log("creating server wallet client");
-  const { rawPublicKey, externalServerKeyGenResults } = await mpcClient.keyGen({
-    chainName,
-    thresholdSignatureScheme,
-  });
 
-  console.log(rawPublicKey);
-  console.log(externalServerKeyGenResults);
-
-  return res.status(200).json({
-    rawPublicKey: JSON.stringify(rawPublicKey),
-    externalServerKeyGenResults: JSON.stringify(externalServerKeyGenResults),
-  });
+  if (chainName === "EVM") {
+    const {
+      accountAddress,
+      rawPublicKey,
+      publicKeyHex,
+      externalServerKeyGenResults,
+    } = await evmClient.createWalletAccount({
+      thresholdSignatureScheme:
+        thresholdSignatureScheme as ThresholdSignatureScheme,
+    });
+    return res.status(200).json({
+      rawPublicKey: JSON.stringify(rawPublicKey),
+      externalServerKeyGenResults: JSON.stringify(externalServerKeyGenResults),
+      accountAddress,
+      publicKeyHex,
+    });
+  } else {
+    throw new Error("Unsupported chain");
+  }
 };
