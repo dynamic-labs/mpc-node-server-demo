@@ -1,0 +1,20 @@
+post:
+  operationId: ImportPrivateKey
+  summary: Import a private key
+  description: Import a private key
+  x-eov-operation-handler: actions/ImportPrivateKey
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ImportPrivateKeyRequest.yaml
+  responses:
+    "200":
+      description: Successfully imported private key
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ImportPrivateKeyResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml

@@ -1,0 +1,20 @@
+type: object
+required:
+  - chainName
+  - sendToAddress
+  - senderAddress
+  - amount
+  - sendRawTransaction
+properties:
+  chainName:
+    type: string
+  sendToAddress:
+    type: string
+  senderAddress:
+    type: string
+  amount:
+    type: string
+  password:
+    type: string
+  sendRawTransaction:
+    type: boolean

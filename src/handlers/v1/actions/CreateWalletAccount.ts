@@ -1,3 +1,4 @@
+import { ThresholdSignatureScheme } from "@dynamic-labs-wallet/server";
 import { CreateWalletAccountRequestType } from "../../../generated";
 import {
   CreateWalletAccount200Type,
@@ -21,6 +22,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
 }> = async (req, res) => {
   const { chainName, thresholdSignatureScheme } = req.body;
   console.log("creating server wallet client");
+
   if (chainName === "EVM") {
     const {
       accountAddress,
@@ -28,7 +30,8 @@ export const CreateWalletAccount: TypedRequestHandler<{
       publicKeyHex,
       externalServerKeyGenResults,
     } = await evmClient.createWalletAccount({
-      thresholdSignatureScheme,
+      thresholdSignatureScheme:
+        thresholdSignatureScheme as ThresholdSignatureScheme,
     });
     return res.status(200).json({
       rawPublicKey: JSON.stringify(rawPublicKey),

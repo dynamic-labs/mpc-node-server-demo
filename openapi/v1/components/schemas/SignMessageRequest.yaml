@@ -1,0 +1,14 @@
+type: object
+required:
+  - chainName
+  - message
+  - accountAddress
+properties:
+  chainName:
+    type: string
+  message:
+    type: string
+  accountAddress:
+    type: string
+  password:
+    type: string

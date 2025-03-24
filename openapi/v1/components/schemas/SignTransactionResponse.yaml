@@ -1,0 +1,8 @@
+type: object
+properties:
+  signedTx:
+    type: string
+  txHash:
+    type: string
+  blockExplorerUrl:
+    type: string

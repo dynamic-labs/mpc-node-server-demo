@@ -1,0 +1,15 @@
+type: object
+required:
+  - accountAddress
+  - publicKeyHex
+  - rawPublicKey
+  - serverKeyShares
+properties:
+  accountAddress:
+    type: string
+  publicKeyHex:
+    type: string
+  rawPublicKey:
+    type: string
+  serverKeyShares:
+    type: string

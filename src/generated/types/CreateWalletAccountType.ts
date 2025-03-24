@@ -3,20 +3,20 @@ import { CreateWalletAccountRequestType } from "./CreateWalletAccountRequestType
 import type { CreateWalletAccountResponseType } from "./CreateWalletAccountResponseType";
 
  /**
- * @description Successfully revoked session key
+ * @description Successfully created wallet account
 */
 export type CreateWalletAccount200Type = CreateWalletAccountResponseType;
 /**
  * @description Bad Request
 */
 export type CreateWalletAccount400Type = BadRequestType;
-export type CreateWalletAccountQueryRequestType = CreateWalletAccountRequestType;
+export type CreateWalletAccountMutationRequestType = CreateWalletAccountRequestType;
 /**
- * @description Successfully revoked session key
+ * @description Successfully created wallet account
 */
-export type CreateWalletAccountQueryResponseType = CreateWalletAccountResponseType;
-export type CreateWalletAccountTypeQuery = {
-    Response: CreateWalletAccountQueryResponseType;
-    Request: CreateWalletAccountQueryRequestType;
+export type CreateWalletAccountMutationResponseType = CreateWalletAccountResponseType;
+export type CreateWalletAccountTypeMutation = {
+    Response: CreateWalletAccountMutationResponseType;
+    Request: CreateWalletAccountMutationRequestType;
     Errors: CreateWalletAccount400Type;
 };
