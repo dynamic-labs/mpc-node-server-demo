@@ -20,7 +20,8 @@ export const SignMessage: TypedRequestHandler<{
   };
 }> = async (req, res) => {
   const { chainName, message, accountAddress, password } = req.body;
-  console.log('signing message');
+  await evmClient.authenticateApiToken();
+
   if (chainName === 'EVM') {
     const serializedSignature = await evmClient.signMessage({
       message,

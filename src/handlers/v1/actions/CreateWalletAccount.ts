@@ -1,11 +1,11 @@
-import { ThresholdSignatureScheme } from "@dynamic-labs-wallet/server";
-import { CreateWalletAccountRequestType } from "../../../generated";
+import { ThresholdSignatureScheme } from '@dynamic-labs-wallet/server';
+import { CreateWalletAccountRequestType } from '../../../generated';
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
-} from "../../../generated";
-import { evmClient } from "../../../services/mpc/constants";
-import { TypedRequestHandler } from "../../../types/express";
+} from '../../../generated';
+import { evmClient } from '../../../services/mpc/constants';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/CreateWalletAccount
@@ -21,9 +21,12 @@ export const CreateWalletAccount: TypedRequestHandler<{
   };
 }> = async (req, res) => {
   const { chainName, thresholdSignatureScheme } = req.body;
-  console.log("creating server wallet client");
+  console.log('creating server wallet client');
 
-  if (chainName === "EVM") {
+  await evmClient.authenticateApiToken();
+  const _wallets = await evmClient.getEvmWallets();
+
+  if (chainName === 'EVM') {
     const {
       accountAddress,
       rawPublicKey,
@@ -40,6 +43,6 @@ export const CreateWalletAccount: TypedRequestHandler<{
       publicKeyHex,
     });
   } else {
-    throw new Error("Unsupported chain");
+    throw new Error('Unsupported chain');
   }
 };
