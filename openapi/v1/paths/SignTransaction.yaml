@@ -1,21 +1,21 @@
 post:
-  operationId: CreateWalletAccount
-  summary: Create a wallet account
-  description: Create a wallet account
-  x-eov-operation-handler: actions/CreateWalletAccount
+  operationId: SignTransaction
+  summary: Sign a transaction
+  description: Sign a transaction
+  x-eov-operation-handler: actions/SignTransaction
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          $ref: ../components/schemas/CreateWalletAccountRequest.yaml
+          $ref: ../components/schemas/SignTransactionRequest.yaml
   responses:
     "200":
-      description: Successfully created wallet account
+      description: Successfully signed transaction
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/CreateWalletAccountResponse.yaml
+            $ref: ../components/schemas/SignTransactionResponse.yaml
     "400":
       $ref: ../components/responses/BadRequest.yaml
     "403":

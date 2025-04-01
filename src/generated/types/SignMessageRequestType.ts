@@ -1,12 +1,12 @@
-export type CreateWalletAccountResponseType = {
+export type SignMessageRequestType = {
     /**
      * @type string
     */
-    rawPublicKey: string;
+    chainName: string;
     /**
      * @type string
     */
-    externalServerKeyShares: string;
+    message: string;
     /**
      * @type string
     */
@@ -14,5 +14,5 @@ export type CreateWalletAccountResponseType = {
     /**
      * @type string | undefined
     */
-    publicKeyHex?: string;
+    password?: string;
 };

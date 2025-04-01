@@ -5,6 +5,13 @@ import { BadRequest } from 'express-openapi-validator/dist/openapi.validator';
 import * as core from 'express-serve-static-core';
 import { ErrorWithStatus } from '../Error';
 
+// Extend Express Request using module augmentation
+declare module 'express' {
+  export interface Request {
+    authToken?: string;
+  }
+}
+
 type TypedRequestProperties = {
   params?: core.ParamsDictionary;
   query?: core.Query;

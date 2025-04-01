@@ -1,0 +1,24 @@
+get:
+  operationId: GetWallets
+  summary: Get wallets
+  description: Get wallets
+  x-eov-operation-handler: actions/GetWallets
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/GetWalletsRequest.yaml
+  responses:
+    "200":
+      description: Successfully retrieved wallets
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GetWalletsResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
+    "500":
+      $ref: ../components/responses/InternalServerError.yaml

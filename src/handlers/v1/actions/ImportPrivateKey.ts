@@ -1,14 +1,10 @@
 import {
-  CreateWalletAccount403Type,
-  CreateWalletAccountRequestType,
+  ImportPrivateKey200Type,
+  ImportPrivateKey400Type,
+  ImportPrivateKey403Type,
+  ImportPrivateKeyRequestType,
 } from "../../../generated";
 import {
-  CreateWalletAccount200Type,
-  CreateWalletAccount400Type,
-} from "../../../generated";
-import {
-  authenticatedEvmClient,
-  authenticatedSvmClient,
   evmClient,
   svmClient,
   ThresholdSignatureScheme,
@@ -19,19 +15,20 @@ import { TypedRequestHandler } from "../../../types/express";
  * /api/v1/actions/CreateWalletAccount
  */
 
-export const CreateWalletAccount: TypedRequestHandler<{
+export const ImportPrivateKey: TypedRequestHandler<{
   request: {
-    body: CreateWalletAccountRequestType;
+    body: ImportPrivateKeyRequestType;
   };
   response: {
     body:
-      | CreateWalletAccount200Type
-      | CreateWalletAccount400Type
-      | CreateWalletAccount403Type;
+      | ImportPrivateKey200Type
+      | ImportPrivateKey400Type
+      | ImportPrivateKey403Type;
     statusCode: 200 | 400 | 403;
   };
 }> = async (req, res) => {
-  const { chainName, thresholdSignatureScheme } = req.body;
+  const { chainName, privateKey, thresholdSignatureScheme, password } =
+    req.body;
   const authToken = req.authToken;
   if (!authToken) {
     return res.status(403).json({
@@ -40,21 +37,17 @@ export const CreateWalletAccount: TypedRequestHandler<{
     });
   }
   if (chainName === "EVM") {
-    await authenticatedEvmClient(authToken);
     const {
       accountAddress,
       rawPublicKey,
       publicKeyHex,
       externalServerKeyShares,
-    } = await evmClient.createWalletAccount({
+    } = await evmClient.importPrivateKey({
+      privateKey,
+      chainName,
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
-    });
-    console.log("evm wallet created", {
-      accountAddress,
-      rawPublicKey,
-      publicKeyHex,
-      externalServerKeyShares,
+      password,
     });
     return res.status(200).json({
       rawPublicKey: JSON.stringify(rawPublicKey),
@@ -63,11 +56,13 @@ export const CreateWalletAccount: TypedRequestHandler<{
       publicKeyHex,
     });
   } else if (chainName === "SVM") {
-    await authenticatedSvmClient(authToken);
     const { accountAddress, rawPublicKey, externalServerKeyShares } =
-      await svmClient.createWalletAccount({
+      await svmClient.importPrivateKey({
+        privateKey,
+        chainName,
         thresholdSignatureScheme:
           thresholdSignatureScheme as ThresholdSignatureScheme,
+        password,
       });
     return res.status(200).json({
       rawPublicKey: JSON.stringify(rawPublicKey),

@@ -1,0 +1,6 @@
+type: object
+required:
+  - serializedSignature
+properties:
+  serializedSignature:
+    type: string
