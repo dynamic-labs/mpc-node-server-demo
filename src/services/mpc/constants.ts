@@ -5,7 +5,6 @@ const BASE_API_URL = process.env.BASE_API_URL;
 const MPC_RELAY_URL = process.env.MPC_RELAY_URL;
 
 const ENVIRONMENT_ID = process.env.ENVIRONMENT_ID;
-const AUTH_TOKEN = process.env.AUTH_TOKEN;
 
 export const environmentId = () => {
   if (!ENVIRONMENT_ID) {
@@ -14,16 +13,8 @@ export const environmentId = () => {
   return ENVIRONMENT_ID;
 };
 
-export const authToken = () => {
-  if (!AUTH_TOKEN) {
-    throw new Error("AUTH_TOKEN must be set");
-  }
-  return AUTH_TOKEN;
-};
-
 export const evmClient = new DynamicEvmWalletClient({
   environmentId: environmentId(),
-  authToken: authToken(),
   baseApiUrl: BASE_API_URL,
   baseMPCRelayApiUrl: MPC_RELAY_URL,
 });
@@ -34,7 +25,6 @@ export const authenticatedEvmClient = async (authToken: string) => {
 
 export const svmClient = new DynamicSvmWalletClient({
   environmentId: environmentId(),
-  authToken: authToken(),
   baseApiUrl: BASE_API_URL,
   baseMPCRelayApiUrl: MPC_RELAY_URL,
 });
