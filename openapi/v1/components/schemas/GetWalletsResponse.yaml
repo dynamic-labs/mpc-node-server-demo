@@ -1,0 +1,32 @@
+type: object
+required:
+  - wallets
+properties:
+  wallets:
+    type: array
+    items:
+      type: object
+      required:
+        - walletId
+        - chainName
+        - accountAddress
+      properties:
+        walletId:
+          type: string
+        chainName:
+          type: string
+        accountAddress:
+          type: string
+        serverKeySharesBackupInfo:
+          type: object
+          additionalProperties: true
+        externalServerKeyShares:
+          type: array
+          items:
+            type: string
+        derivationPath:
+          type: string
+          nullable: true
+        thresholdSignatureScheme:
+          type: string
+          nullable: true

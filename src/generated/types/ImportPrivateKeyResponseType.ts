@@ -4,9 +4,9 @@ export type ImportPrivateKeyResponseType = {
     */
     accountAddress: string;
     /**
-     * @type string
+     * @type string | undefined
     */
-    publicKeyHex: string;
+    publicKeyHex?: string;
     /**
      * @type string
     */
@@ -14,5 +14,5 @@ export type ImportPrivateKeyResponseType = {
     /**
      * @type string
     */
-    serverKeyShares: string;
+    externalServerKeyShares: string;
 };
