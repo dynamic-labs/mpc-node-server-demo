@@ -1,9 +1,8 @@
 type: object
 required:
   - accountAddress
-  - publicKeyHex
   - rawPublicKey
-  - serverKeyShares
+  - externalServerKeyShares
 properties:
   accountAddress:
     type: string
@@ -11,5 +10,5 @@ properties:
     type: string
   rawPublicKey:
     type: string
-  serverKeyShares:
+  externalServerKeyShares:
     type: string

@@ -6,13 +6,13 @@ export type CreateWalletAccountResponseType = {
     /**
      * @type string
     */
-    externalServerKeyGenResults: string;
+    externalServerKeyShares: string;
     /**
      * @type string
     */
     accountAddress: string;
     /**
-     * @type string
+     * @type string | undefined
     */
-    publicKeyHex: string;
+    publicKeyHex?: string;
 };

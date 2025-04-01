@@ -1,0 +1,13 @@
+type: object
+required:
+  - error_code
+  - error_message
+properties:
+  error_code:
+    type: string
+    enum:
+      - api_key_required
+      - api_key_invalid
+      - api_key_not_authorized
+  error_message:
+    type: string

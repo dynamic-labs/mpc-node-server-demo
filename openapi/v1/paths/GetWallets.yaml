@@ -1,21 +1,21 @@
-post:
-  operationId: SignMessage
-  summary: Sign a message
-  description: Sign a message
-  x-eov-operation-handler: actions/SignMessage
+get:
+  operationId: GetWallets
+  summary: Get wallets
+  description: Get wallets
+  x-eov-operation-handler: actions/GetWallets
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          $ref: ../components/schemas/SignMessageRequest.yaml
+          $ref: ../components/schemas/GetWalletsRequest.yaml
   responses:
     "200":
-      description: Successfully signed message
+      description: Successfully retrieved wallets
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/SignMessageResponse.yaml
+            $ref: ../components/schemas/GetWalletsResponse.yaml
     "400":
       $ref: ../components/responses/BadRequest.yaml
     "403":

@@ -17,6 +17,8 @@ paths:
     $ref: paths/SignTransaction.yaml
   /api/v1/actions/ImportPrivateKey:
     $ref: paths/ImportPrivateKey.yaml
+  /api/v1/actions/GetWallets:
+    $ref: paths/GetWallets.yaml
 components:
   securitySchemes:
     BasicAuth:

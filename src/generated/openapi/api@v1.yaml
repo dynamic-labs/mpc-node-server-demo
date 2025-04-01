@@ -43,6 +43,10 @@ paths:
                 $ref: '#/components/schemas/CreateWalletAccountResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/actions/SignMessage:
     post:
       operationId: SignMessage
@@ -64,6 +68,10 @@ paths:
                 $ref: '#/components/schemas/SignMessageResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/actions/SignTransaction:
     post:
       operationId: SignTransaction
@@ -85,6 +93,10 @@ paths:
                 $ref: '#/components/schemas/SignTransactionResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /api/v1/actions/ImportPrivateKey:
     post:
       operationId: ImportPrivateKey
@@ -106,6 +118,33 @@ paths:
                 $ref: '#/components/schemas/ImportPrivateKeyResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v1/actions/GetWallets:
+    get:
+      operationId: GetWallets
+      summary: Get wallets
+      description: Get wallets
+      x-eov-operation-handler: actions/GetWallets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetWalletsRequest'
+      responses:
+        '200':
+          description: Successfully retrieved wallets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWalletsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     BasicAuth:
@@ -148,18 +187,42 @@ components:
       type: object
       required:
         - rawPublicKey
-        - externalServerKeyGenResults
+        - externalServerKeyShares
         - accountAddress
-        - publicKeyHex
       properties:
         rawPublicKey:
           type: string
-        externalServerKeyGenResults:
+        externalServerKeyShares:
           type: string
         accountAddress:
           type: string
         publicKeyHex:
           type: string
+    Forbidden:
+      type: object
+      required:
+        - error_code
+        - error_message
+      properties:
+        error_code:
+          type: string
+          enum:
+            - api_key_required
+            - api_key_invalid
+            - api_key_not_authorized
+        error_message:
+          type: string
+    InternalServerError:
+      type: object
+      properties:
+        error_code:
+          type: string
+          enum:
+            - internal_server_error
+            - unknown_error
+        error_message:
+          type: string
+          example: Internal Server Error
     SignMessageRequest:
       type: object
       required:
@@ -234,9 +297,8 @@ components:
       type: object
       required:
         - accountAddress
-        - publicKeyHex
         - rawPublicKey
-        - serverKeyShares
+        - externalServerKeyShares
       properties:
         accountAddress:
           type: string
@@ -244,8 +306,48 @@ components:
           type: string
         rawPublicKey:
           type: string
-        serverKeyShares:
+        externalServerKeyShares:
           type: string
+    GetWalletsRequest:
+      type: object
+      required:
+        - chainName
+      properties:
+        chainName:
+          type: string
+    GetWalletsResponse:
+      type: object
+      required:
+        - wallets
+      properties:
+        wallets:
+          type: array
+          items:
+            type: object
+            required:
+              - walletId
+              - chainName
+              - accountAddress
+            properties:
+              walletId:
+                type: string
+              chainName:
+                type: string
+              accountAddress:
+                type: string
+              serverKeySharesBackupInfo:
+                type: object
+                additionalProperties: true
+              externalServerKeyShares:
+                type: array
+                items:
+                  type: string
+              derivationPath:
+                type: string
+                nullable: true
+              thresholdSignatureScheme:
+                type: string
+                nullable: true
   responses:
     BadRequest:
       description: Bad Request
@@ -253,3 +355,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BadRequest'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Forbidden'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InternalServerError'
