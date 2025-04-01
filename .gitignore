@@ -56,3 +56,4 @@ dist
 # Enclave stuff
 enclave.Dockerfile
 nitro-cli-image.Dockerfile
+.vercel
