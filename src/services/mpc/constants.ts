@@ -16,6 +16,7 @@ export const environmentId = () => {
 export const evmClient = new DynamicEvmWalletClient({
   environmentId: environmentId(),
   baseApiUrl: BASE_API_URL,
+  authToken: "tmp",
   baseMPCRelayApiUrl: MPC_RELAY_URL,
 });
 
@@ -27,6 +28,7 @@ export const svmClient = new DynamicSvmWalletClient({
   environmentId: environmentId(),
   baseApiUrl: BASE_API_URL,
   baseMPCRelayApiUrl: MPC_RELAY_URL,
+  authToken: "tmp",
 });
 
 export const authenticatedSvmClient = async (authToken: string) => {
