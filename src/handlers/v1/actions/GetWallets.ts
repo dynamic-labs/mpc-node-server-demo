@@ -3,14 +3,12 @@ import {
   GetWallets400Type,
   GetWallets403Type,
   GetWalletsRequestType,
-} from '../../../generated';
+} from "../../../generated";
 import {
   authenticatedEvmClient,
   authenticatedSvmClient,
-  evmClient,
-  svmClient,
-} from '../../../services/mpc/constants';
-import { TypedRequestHandler } from '../../../types/express';
+} from "../../../services/mpc/constants";
+import { TypedRequestHandler } from "../../../types/express";
 
 /**
  * /api/v1/actions/CreateWalletAccount
@@ -27,24 +25,37 @@ export const GetWallets: TypedRequestHandler<{
 }> = async (req, res) => {
   const { chainName } = req.body;
   const authToken = req.authToken;
+  const environmentId = req.params.environmentId;
   if (!authToken) {
-    const error = new Error('API key is required');
+    const error = new Error("API key is required");
     Object.assign(error, {
       status: 403,
-      code: 'api_key_required',
-      message: 'API key is required',
+      code: "api_key_required",
+      message: "API key is required",
     });
     throw error;
   }
-  if (chainName === 'EVM') {
-    await authenticatedEvmClient(authToken);
+  if (chainName === "EVM") {
+    const evmClient = await authenticatedEvmClient({
+      authToken,
+      environmentId,
+    });
     const wallets = await evmClient.getEvmWallets();
-    return res.status(200).json(wallets);
-  } else if (chainName === 'SVM') {
-    await authenticatedSvmClient(authToken);
+    console.log("wallets", wallets);
+    return res.status(200).json({
+      wallets,
+    });
+  } else if (chainName === "SVM") {
+    const svmClient = await authenticatedSvmClient({
+      authToken,
+      environmentId,
+    });
     const wallets = await svmClient.getSvmWallets();
-    return res.status(200).json(wallets);
+    console.log("wallets", wallets);
+    return res.status(200).json({
+      wallets,
+    });
   } else {
-    throw new Error('Unsupported chain');
+    throw new Error("Unsupported chain");
   }
 };

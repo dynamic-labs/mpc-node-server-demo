@@ -9,10 +9,7 @@ import {
   SignTransaction500Type,
   SignTransactionRequestType,
 } from "../../../generated";
-import {
-  authenticatedEvmClient,
-  evmClient,
-} from "../../../services/mpc/constants";
+import { authenticatedEvmClient } from "../../../services/mpc/constants";
 import { TypedRequestHandler } from "../../../types/express";
 
 /**
@@ -43,6 +40,7 @@ export const SignTransaction: TypedRequestHandler<{
 
   console.log("signing transaction");
   const authToken = req.authToken;
+  const environmentId = req.params.environmentId;
   if (!authToken) {
     return res.status(403).json({
       error_code: "api_key_required",
@@ -51,7 +49,10 @@ export const SignTransaction: TypedRequestHandler<{
   }
 
   if (chainName === "EVM") {
-    await authenticatedEvmClient(authToken);
+    const evmClient = await authenticatedEvmClient({
+      authToken,
+      environmentId,
+    });
     try {
       const chain = baseSepolia;
       const publicClient = evmClient.createViemPublicClient({

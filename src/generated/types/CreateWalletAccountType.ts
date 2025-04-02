@@ -4,7 +4,14 @@ import { InternalServerErrorType } from "./InternalServerErrorType";
 import { CreateWalletAccountRequestType } from "./CreateWalletAccountRequestType";
 import type { CreateWalletAccountResponseType } from "./CreateWalletAccountResponseType";
 
- /**
+ export type CreateWalletAccountPathParamsType = {
+    /**
+     * @description ID of the environment
+     * @type string
+    */
+    environmentId: string;
+};
+/**
  * @description Successfully created wallet account
 */
 export type CreateWalletAccount200Type = CreateWalletAccountResponseType;
@@ -28,5 +35,6 @@ export type CreateWalletAccountMutationResponseType = CreateWalletAccountRespons
 export type CreateWalletAccountTypeMutation = {
     Response: CreateWalletAccountMutationResponseType;
     Request: CreateWalletAccountMutationRequestType;
+    PathParams: CreateWalletAccountPathParamsType;
     Errors: CreateWalletAccount400Type | CreateWalletAccount403Type | CreateWalletAccount500Type;
 };

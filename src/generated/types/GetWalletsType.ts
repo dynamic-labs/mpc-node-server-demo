@@ -4,7 +4,14 @@ import { InternalServerErrorType } from "./InternalServerErrorType";
 import { GetWalletsRequestType } from "./GetWalletsRequestType";
 import type { GetWalletsResponseType } from "./GetWalletsResponseType";
 
- /**
+ export type GetWalletsPathParamsType = {
+    /**
+     * @description ID of the environment
+     * @type string
+    */
+    environmentId: string;
+};
+/**
  * @description Successfully retrieved wallets
 */
 export type GetWallets200Type = GetWalletsResponseType;
@@ -28,5 +35,6 @@ export type GetWalletsQueryResponseType = GetWalletsResponseType;
 export type GetWalletsTypeQuery = {
     Response: GetWalletsQueryResponseType;
     Request: GetWalletsQueryRequestType;
+    PathParams: GetWalletsPathParamsType;
     Errors: GetWallets400Type | GetWallets403Type | GetWallets500Type;
 };

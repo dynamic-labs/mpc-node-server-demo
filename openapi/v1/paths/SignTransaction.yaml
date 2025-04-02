@@ -1,3 +1,5 @@
+parameters:
+  - $ref: "../openapi.yaml#/components/parameters/environmentId"
 post:
   operationId: SignTransaction
   summary: Sign a transaction

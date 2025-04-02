@@ -1,0 +1,11 @@
+environmentId:
+  name: environmentId
+  in: path
+  required: true
+  description: ID of the environment
+  example: "95b11417-f18f-457f-8804-68e361f9164f"
+  schema:
+    type: string
+    pattern: "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    minLength: 36
+    maxLength: 36

@@ -3,14 +3,12 @@ import {
   SignMessage400Type,
   SignMessage403Type,
   SignMessageRequestType,
-} from '../../../generated';
+} from "../../../generated";
 import {
   authenticatedEvmClient,
   authenticatedSvmClient,
-  evmClient,
-  svmClient,
-} from '../../../services/mpc/constants';
-import { TypedRequestHandler } from '../../../types/express';
+} from "../../../services/mpc/constants";
+import { TypedRequestHandler } from "../../../types/express";
 
 /**
  * /api/v1/actions/SignMessage
@@ -26,16 +24,20 @@ export const SignMessage: TypedRequestHandler<{
   };
 }> = async (req, res) => {
   const { chainName, message, accountAddress, password } = req.body;
-  console.log('signing message');
+  console.log("signing message");
   const authToken = req.authToken;
+  const environmentId = req.params.environmentId;
   if (!authToken) {
     return res.status(403).json({
-      error_code: 'api_key_required',
-      error_message: 'API key is required',
+      error_code: "api_key_required",
+      error_message: "API key is required",
     });
   }
-  if (chainName === 'EVM') {
-    await authenticatedEvmClient(authToken);
+  if (chainName === "EVM") {
+    const evmClient = await authenticatedEvmClient({
+      authToken,
+      environmentId,
+    });
     const serializedSignature = await evmClient.signMessage({
       message,
       accountAddress,
@@ -44,8 +46,11 @@ export const SignMessage: TypedRequestHandler<{
     return res.status(200).json({
       serializedSignature,
     });
-  } else if (chainName === 'SVM') {
-    await authenticatedSvmClient(authToken);
+  } else if (chainName === "SVM") {
+    const svmClient = await authenticatedSvmClient({
+      authToken,
+      environmentId,
+    });
     const serializedSignature = await svmClient.signMessage({
       message,
       accountAddress,
@@ -55,6 +60,6 @@ export const SignMessage: TypedRequestHandler<{
       serializedSignature,
     });
   } else {
-    throw new Error('Unsupported chain');
+    throw new Error("Unsupported chain");
   }
 };

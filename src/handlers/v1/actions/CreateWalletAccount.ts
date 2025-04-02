@@ -7,11 +7,9 @@ import {
   CreateWalletAccount400Type,
 } from "../../../generated";
 import {
+  ThresholdSignatureScheme,
   authenticatedEvmClient,
   authenticatedSvmClient,
-  evmClient,
-  svmClient,
-  ThresholdSignatureScheme,
 } from "../../../services/mpc/constants";
 import { TypedRequestHandler } from "../../../types/express";
 
@@ -33,6 +31,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
 }> = async (req, res) => {
   const { chainName, thresholdSignatureScheme } = req.body;
   const authToken = req.authToken;
+  const environmentId = req.params.environmentId;
   if (!authToken) {
     return res.status(403).json({
       error_code: "api_key_required",
@@ -40,7 +39,10 @@ export const CreateWalletAccount: TypedRequestHandler<{
     });
   }
   if (chainName === "EVM") {
-    await authenticatedEvmClient(authToken);
+    const evmClient = await authenticatedEvmClient({
+      authToken,
+      environmentId,
+    });
     const {
       accountAddress,
       rawPublicKey,
@@ -63,7 +65,10 @@ export const CreateWalletAccount: TypedRequestHandler<{
       publicKeyHex,
     });
   } else if (chainName === "SVM") {
-    await authenticatedSvmClient(authToken);
+    const svmClient = await authenticatedSvmClient({
+      authToken,
+      environmentId,
+    });
     const { accountAddress, rawPublicKey, externalServerKeyShares } =
       await svmClient.createWalletAccount({
         thresholdSignatureScheme:

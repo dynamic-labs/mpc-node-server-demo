@@ -4,7 +4,14 @@ import { InternalServerErrorType } from "./InternalServerErrorType";
 import { SignTransactionRequestType } from "./SignTransactionRequestType";
 import type { SignTransactionResponseType } from "./SignTransactionResponseType";
 
- /**
+ export type SignTransactionPathParamsType = {
+    /**
+     * @description ID of the environment
+     * @type string
+    */
+    environmentId: string;
+};
+/**
  * @description Successfully signed transaction
 */
 export type SignTransaction200Type = SignTransactionResponseType;
@@ -28,5 +35,6 @@ export type SignTransactionMutationResponseType = SignTransactionResponseType;
 export type SignTransactionTypeMutation = {
     Response: SignTransactionMutationResponseType;
     Request: SignTransactionMutationRequestType;
+    PathParams: SignTransactionPathParamsType;
     Errors: SignTransaction400Type | SignTransaction403Type | SignTransaction500Type;
 };

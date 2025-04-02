@@ -5,8 +5,8 @@ import {
   ImportPrivateKeyRequestType,
 } from "../../../generated";
 import {
-  evmClient,
-  svmClient,
+  authenticatedEvmClient,
+  authenticatedSvmClient,
   ThresholdSignatureScheme,
 } from "../../../services/mpc/constants";
 import { TypedRequestHandler } from "../../../types/express";
@@ -30,6 +30,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
   const { chainName, privateKey, thresholdSignatureScheme, password } =
     req.body;
   const authToken = req.authToken;
+  const environmentId = req.params.environmentId;
   if (!authToken) {
     return res.status(403).json({
       error_code: "api_key_required",
@@ -37,6 +38,10 @@ export const ImportPrivateKey: TypedRequestHandler<{
     });
   }
   if (chainName === "EVM") {
+    const evmClient = await authenticatedEvmClient({
+      authToken,
+      environmentId,
+    });
     const {
       accountAddress,
       rawPublicKey,
@@ -56,6 +61,10 @@ export const ImportPrivateKey: TypedRequestHandler<{
       publicKeyHex,
     });
   } else if (chainName === "SVM") {
+    const svmClient = await authenticatedSvmClient({
+      authToken,
+      environmentId,
+    });
     const { accountAddress, rawPublicKey, externalServerKeyShares } =
       await svmClient.importPrivateKey({
         privateKey,

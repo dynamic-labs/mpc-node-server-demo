@@ -22,7 +22,9 @@ paths:
                 $ref: '#/components/schemas/HealthCheckResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
-  /api/v1/actions/CreateWalletAccount:
+  /api/v1/actions/{environmentId}/CreateWalletAccount:
+    parameters:
+      - $ref: '#/components/parameters/environmentId'
     post:
       operationId: CreateWalletAccount
       summary: Create a wallet account
@@ -47,7 +49,9 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/SignMessage:
+  /api/v1/actions/{environmentId}/SignMessage:
+    parameters:
+      - $ref: '#/components/parameters/environmentId'
     post:
       operationId: SignMessage
       summary: Sign a message
@@ -72,7 +76,9 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/SignTransaction:
+  /api/v1/actions/{environmentId}/SignTransaction:
+    parameters:
+      - $ref: '#/components/parameters/environmentId'
     post:
       operationId: SignTransaction
       summary: Sign a transaction
@@ -97,7 +103,9 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /api/v1/actions/ImportPrivateKey:
+  /api/v1/actions/{environmentId}/ImportPrivateKey:
+    parameters:
+      - $ref: '#/components/parameters/environmentId'
     post:
       operationId: ImportPrivateKey
       summary: Import a private key
@@ -120,7 +128,9 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '403':
           $ref: '#/components/responses/Forbidden'
-  /api/v1/actions/GetWallets:
+  /api/v1/actions/{environmentId}/GetWallets:
+    parameters:
+      - $ref: '#/components/parameters/environmentId'
     get:
       operationId: GetWallets
       summary: Get wallets
@@ -146,6 +156,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  parameters:
+    environmentId:
+      name: environmentId
+      in: path
+      required: true
+      description: ID of the environment
+      example: 95b11417-f18f-457f-8804-68e361f9164f
+      schema:
+        type: string
+        pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+        minLength: 36
+        maxLength: 36
   securitySchemes:
     BasicAuth:
       type: http
