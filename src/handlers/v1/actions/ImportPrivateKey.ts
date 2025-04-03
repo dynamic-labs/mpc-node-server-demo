@@ -38,6 +38,9 @@ export const ImportPrivateKey: TypedRequestHandler<{
       error_message: 'API key is required',
     });
   }
+  const onError = (error: Error) => {
+    throw new Error(error.message);
+  };
   if (chainName === 'EVM') {
     const evmClient = await authenticatedEvmClient({
       authToken,
@@ -54,6 +57,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
       password,
+      onError,
     });
     return res.status(200).json({
       rawPublicKey: Array.from(rawPublicKey),
@@ -74,6 +78,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
         thresholdSignatureScheme:
           thresholdSignatureScheme as ThresholdSignatureScheme,
         password,
+        onError,
       });
 
     if (!rawPublicKey) {

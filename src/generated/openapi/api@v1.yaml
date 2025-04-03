@@ -259,6 +259,8 @@ components:
           type: string
         thresholdSignatureScheme:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
+        password:
+          type: string
     ExternalServerKeyShares:
       type: array
       items:

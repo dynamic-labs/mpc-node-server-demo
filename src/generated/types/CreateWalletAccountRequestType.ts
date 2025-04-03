@@ -6,4 +6,8 @@ import { ThresholdSignatureSchemeType } from "./ThresholdSignatureSchemeType";
     */
     chainName: string;
     thresholdSignatureScheme: ThresholdSignatureSchemeType;
+    /**
+     * @type string | undefined
+    */
+    password?: string;
 };

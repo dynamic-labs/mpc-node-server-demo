@@ -30,7 +30,7 @@ export const CreateWalletAccount: TypedRequestHandler<{
     statusCode: 200 | 400 | 403;
   };
 }> = async (req, res) => {
-  const { chainName, thresholdSignatureScheme } = req.body;
+  const { chainName, thresholdSignatureScheme, password } = req.body;
   const authToken = req.authToken;
   const environmentId = req.params.environmentId;
   if (!authToken) {
@@ -39,6 +39,9 @@ export const CreateWalletAccount: TypedRequestHandler<{
       error_message: 'API key is required',
     });
   }
+  const onError = (error: Error) => {
+    throw new Error(error.message);
+  };
   if (chainName === 'EVM') {
     const evmClient = await authenticatedEvmClient({
       authToken,
@@ -52,6 +55,8 @@ export const CreateWalletAccount: TypedRequestHandler<{
     } = await evmClient.createWalletAccount({
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
+      password,
+      onError,
     });
     return res.status(200).json({
       rawPublicKey: Array.from(rawPublicKey),
@@ -69,6 +74,8 @@ export const CreateWalletAccount: TypedRequestHandler<{
       await svmClient.createWalletAccount({
         thresholdSignatureScheme:
           thresholdSignatureScheme as ThresholdSignatureScheme,
+        password,
+        onError,
       });
     return res.status(200).json({
       rawPublicKey: Array.from(rawPublicKey),
