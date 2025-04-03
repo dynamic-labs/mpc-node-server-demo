@@ -1,13 +1,13 @@
 /// <reference types="express-serve-static-core" />
 
-import { Request } from "express";
-import { Response } from "express";
-import { BadRequest } from "express-openapi-validator/dist/openapi.validator";
-import * as core from "express-serve-static-core";
-import { ErrorWithStatus } from "../Error";
+import { Request } from 'express';
+import { Response } from 'express';
+import { BadRequest } from 'express-openapi-validator/dist/openapi.validator';
+import * as core from 'express-serve-static-core';
+import { ErrorWithStatus } from '../Error';
 
 // Extend Express Request using module augmentation
-declare module "express" {
+declare module 'express' {
   export interface Request {
     authToken?: string;
   }
@@ -32,46 +32,46 @@ export interface TypedRequest<
     query: core.Query;
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     body: Record<string, any>;
-  }
+  },
 > extends Request<
-    T["params"] extends core.ParamsDictionary
-      ? T["params"]
+    T['params'] extends core.ParamsDictionary
+      ? T['params']
       : core.ParamsDictionary,
     // biome-ignore lint/suspicious/noExplicitAny: Likely not
     any,
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    T["body"] extends Record<string, any> ? T["body"] : unknown,
-    T["query"] extends core.Query ? T["query"] : core.Query
+    T['body'] extends Record<string, any> ? T['body'] : unknown,
+    T['query'] extends core.Query ? T['query'] : core.Query
   > {}
 export interface TypedResponse<T extends TypedResponseProperties>
-  extends Response<T["body"], Record<string, any>> {}
+  extends Response<T['body'], Record<string, any>> {}
 
 export type TypedRequestHandler<
   T extends {
     request: TypedRequestProperties;
     response: TypedResponseProperties;
-  }
+  },
 > = (
-  req: TypedRequest<T["request"]>,
-  res: TypedResponse<T["response"]>,
-  next: core.NextFunction
+  req: TypedRequest<T['request']>,
+  res: TypedResponse<T['response']>,
+  next: core.NextFunction,
 ) => // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
-| (TypedResponse<T["response"]> | void)
+  | (TypedResponse<T['response']> | void)
   // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
-  | Promise<TypedResponse<T["response"]> | void>;
+  | Promise<TypedResponse<T['response']> | void>;
 
 export type TypedErrorHandler<
   T extends {
     error: ErrorWithStatus | BadRequest;
     request: TypedRequestProperties;
     response: TypedResponseProperties;
-  }
+  },
 > = (
-  error: T["error"],
-  req: TypedRequest<T["request"]>,
-  res: TypedResponse<T["response"]>,
-  next: core.NextFunction
+  error: T['error'],
+  req: TypedRequest<T['request']>,
+  res: TypedResponse<T['response']>,
+  next: core.NextFunction,
 ) => // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
-| (TypedResponse<T["response"]> | void)
+  | (TypedResponse<T['response']> | void)
   // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
-  | Promise<TypedResponse<T["response"]> | void>;
+  | Promise<TypedResponse<T['response']> | void>;

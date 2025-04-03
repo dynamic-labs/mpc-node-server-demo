@@ -1,12 +1,8 @@
-export type SignMessageRequestType = {
+export type ExportPrivateKeyRequestType = {
     /**
      * @type string
     */
     chainName: string;
-    /**
-     * @type string
-    */
-    message: string;
     /**
      * @type string
     */

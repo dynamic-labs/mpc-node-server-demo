@@ -5,9 +5,13 @@ required:
   - accountAddress
 properties:
   rawPublicKey:
-    type: string
+    type: array
+    items:
+      type: integer
+      format: uint8
+    description: Raw public key as a Uint8Array
   externalServerKeyShares:
-    type: string
+    $ref: ./ExternalServerKeyShares.yaml
   accountAddress:
     type: string
   publicKeyHex:

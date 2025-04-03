@@ -1,0 +1,26 @@
+parameters:
+  - $ref: "../openapi.yaml#/components/parameters/environmentId"
+post:
+  operationId: RefreshWalletShares
+  summary: Refresh wallet shares
+  description: Refresh wallet shares
+  x-eov-operation-handler: actions/RefreshWalletShares
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/RefreshWalletSharesRequest.yaml
+  responses:
+    "200":
+      description: Successfully refreshed wallet shares
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/RefreshWalletSharesResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
+    "500":
+      $ref: ../components/responses/InternalServerError.yaml

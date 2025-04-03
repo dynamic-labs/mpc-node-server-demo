@@ -19,6 +19,10 @@ paths:
     $ref: paths/ImportPrivateKey.yaml
   /api/v1/actions/{environmentId}/GetWallets:
     $ref: paths/GetWallets.yaml
+  /api/v1/actions/{environmentId}/ExportPrivateKey:
+    $ref: paths/ExportPrivateKey.yaml
+  /api/v1/actions/{environmentId}/RefreshWalletShares:
+    $ref: paths/RefreshWalletShares.yaml
 components:
   parameters:
     environmentId:

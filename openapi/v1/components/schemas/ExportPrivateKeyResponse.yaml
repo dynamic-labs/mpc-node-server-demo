@@ -1,0 +1,6 @@
+type: object
+required:
+  - derivedPrivateKey
+properties:
+  derivedPrivateKey:
+    type: string

@@ -1,6 +1,7 @@
 import {
   CreateWalletAccount403Type,
   CreateWalletAccountRequestType,
+  ExternalServerKeySharesType,
 } from '../../../generated';
 import {
   CreateWalletAccount200Type,
@@ -53,8 +54,9 @@ export const CreateWalletAccount: TypedRequestHandler<{
         thresholdSignatureScheme as ThresholdSignatureScheme,
     });
     return res.status(200).json({
-      rawPublicKey: JSON.stringify(rawPublicKey),
-      externalServerKeyShares: JSON.stringify(externalServerKeyShares),
+      rawPublicKey: Array.from(rawPublicKey),
+      externalServerKeyShares:
+        externalServerKeyShares as ExternalServerKeySharesType,
       accountAddress,
       publicKeyHex,
     });
@@ -69,8 +71,9 @@ export const CreateWalletAccount: TypedRequestHandler<{
           thresholdSignatureScheme as ThresholdSignatureScheme,
       });
     return res.status(200).json({
-      rawPublicKey: JSON.stringify(rawPublicKey),
-      externalServerKeyShares: JSON.stringify(externalServerKeyShares),
+      rawPublicKey: Array.from(rawPublicKey),
+      externalServerKeyShares:
+        externalServerKeyShares as ExternalServerKeySharesType,
       accountAddress,
     });
   } else {

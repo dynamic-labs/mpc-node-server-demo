@@ -1,6 +1,6 @@
 export type SignMessageResponseType = {
-  /**
-   * @type string
-   */
-  serializedSignature: string;
+    /**
+     * @type string
+    */
+    serializedSignature: string;
 };

@@ -1,16 +1,16 @@
-import { TransactionSerializable } from "viem";
-import { http, createWalletClient } from "viem";
-import { baseSepolia } from "viem/chains";
-import { parseEther } from "viem/utils";
+import { TransactionSerializable } from 'viem';
+import { http, createWalletClient } from 'viem';
+import { baseSepolia } from 'viem/chains';
+import { parseEther } from 'viem/utils';
 import {
   SignTransaction200Type,
   SignTransaction400Type,
   SignTransaction403Type,
   SignTransaction500Type,
   SignTransactionRequestType,
-} from "../../../generated";
-import { authenticatedEvmClient } from "../../../services/mpc/constants";
-import { TypedRequestHandler } from "../../../types/express";
+} from '../../../generated';
+import { authenticatedEvmClient } from '../../../services/mpc/constants';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/SignTransaction
@@ -42,12 +42,12 @@ export const SignTransaction: TypedRequestHandler<{
   const environmentId = req.params.environmentId;
   if (!authToken) {
     return res.status(403).json({
-      error_code: "api_key_required",
-      error_message: "API key is required",
+      error_code: 'api_key_required',
+      error_message: 'API key is required',
     });
   }
 
-  if (chainName === "EVM") {
+  if (chainName === 'EVM') {
     const evmClient = await authenticatedEvmClient({
       authToken,
       environmentId,
@@ -56,7 +56,7 @@ export const SignTransaction: TypedRequestHandler<{
       const chain = baseSepolia;
       const publicClient = evmClient.createViemPublicClient({
         chain: baseSepolia,
-        rpcUrl: "https://sepolia.base.org",
+        rpcUrl: 'https://sepolia.base.org',
       });
 
       const transactionRequest = {
@@ -78,7 +78,7 @@ export const SignTransaction: TypedRequestHandler<{
 
       const walletClient = createWalletClient({
         chain,
-        transport: http("https://sepolia.base.org"),
+        transport: http('https://sepolia.base.org'),
         account: senderAddress as `0x${string}`,
       });
 
@@ -93,20 +93,20 @@ export const SignTransaction: TypedRequestHandler<{
       }
 
       if (!signedTx) {
-        console.error("Error signing transaction");
+        console.error('Error signing transaction');
         return;
       }
       return res.status(200).json({
         signedTx,
       });
     } catch (error) {
-      console.error("Error signing transaction", error);
+      console.error('Error signing transaction', error);
       return res.status(500).json({
-        error_code: "internal_server_error",
-        error_message: error instanceof Error ? error.message : "Unknown error",
+        error_code: 'internal_server_error',
+        error_message: error instanceof Error ? error.message : 'Unknown error',
       });
     }
   } else {
-    throw new Error("Unsupported chain");
+    throw new Error('Unsupported chain');
   }
 };

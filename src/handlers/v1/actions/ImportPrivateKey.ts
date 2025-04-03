@@ -1,4 +1,5 @@
 import {
+  ExternalServerKeySharesType,
   ImportPrivateKey200Type,
   ImportPrivateKey400Type,
   ImportPrivateKey403Type,
@@ -55,8 +56,9 @@ export const ImportPrivateKey: TypedRequestHandler<{
       password,
     });
     return res.status(200).json({
-      rawPublicKey: JSON.stringify(rawPublicKey),
-      externalServerKeyShares: JSON.stringify(externalServerKeyShares),
+      rawPublicKey: Array.from(rawPublicKey),
+      externalServerKeyShares:
+        externalServerKeyShares as ExternalServerKeySharesType,
       accountAddress,
       publicKeyHex,
     });
@@ -73,9 +75,14 @@ export const ImportPrivateKey: TypedRequestHandler<{
           thresholdSignatureScheme as ThresholdSignatureScheme,
         password,
       });
+
+    if (!rawPublicKey) {
+      throw new Error('Raw public key is required');
+    }
     return res.status(200).json({
-      rawPublicKey: JSON.stringify(rawPublicKey),
-      externalServerKeyShares: JSON.stringify(externalServerKeyShares),
+      rawPublicKey: Array.from(rawPublicKey),
+      externalServerKeyShares:
+        externalServerKeyShares as ExternalServerKeySharesType,
       accountAddress,
     });
   } else {

@@ -1,0 +1,26 @@
+parameters:
+  - $ref: "../openapi.yaml#/components/parameters/environmentId"
+post:
+  operationId: ExportPrivateKey
+  summary: Export private key
+  description: Export private key
+  x-eov-operation-handler: actions/ExportPrivateKey
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ExportPrivateKeyRequest.yaml
+  responses:
+    "200":
+      description: Successfully exported private key
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ExportPrivateKeyResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
+    "500":
+      $ref: ../components/responses/InternalServerError.yaml

@@ -155,6 +155,60 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /api/v1/actions/{environmentId}/ExportPrivateKey:
+    parameters:
+      - $ref: '#/components/parameters/environmentId'
+    post:
+      operationId: ExportPrivateKey
+      summary: Export private key
+      description: Export private key
+      x-eov-operation-handler: actions/ExportPrivateKey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportPrivateKeyRequest'
+      responses:
+        '200':
+          description: Successfully exported private key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportPrivateKeyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/actions/{environmentId}/RefreshWalletShares:
+    parameters:
+      - $ref: '#/components/parameters/environmentId'
+    post:
+      operationId: RefreshWalletShares
+      summary: Refresh wallet shares
+      description: Refresh wallet shares
+      x-eov-operation-handler: actions/RefreshWalletShares
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshWalletSharesRequest'
+      responses:
+        '200':
+          description: Successfully refreshed wallet shares
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshWalletSharesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   parameters:
     environmentId:
@@ -205,6 +259,18 @@ components:
           type: string
         thresholdSignatureScheme:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
+    ExternalServerKeyShares:
+      type: array
+      items:
+        type: object
+        required:
+          - pubkey
+          - secretShare
+        properties:
+          pubkey:
+            type: string
+          secretShare:
+            type: string
     CreateWalletAccountResponse:
       type: object
       required:
@@ -213,9 +279,13 @@ components:
         - accountAddress
       properties:
         rawPublicKey:
-          type: string
+          type: array
+          items:
+            type: integer
+            format: uint8
+          description: Raw public key as a Uint8Array
         externalServerKeyShares:
-          type: string
+          $ref: '#/components/schemas/ExternalServerKeyShares'
         accountAddress:
           type: string
         publicKeyHex:
@@ -322,13 +392,17 @@ components:
         - rawPublicKey
         - externalServerKeyShares
       properties:
+        rawPublicKey:
+          type: array
+          items:
+            type: integer
+            format: uint8
+          description: Raw public key as a Uint8Array
+        externalServerKeyShares:
+          $ref: '#/components/schemas/ExternalServerKeyShares'
         accountAddress:
           type: string
         publicKeyHex:
-          type: string
-        rawPublicKey:
-          type: string
-        externalServerKeyShares:
           type: string
     GetWalletsRequest:
       type: object
@@ -370,6 +444,54 @@ components:
               thresholdSignatureScheme:
                 type: string
                 nullable: true
+    ExportPrivateKeyRequest:
+      type: object
+      required:
+        - chainName
+        - accountAddress
+      properties:
+        chainName:
+          type: string
+        accountAddress:
+          type: string
+        password:
+          type: string
+    ExportPrivateKeyResponse:
+      type: object
+      required:
+        - derivedPrivateKey
+      properties:
+        derivedPrivateKey:
+          type: string
+    RefreshWalletSharesRequest:
+      type: object
+      required:
+        - chainName
+        - accountAddress
+      properties:
+        chainName:
+          type: string
+        accountAddress:
+          type: string
+        password:
+          type: string
+    RefreshWalletSharesResponse:
+      type: object
+      required:
+        - externalServerKeyShares
+      properties:
+        externalServerKeyShares:
+          type: array
+          items:
+            type: object
+            required:
+              - pubkey
+              - secretShare
+            properties:
+              pubkey:
+                type: string
+              secretShare:
+                type: string
   responses:
     BadRequest:
       description: Bad Request
