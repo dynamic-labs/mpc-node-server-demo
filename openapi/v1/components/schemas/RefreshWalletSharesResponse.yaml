@@ -3,14 +3,4 @@ required:
   - externalServerKeyShares
 properties:
   externalServerKeyShares:
-    type: array
-    items:
-      type: object
-      required:
-        - pubkey
-        - secretShare
-      properties:
-        pubkey:
-          type: string
-        secretShare:
-          type: string
+    type: string

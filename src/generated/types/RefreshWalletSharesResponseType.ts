@@ -1,15 +1,6 @@
 export type RefreshWalletSharesResponseType = {
     /**
-     * @type array
+     * @type string
     */
-    externalServerKeyShares: {
-        /**
-         * @type string
-        */
-        pubkey: string;
-        /**
-         * @type string
-        */
-        secretShare: string;
-    }[];
+    externalServerKeyShares: string;
 };

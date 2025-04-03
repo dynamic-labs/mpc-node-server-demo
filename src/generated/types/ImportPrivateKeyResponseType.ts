@@ -1,12 +1,12 @@
-import { ExternalServerKeySharesType } from "./ExternalServerKeySharesType";
-
- export type ImportPrivateKeyResponseType = {
+export type ImportPrivateKeyResponseType = {
     /**
-     * @description Raw public key as a Uint8Array
-     * @type array
+     * @type string
     */
-    rawPublicKey: number[];
-    externalServerKeyShares: ExternalServerKeySharesType;
+    rawPublicKey: string;
+    /**
+     * @type string
+    */
+    externalServerKeyShares: string;
     /**
      * @type string
     */

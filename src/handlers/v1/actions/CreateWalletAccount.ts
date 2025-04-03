@@ -1,7 +1,6 @@
 import {
   CreateWalletAccount403Type,
   CreateWalletAccountRequestType,
-  ExternalServerKeySharesType,
 } from '../../../generated';
 import {
   CreateWalletAccount200Type,
@@ -58,10 +57,11 @@ export const CreateWalletAccount: TypedRequestHandler<{
       password,
       onError,
     });
+    console.log('rawPublicKey', rawPublicKey);
+    console.log('externalServerKeyShares', externalServerKeyShares);
     return res.status(200).json({
-      rawPublicKey: Array.from(rawPublicKey),
-      externalServerKeyShares:
-        externalServerKeyShares as ExternalServerKeySharesType,
+      rawPublicKey: JSON.stringify(rawPublicKey),
+      externalServerKeyShares: JSON.stringify(externalServerKeyShares),
       accountAddress,
       publicKeyHex,
     });
@@ -78,9 +78,8 @@ export const CreateWalletAccount: TypedRequestHandler<{
         onError,
       });
     return res.status(200).json({
-      rawPublicKey: Array.from(rawPublicKey),
-      externalServerKeyShares:
-        externalServerKeyShares as ExternalServerKeySharesType,
+      rawPublicKey: JSON.stringify(rawPublicKey),
+      externalServerKeyShares: JSON.stringify(externalServerKeyShares),
       accountAddress,
     });
   } else {

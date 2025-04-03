@@ -261,18 +261,6 @@ components:
           $ref: '#/components/schemas/ThresholdSignatureScheme'
         password:
           type: string
-    ExternalServerKeyShares:
-      type: array
-      items:
-        type: object
-        required:
-          - pubkey
-          - secretShare
-        properties:
-          pubkey:
-            type: string
-          secretShare:
-            type: string
     CreateWalletAccountResponse:
       type: object
       required:
@@ -281,13 +269,9 @@ components:
         - accountAddress
       properties:
         rawPublicKey:
-          type: array
-          items:
-            type: integer
-            format: uint8
-          description: Raw public key as a Uint8Array
+          type: string
         externalServerKeyShares:
-          $ref: '#/components/schemas/ExternalServerKeyShares'
+          type: string
         accountAddress:
           type: string
         publicKeyHex:
@@ -395,13 +379,9 @@ components:
         - externalServerKeyShares
       properties:
         rawPublicKey:
-          type: array
-          items:
-            type: integer
-            format: uint8
-          description: Raw public key as a Uint8Array
+          type: string
         externalServerKeyShares:
-          $ref: '#/components/schemas/ExternalServerKeyShares'
+          type: string
         accountAddress:
           type: string
         publicKeyHex:
@@ -483,17 +463,7 @@ components:
         - externalServerKeyShares
       properties:
         externalServerKeyShares:
-          type: array
-          items:
-            type: object
-            required:
-              - pubkey
-              - secretShare
-            properties:
-              pubkey:
-                type: string
-              secretShare:
-                type: string
+          type: string
   responses:
     BadRequest:
       description: Bad Request
