@@ -3,13 +3,13 @@ import {
   ImportPrivateKey400Type,
   ImportPrivateKey403Type,
   ImportPrivateKeyRequestType,
-} from "../../../generated";
+} from '../../../generated';
 import {
+  ThresholdSignatureScheme,
   authenticatedEvmClient,
   authenticatedSvmClient,
-  ThresholdSignatureScheme,
-} from "../../../services/mpc/constants";
-import { TypedRequestHandler } from "../../../types/express";
+} from '../../../services/mpc/constants';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/CreateWalletAccount
@@ -33,11 +33,11 @@ export const ImportPrivateKey: TypedRequestHandler<{
   const environmentId = req.params.environmentId;
   if (!authToken) {
     return res.status(403).json({
-      error_code: "api_key_required",
-      error_message: "API key is required",
+      error_code: 'api_key_required',
+      error_message: 'API key is required',
     });
   }
-  if (chainName === "EVM") {
+  if (chainName === 'EVM') {
     const evmClient = await authenticatedEvmClient({
       authToken,
       environmentId,
@@ -60,7 +60,7 @@ export const ImportPrivateKey: TypedRequestHandler<{
       accountAddress,
       publicKeyHex,
     });
-  } else if (chainName === "SVM") {
+  } else if (chainName === 'SVM') {
     const svmClient = await authenticatedSvmClient({
       authToken,
       environmentId,
@@ -79,6 +79,6 @@ export const ImportPrivateKey: TypedRequestHandler<{
       accountAddress,
     });
   } else {
-    throw new Error("Unsupported chain");
+    throw new Error('Unsupported chain');
   }
 };

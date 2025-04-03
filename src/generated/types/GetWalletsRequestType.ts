@@ -1,6 +1,6 @@
 export type GetWalletsRequestType = {
-    /**
-     * @type string
-    */
-    chainName: string;
+  /**
+   * @type string
+   */
+  chainName: string;
 };

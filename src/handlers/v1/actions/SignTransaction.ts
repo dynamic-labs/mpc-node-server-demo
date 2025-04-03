@@ -38,7 +38,6 @@ export const SignTransaction: TypedRequestHandler<{
     sendRawTransaction,
   } = req.body;
 
-  console.log("signing transaction");
   const authToken = req.authToken;
   const environmentId = req.params.environmentId;
   if (!authToken) {

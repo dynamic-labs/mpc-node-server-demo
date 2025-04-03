@@ -1,17 +1,17 @@
 import {
   CreateWalletAccount403Type,
   CreateWalletAccountRequestType,
-} from "../../../generated";
+} from '../../../generated';
 import {
   CreateWalletAccount200Type,
   CreateWalletAccount400Type,
-} from "../../../generated";
+} from '../../../generated';
 import {
   ThresholdSignatureScheme,
   authenticatedEvmClient,
   authenticatedSvmClient,
-} from "../../../services/mpc/constants";
-import { TypedRequestHandler } from "../../../types/express";
+} from '../../../services/mpc/constants';
+import { TypedRequestHandler } from '../../../types/express';
 
 /**
  * /api/v1/actions/CreateWalletAccount
@@ -34,11 +34,11 @@ export const CreateWalletAccount: TypedRequestHandler<{
   const environmentId = req.params.environmentId;
   if (!authToken) {
     return res.status(403).json({
-      error_code: "api_key_required",
-      error_message: "API key is required",
+      error_code: 'api_key_required',
+      error_message: 'API key is required',
     });
   }
-  if (chainName === "EVM") {
+  if (chainName === 'EVM') {
     const evmClient = await authenticatedEvmClient({
       authToken,
       environmentId,
@@ -52,19 +52,13 @@ export const CreateWalletAccount: TypedRequestHandler<{
       thresholdSignatureScheme:
         thresholdSignatureScheme as ThresholdSignatureScheme,
     });
-    console.log("evm wallet created", {
-      accountAddress,
-      rawPublicKey,
-      publicKeyHex,
-      externalServerKeyShares,
-    });
     return res.status(200).json({
       rawPublicKey: JSON.stringify(rawPublicKey),
       externalServerKeyShares: JSON.stringify(externalServerKeyShares),
       accountAddress,
       publicKeyHex,
     });
-  } else if (chainName === "SVM") {
+  } else if (chainName === 'SVM') {
     const svmClient = await authenticatedSvmClient({
       authToken,
       environmentId,
@@ -80,6 +74,6 @@ export const CreateWalletAccount: TypedRequestHandler<{
       accountAddress,
     });
   } else {
-    throw new Error("Unsupported chain");
+    throw new Error('Unsupported chain');
   }
 };
